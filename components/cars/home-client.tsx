@@ -210,6 +210,7 @@ export default function HomeClient({ user, featuredCars, allCars }: HomeClientPr
               onSave={handleSave}
               onCompare={handleCompare}
               isLoggedIn={!!user}
+              hideMatchBadge
             />
           ))}
         </div>

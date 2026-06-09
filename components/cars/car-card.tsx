@@ -18,6 +18,7 @@ interface CarCardProps {
   onSave?: (carId: string) => void
   onCompare?: (carId: string) => void
   isLoggedIn?: boolean
+  hideMatchBadge?: boolean
 }
 
 const fuelColors: Record<string, string> = {
@@ -36,11 +37,11 @@ const fuelIcons: Record<string, React.ReactNode> = {
   diesel: <Fuel className="w-3 h-3" />,
 }
 
-export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave, onCompare, isLoggedIn }: CarCardProps) {
+export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave, onCompare, isLoggedIn, hideMatchBadge = false }: CarCardProps) {
   const isSaved = savedCarIds.includes(car.id)
   const isInCompare = compareIds.includes(car.id)
   const { answers } = useQuizAnswers()
-  const matchScore = answers ? scoreCarForAnswers(car, answers) : null
+  const matchScore = answers && !hideMatchBadge ? scoreCarForAnswers(car, answers) : null
   const bestForTags = getBestForTags(car)
 
   const fuelStat = car.fuelType === "electric"
