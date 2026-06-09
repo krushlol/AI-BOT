@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  supabaseId String   @unique
+  email      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  savedCars     SavedCar[]
+  savedSearches SavedSearch[]
+
+  @@map("users")
+}
+
+model SavedCar {
+  id        String   @id @default(cuid())
+  userId    String
+  carId     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, carId])
+  @@map("saved_cars")
+}
+
+model SavedSearch {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  params    Json
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("saved_searches")
+}
+
+model CachedCarSpec {
+  id       String   @id @default(cuid())
+  make     String
+  model    String
+  year     Int
+  data     Json
+  cachedAt DateTime @default(now())
+
+  @@unique([make, model, year])
+  @@map("cached_car_specs")
+}
+
+model CachedSafetyRating {
+  id       String   @id @default(cuid())
+  nhtsaId  String   @unique
+  make     String
+  model    String
+  year     Int
+  data     Json
+  cachedAt DateTime @default(now())
+
+  @@map("cached_safety_ratings")
+}
+

@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx shadcn@latest add button input card badge select tabs separator dialog checkbox avatar dropdown-menu --yes)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/search)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/cars/toyota-camry-2024)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/compare)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(npx prisma *)",
+      "Bash(mkdir -p \"/Users/arushchirputkar/Projects/autobuy-electronics/app/api/cars/live/[make]/[model]/[year]\")",
+      "Bash(mkdir -p \"/Users/arushchirputkar/Projects/autobuy-electronics/app/cars/live/[make]/[model]/[year]\")",
+      "Bash(npx tsc *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \" %{http_code}\" http://localhost:3000/contact)",
+      "WebFetch(domain:unsplash.com)",
+      "Bash(npm install *)",
+      "Bash(python3 -c \"import json,sys; p=json.load\\(sys.stdin\\); print\\(p.get\\('main',''\\), p.get\\('module',''\\), p.get\\('exports',{}\\)\\)\")",
+      "Bash(python3 -m json.tool)",
+      "Bash(python3 -c \"import json; p=json.load\\(open\\('/Users/arushchirputkar/Projects/autobuy-electronics/node_modules/@supabase/ssr/package.json'\\)\\); print\\(json.dumps\\(p, indent=2\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; p=json.load\\(sys.stdin\\); print\\(p['version']\\)\")",
+      "Bash(python3 -c \"import json,sys; p=json.load\\(sys.stdin\\); print\\(json.dumps\\(p.get\\('exports', {}\\), indent=2\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; p=json.load\\(sys.stdin\\); print\\('version:', p['version']\\); print\\('main:', p.get\\('main',''\\)\\); print\\('module:', p.get\\('module',''\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; p=json.load\\(sys.stdin\\); print\\('version:', p['version']\\); print\\('module:', p.get\\('module',''\\)\\)\")",
+      "Bash(vercel --version)",
+      "Bash(npm run *)"
+    ]
+  }
+}
