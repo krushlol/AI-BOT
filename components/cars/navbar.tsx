@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Car, Search, GitCompare, Heart, User, Menu, X, Mail, Sparkles, Zap } from "lucide-react"
+import { Car, Search, GitCompare, Heart, User, Menu, X, Mail, Sparkles, Zap, Calculator } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
@@ -31,6 +31,7 @@ export default function Navbar({ user }: NavbarProps) {
     { href: "/quiz", label: "Find My Car", icon: Sparkles, highlight: true },
     { href: "/search", label: "Browse Cars", icon: Search },
     { href: "/compare", label: "Compare", icon: GitCompare },
+    { href: "/calculator", label: "Calculator", icon: Calculator },
     { href: "/pricing", label: "Pricing", icon: Zap },
     { href: "/contact", label: "Contact", icon: Mail },
     ...(user ? [{ href: "/dashboard", label: "Saved", icon: Heart }] : []),
