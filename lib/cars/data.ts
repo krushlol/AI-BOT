@@ -200,7 +200,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 36315,
     maxPrice: 80885,
-    image: "https://images.unsplash.com/photo-1605893477799-b99e3b8b93fe?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1614484393797-257ee1d83a1e?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "America's best-selling vehicle for 47 years running",
     description:
@@ -394,7 +394,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 43800,
     maxPrice: 59500,
-    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1594051673969-172a6f721d3c?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "The ultimate driving machine — still the benchmark",
     description:
@@ -583,7 +583,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 41450,
     maxPrice: 56500,
-    image: "https://images.unsplash.com/photo-1674110997072-41f11b7d4ae7?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1647418552401-f3958302b72a?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "Retro-futuristic design meets ultra-fast charging",
     description:
@@ -678,7 +678,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 67295,
     maxPrice: 135000,
-    image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1619405399517-d7fce0f13302?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "Mid-engine American supercar — starting under $70k",
     description:
@@ -865,7 +865,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 93300,
     maxPrice: 185000,
-    image: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1584060622420-0673aad46076?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "Electric performance that doesn't compromise the Porsche DNA",
     description:
@@ -960,7 +960,7 @@ export const cars: Car[] = [
     fuelType: "plug-in hybrid",
     basePrice: 33395,
     maxPrice: 61000,
-    image: "https://images.unsplash.com/photo-1562519819-016930ada31d?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1506015391300-4802dc74de2e?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "The original off-roader, now with plug-in power",
     description:
@@ -1056,7 +1056,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 42600,
     maxPrice: 61900,
-    image: "https://images.unsplash.com/photo-1667805630247-28c2a8db1cb4?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1665127771643-0bc02014da61?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "The EV that wants to be a sports car",
     description:
@@ -1149,7 +1149,7 @@ export const cars: Car[] = [
     fuelType: "hybrid",
     basePrice: 62150,
     maxPrice: 89900,
-    image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1611168935847-4bf3f7291cde?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "Luxury redefined — the flagship mid-size SUV",
     description:
@@ -1435,7 +1435,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 24950,
     maxPrice: 32650,
-    image: "https://images.unsplash.com/photo-1619682817481-e994891cd1f5?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1594070319944-7c0cbebb6f58?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "The benchmark compact sedan — sporty, reliable, affordable",
     description:
@@ -1522,7 +1522,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 43990,
     maxPrice: 58990,
-    image: "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1676754568744-7852efc67c40?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "The world's best-selling EV — now even better",
     description:
@@ -1611,7 +1611,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 32515,
     maxPrice: 60000,
-    image: "https://images.unsplash.com/photo-1584345604476-8ec5f452d1f2?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1625231334168-35067f8853ed?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "An American icon, completely reborn for 2024",
     description:
@@ -1698,7 +1698,7 @@ export const cars: Car[] = [
     fuelType: "hybrid",
     basePrice: 38520,
     maxPrice: 72310,
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1618609740315-de8a9088ea77?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "Toyota's full-size truck with a twin-turbo hybrid V6",
     description:
@@ -1789,7 +1789,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 37870,
     maxPrice: 52635,
-    image: "https://images.unsplash.com/photo-1546614042-7df3c24c9e5d?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1532564979029-bbf9fcbe7b0b?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "The gold standard of family minivans",
     description:
@@ -1879,7 +1879,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 34995,
     maxPrice: 48995,
-    image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1697989716693-092a7ed5a21a?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "The most affordable electric SUV in America",
     description:
@@ -1968,7 +1968,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 38135,
     maxPrice: 77285,
-    image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1672125052834-937014e540c2?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "America's most comfortable full-size truck",
     description:
@@ -2058,7 +2058,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 38995,
     maxPrice: 50995,
-    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1571872580550-5a0570339714?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "German engineering meets everyday electric SUV",
     description:
@@ -2148,7 +2148,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 29150,
     maxPrice: 41050,
-    image: "https://images.unsplash.com/photo-1609427337264-df2e88f4e1f5?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1687292625389-664f8c39586b?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "The SUV that drives like a sports car",
     description:
@@ -2238,7 +2238,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 56950,
     maxPrice: 79000,
-    image: "https://images.unsplash.com/photo-1629897048514-3dd7414fe72a?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1709104761873-24cc12d23b28?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "Luxury SUV that redefines value",
     description:
@@ -2327,7 +2327,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 35000,
     maxPrice: 63000,
-    image: "https://images.unsplash.com/photo-1625231337069-a1cb247ee8f7?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1677739115529-abf0fa4d3ea2?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "Born wild. Built for the trail.",
     description:
@@ -2417,7 +2417,7 @@ export const cars: Car[] = [
     fuelType: "plug-in hybrid",
     basePrice: 38000,
     maxPrice: 44000,
-    image: "https://images.unsplash.com/photo-1629924360406-f5e6bc64e9b3?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1575090536203-2a6193126514?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "Plug in, charge up, and go farther on less",
     description:
@@ -2508,7 +2508,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 39125,
     maxPrice: 60125,
-    image: "https://images.unsplash.com/photo-1647890224823-6d80c5e26b4d?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "Nissan's bold step into the electric future",
     description:
@@ -2597,7 +2597,7 @@ export const cars: Car[] = [
     fuelType: "plug-in hybrid",
     basePrice: 46895,
     maxPrice: 59995,
-    image: "https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1622701579527-dcd1bb5fbb9b?w=800&q=80",
     interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "German luxury SUV with plug-in efficiency",
     description:
