@@ -2,13 +2,11 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Car, Search, Heart, User, Menu, X, Mail, Sparkles, Zap, Calculator } from "lucide-react"
+import { Car, Search, Heart, User, Menu, X, Mail, Sparkles, Calculator } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
-import { useProStatus } from "@/hooks/useProStatus"
-import ProBadge from "@/components/pricing/pro-badge"
 
 interface NavbarProps {
   user?: { email?: string } | null
@@ -19,7 +17,6 @@ export default function Navbar({ user }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const router = useRouter()
   const supabase = createClient()
-  const { isPro } = useProStatus()
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -31,7 +28,6 @@ export default function Navbar({ user }: NavbarProps) {
     { href: "/quiz", label: "Find My Car", icon: Sparkles, highlight: true },
     { href: "/search", label: "Browse Cars", icon: Search },
     { href: "/calculator", label: "Calculator", icon: Calculator },
-    { href: "/pricing", label: "Pricing", icon: Zap },
     { href: "/contact", label: "Contact", icon: Mail },
     ...(user ? [{ href: "/dashboard", label: "Saved", icon: Heart }] : []),
   ]
@@ -77,7 +73,6 @@ export default function Navbar({ user }: NavbarProps) {
                 <span className="text-sm text-gray-600 flex items-center gap-1.5">
                   <User className="w-4 h-4" />
                   {user.email?.split("@")[0]}
-                  {isPro && <ProBadge />}
                 </span>
                 <Button variant="outline" size="sm" onClick={handleSignOut}>
                   Sign Out
@@ -103,7 +98,7 @@ export default function Navbar({ user }: NavbarProps) {
 
       {mobileOpen && (
         <div className="md:hidden border-t bg-white px-4 py-4 space-y-3">
-          {links.map(({ href, label, icon: Icon, highlight }) => (
+          {links.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}

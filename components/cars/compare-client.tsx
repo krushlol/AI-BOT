@@ -1,22 +1,18 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { useRouter } from "next/navigation"
-import { X, Plus, CheckCircle, XCircle, Zap } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { X, Plus, CheckCircle, XCircle } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
 import Navbar from "./navbar"
 import { Car } from "@/lib/cars/types"
-import { useProStatus } from "@/hooks/useProStatus"
-import UpgradeModal from "@/components/pricing/upgrade-modal"
-import { FREE_COMPARE_LIMIT, PRO_COMPARE_LIMIT } from "@/lib/plans"
 
 interface CompareClientProps {
   user: { email?: string } | null
   allCars: Car[]
   initialIds: string[]
 }
+
+const COMPARE_LIMIT = 4
 
 const fuelLabel = (f: string) => (f === "plug-in hybrid" ? "PHEV" : f.charAt(0).toUpperCase() + f.slice(1))
 
@@ -51,11 +47,12 @@ const specGroups: RowGroup[] = [
     ],
   },
   {
-    group: "Practicality",
+    group: "Dimensions & Capacity",
     rows: [
       { label: "Seating", key: (c) => `${c.specs.seating} passengers` },
       { label: "Cargo Space", key: (c) => `${c.specs.cargo} cu.ft.` },
       { label: "Towing Capacity", key: (c) => c.specs.towingCapacity ? `${c.specs.towingCapacity.toLocaleString()} lbs` : "—" },
+      { label: "Payload", key: (c) => c.specs.payloadCapacity ? `${c.specs.payloadCapacity.toLocaleString()} lbs` : "—" },
     ],
   },
   {
@@ -63,26 +60,12 @@ const specGroups: RowGroup[] = [
     rows: [
       { label: "Starting Price", key: (c) => `$${c.basePrice.toLocaleString()}` },
       { label: "Top Price", key: (c) => `$${c.maxPrice.toLocaleString()}` },
-      { label: "Body Style", key: (c) => c.bodyStyle },
-      { label: "Fuel Type", key: (c) => fuelLabel(c.fuelType) },
-    ],
-  },
-  {
-    group: "Safety",
-    rows: [
-      { label: "Safety Rating", key: (c) => c.safety.rating ?? "—" },
-      { label: "Rating Source", key: (c) => c.safety.ratingSource ?? "—" },
     ],
   },
 ]
 
 export default function CompareClient({ user, allCars, initialIds }: CompareClientProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>(initialIds)
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
-  const router = useRouter()
-  const { isPro } = useProStatus()
-
-  const compareLimit = isPro ? PRO_COMPARE_LIMIT : FREE_COMPARE_LIMIT
 
   const selectedCars = useMemo(
     () => selectedIds.map((id) => allCars.find((c) => c.id === id)).filter(Boolean) as Car[],
@@ -90,11 +73,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
   )
 
   const addCar = (id: string) => {
-    if (selectedIds.includes(id)) return
-    if (selectedIds.length >= compareLimit) {
-      setShowUpgradeModal(true)
-      return
-    }
+    if (selectedIds.includes(id) || selectedIds.length >= COMPARE_LIMIT) return
     setSelectedIds([...selectedIds, id])
   }
 
@@ -102,33 +81,18 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
 
   const availableCars = allCars.filter((c) => !selectedIds.includes(c.id))
 
-  const getCellClass = (label: string, values: (string | number | null)[]) => {
-    if (selectedCars.length < 2) return ""
-    const numVals = values.map((v) => typeof v === "string" ? parseFloat(v.replace(/[^0-9.]/g, "")) : null).filter((n) => n !== null && !isNaN(n as number)) as number[]
-    if (numVals.length < 2) return ""
-    const max = Math.max(...numVals)
-    const min = Math.min(...numVals)
-    const goodHigher = ["Horsepower", "Torque", "Top Speed", "Electric Range", "Total Range", "MPG City", "MPG Highway", "MPG Combined", "Seating", "Cargo Space", "Towing Capacity"]
-    const goodLower = ["0–60 mph", "Starting Price", "Top Price", "Charge Time"]
-    return { max, min, goodHigher: goodHigher.includes(label), goodLower: goodLower.includes(label) } as any
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar user={user} />
-      <UpgradeModal isOpen={showUpgradeModal} onClose={() => setShowUpgradeModal(false)} reason="compare" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Compare Cars</h1>
-          <p className="text-gray-600">
-            {isPro ? "Compare up to 4 cars side-by-side" : `Compare up to ${FREE_COMPARE_LIMIT} cars · `}
-            {!isPro && <a href="/pricing" className="text-blue-600 hover:underline font-medium inline-flex items-center gap-1"><Zap className="w-3 h-3" />Upgrade for 4</a>}
-          </p>
+          <p className="text-gray-600">Compare up to {COMPARE_LIMIT} cars side-by-side</p>
         </div>
 
         {/* Car selector row */}
-        <div className="grid gap-4 mb-8" style={{ gridTemplateColumns: `repeat(${Math.max(selectedCars.length + (selectedCars.length < 4 ? 1 : 0), 2)}, minmax(0, 1fr))` }}>
+        <div className="grid gap-4 mb-8" style={{ gridTemplateColumns: `repeat(${Math.max(selectedCars.length + (selectedCars.length < COMPARE_LIMIT ? 1 : 0), 2)}, minmax(0, 1fr))` }}>
           {selectedCars.map((car) => (
             <div key={car.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <div className="relative">
@@ -147,7 +111,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
               </div>
             </div>
           ))}
-          {selectedCars.length < compareLimit && (
+          {selectedCars.length < COMPARE_LIMIT && (
             <div className="bg-white rounded-xl border-2 border-dashed border-gray-300 p-4 flex flex-col items-center justify-center gap-2 min-h-[160px]">
               <Plus className="w-6 h-6 text-gray-400" />
               <p className="text-xs text-gray-500 text-center">Add a car</p>
@@ -164,16 +128,6 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
                 </SelectContent>
               </Select>
             </div>
-          )}
-          {selectedCars.length >= compareLimit && !isPro && (
-            <button
-              onClick={() => setShowUpgradeModal(true)}
-              className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-dashed border-blue-300 p-4 flex flex-col items-center justify-center gap-2 min-h-[160px] hover:border-blue-400 transition-colors"
-            >
-              <Zap className="w-6 h-6 text-blue-500" />
-              <p className="text-xs text-blue-700 font-semibold text-center">Add 2 more with Pro</p>
-              <span className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full font-bold">Upgrade</span>
-            </button>
           )}
         </div>
 
@@ -227,7 +181,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
               </div>
             ))}
 
-            {/* Pros vs Cons comparison */}
+            {/* Pros vs Cons */}
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <div className="bg-gray-50 px-6 py-3 border-b">
                 <h3 className="font-bold text-gray-900">Pros & Cons</h3>
