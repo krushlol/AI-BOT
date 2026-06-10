@@ -3,7 +3,7 @@
 import { Car } from "@/lib/cars/types"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Heart, GitCompare, Zap, Fuel, Gauge } from "lucide-react"
+import { Heart, GitCompare, Zap, Fuel } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { getBestForTags } from "@/lib/cars/tags"
@@ -52,26 +52,39 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
-      <Link href={`/cars/${car.id}`} className="block">
-        <div className="relative h-48 bg-gray-100 overflow-hidden">
+      <div className="relative h-48 bg-gray-100 overflow-hidden">
+        <Link href={`/cars/${car.id}`} className="block w-full h-full">
           <img
             src={car.image}
             alt={`${car.year} ${car.brand} ${car.model}`}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute top-3 left-3">
-            <Badge className={`text-xs gap-1 ${fuelColors[car.fuelType]}`}>
-              {fuelIcons[car.fuelType]}
-              {car.fuelType === "plug-in hybrid" ? "PHEV" : car.fuelType.charAt(0).toUpperCase() + car.fuelType.slice(1)}
-            </Badge>
-          </div>
-          {matchScore !== null && (
-            <div className="absolute top-3 right-3">
-              <MatchBadge score={matchScore} />
-            </div>
-          )}
+        </Link>
+        <div className="absolute top-3 left-3">
+          <Badge className={`text-xs gap-1 ${fuelColors[car.fuelType]}`}>
+            {fuelIcons[car.fuelType]}
+            {car.fuelType === "plug-in hybrid" ? "PHEV" : car.fuelType.charAt(0).toUpperCase() + car.fuelType.slice(1)}
+          </Badge>
         </div>
-      </Link>
+        {matchScore !== null && (
+          <div className="absolute top-3 right-3">
+            <MatchBadge score={matchScore} />
+          </div>
+        )}
+        {onCompare && (
+          <button
+            onClick={() => onCompare(car.id)}
+            title={isInCompare ? "Remove from compare" : "Add to compare"}
+            className={`absolute bottom-3 right-3 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
+              isInCompare
+                ? "bg-blue-600 text-white"
+                : "bg-white/90 text-gray-600 hover:bg-blue-600 hover:text-white"
+            }`}
+          >
+            <GitCompare className="w-4 h-4" />
+          </button>
+        )}
+      </div>
 
       <div className="p-4">
         <Link href={`/cars/${car.id}`}>
@@ -131,17 +144,6 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
               title={isLoggedIn ? (isSaved ? "Remove from saved" : "Save car") : "Sign in to save"}
             >
               <Heart className={`w-4 h-4 ${isSaved ? "fill-current" : ""}`} />
-            </Button>
-          )}
-          {onCompare && (
-            <Button
-              variant="outline"
-              size="sm"
-              className={`px-3 ${isInCompare ? "text-blue-500 border-blue-200 bg-blue-50" : ""}`}
-              onClick={() => onCompare(car.id)}
-              title={isInCompare ? "Remove from compare" : "Add to compare"}
-            >
-              <GitCompare className="w-4 h-4" />
             </Button>
           )}
         </div>

@@ -45,7 +45,6 @@ export interface Car {
   basePrice: number
   maxPrice: number
   image: string
-  interiorImage: string
   tagline: string
   description: string
   specs: CarSpecs

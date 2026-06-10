@@ -273,7 +273,7 @@ export default function HomeClient({ user, featuredCars, allCars }: HomeClientPr
             <div>
               <p className="text-white font-semibold text-sm mb-3">Tools</p>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/compare" className="hover:text-white transition-colors">Compare Cars</Link></li>
+                <li><Link href="/calculator" className="hover:text-white transition-colors">Loan Calculator</Link></li>
                 <li><Link href="/search" className="hover:text-white transition-colors">Live Catalog</Link></li>
                 <li><Link href="/dashboard" className="hover:text-white transition-colors">Saved Cars</Link></li>
               </ul>

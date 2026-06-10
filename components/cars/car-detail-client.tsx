@@ -32,7 +32,6 @@ const fuelLabel = (f: string) => {
 export default function CarDetailClient({ car, user, relatedCars }: CarDetailClientProps) {
   const [saved, setSaved] = useState(false)
   const [showAllTrims, setShowAllTrims] = useState(false)
-  const [imageView, setImageView] = useState<"exterior" | "interior">("exterior")
   const { answers } = useQuizAnswers()
   const matchScore = answers ? scoreCarForAnswers(car, answers) : null
   const bestForTags = getBestForTags(car)
@@ -85,28 +84,13 @@ export default function CarDetailClient({ car, user, relatedCars }: CarDetailCli
           <div className="grid lg:grid-cols-2 gap-0">
             <div className="relative h-64 lg:h-96 bg-gray-100">
               <img
-                src={imageView === "exterior" ? car.image : car.interiorImage}
-                alt={`${car.year} ${car.brand} ${car.model} ${imageView}`}
-                className="w-full h-full object-cover transition-opacity duration-300"
+                src={car.image}
+                alt={`${car.year} ${car.brand} ${car.model}`}
+                className="w-full h-full object-cover"
               />
               <div className="absolute top-4 left-4 flex gap-2">
                 <Badge className="bg-blue-600 text-white capitalize">{car.bodyStyle}</Badge>
                 <Badge className="bg-white text-gray-800 border">{fuelLabel(car.fuelType)}</Badge>
-              </div>
-              {/* Exterior / Interior toggle */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex bg-black/60 backdrop-blur-sm rounded-full p-1 gap-1">
-                <button
-                  onClick={() => setImageView("exterior")}
-                  className={`text-xs font-semibold px-3 py-1 rounded-full transition-colors ${imageView === "exterior" ? "bg-white text-gray-900" : "text-white/80 hover:text-white"}`}
-                >
-                  Exterior
-                </button>
-                <button
-                  onClick={() => setImageView("interior")}
-                  className={`text-xs font-semibold px-3 py-1 rounded-full transition-colors ${imageView === "interior" ? "bg-white text-gray-900" : "text-white/80 hover:text-white"}`}
-                >
-                  Interior
-                </button>
               </div>
             </div>
             <div className="p-6 lg:p-8 flex flex-col justify-between">

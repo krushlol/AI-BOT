@@ -11,7 +11,6 @@ export const cars: Car[] = [
     basePrice: 28400,
     maxPrice: 36785,
     image: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "America's best-selling sedan, now hybrid-only",
     description:
       "The 2024 Toyota Camry transitions to a hybrid-only powertrain, offering outstanding fuel efficiency without sacrificing performance. A perennial favorite for its legendary reliability, spacious cabin, and competitive pricing.",
@@ -106,7 +105,6 @@ export const cars: Car[] = [
     basePrice: 40240,
     maxPrice: 55990,
     image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "The EV that changed everything, now better than ever",
     description:
       "The refreshed 2024 Tesla Model 3 (Highland) brings a completely new interior, improved range, and refined driving dynamics. It remains the benchmark electric sedan for technology, performance, and charging network access.",
@@ -201,7 +199,6 @@ export const cars: Car[] = [
     basePrice: 36315,
     maxPrice: 80885,
     image: "https://images.unsplash.com/photo-1614484393797-257ee1d83a1e?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "America's best-selling vehicle for 47 years running",
     description:
       "The Ford F-150 is the undisputed king of full-size pickups. Offering unmatched versatility, a wide range of powertrains (including hybrid), and clever features like the Pro Power Onboard generator, the F-150 does it all.",
@@ -298,7 +295,6 @@ export const cars: Car[] = [
     basePrice: 31895,
     maxPrice: 42240,
     image: "https://images.unsplash.com/photo-1623597780975-38ccd5030c83?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "The world's best-selling SUV, now with plug-in power",
     description:
       "Honda's perennial best-seller gets a plug-in hybrid variant that offers 40 miles of electric-only range alongside a practical, spacious interior. The CR-V PHEV combines everyday EV efficiency with the confidence of gas backup.",
@@ -395,7 +391,6 @@ export const cars: Car[] = [
     basePrice: 43800,
     maxPrice: 59500,
     image: "https://images.unsplash.com/photo-1594051673969-172a6f721d3c?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "The ultimate driving machine — still the benchmark",
     description:
       "The BMW 3 Series remains the definitive sports sedan benchmark. With its perfect 50/50 weight distribution, communicative steering, and powerful engine options, the 3 Series delivers an unmatched driving experience in the luxury compact segment.",
@@ -488,7 +483,6 @@ export const cars: Car[] = [
     basePrice: 69900,
     maxPrice: 99900,
     image: "https://images.unsplash.com/photo-1689702302312-8ef703f0d1d5?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "The electric adventure truck that redefined the segment",
     description:
       "The Rivian R1T is the first dedicated electric pickup truck built from the ground up. With a unique gear tunnel, massive performance, and genuine off-road capability, the R1T proves electric trucks can be more capable than their gas counterparts.",
@@ -584,7 +578,6 @@ export const cars: Car[] = [
     basePrice: 41450,
     maxPrice: 56500,
     image: "https://images.unsplash.com/photo-1647418552401-f3958302b72a?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "Retro-futuristic design meets ultra-fast charging",
     description:
       "The Hyundai IONIQ 5 turns heads with its pixel-art inspired retro design and delivers on substance with 800V ultra-fast charging (5 min = 68 miles), a spacious lounge-like interior, and Vehicle-to-Load capability.",
@@ -679,7 +672,6 @@ export const cars: Car[] = [
     basePrice: 67295,
     maxPrice: 135000,
     image: "https://images.unsplash.com/photo-1619405399517-d7fce0f13302?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "Mid-engine American supercar — starting under $70k",
     description:
       "The C8 Corvette remains America's supercar story: mid-engine layout, naturally aspirated V8, and genuine 911-fighting performance at a fraction of European rival costs. With the optional Z51 package, it decimates cars costing twice as much.",
@@ -772,7 +764,6 @@ export const cars: Car[] = [
     basePrice: 28995,
     maxPrice: 45645,
     image: "https://images.unsplash.com/photo-1609772168547-d216c44c3f85?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "Adventure-ready wagon with standard AWD",
     description:
       "The Subaru Outback invented the crossover wagon category and remains its best example. Standard Symmetrical AWD, 8.7 inches of ground clearance, and exceptional off-road capability combined with car-like fuel economy and practicality make it uniquely capable.",
@@ -866,7 +857,6 @@ export const cars: Car[] = [
     basePrice: 93300,
     maxPrice: 185000,
     image: "https://images.unsplash.com/photo-1584060622420-0673aad46076?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "Electric performance that doesn't compromise the Porsche DNA",
     description:
       "The Porsche Taycan redefined what an electric performance car can be. With 800V charging, authentic sports car handling and feel, and a stunning interior, the Taycan proves EVs can excite, not just transport.",
@@ -961,7 +951,6 @@ export const cars: Car[] = [
     basePrice: 33395,
     maxPrice: 61000,
     image: "https://images.unsplash.com/photo-1506015391300-4802dc74de2e?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "The original off-roader, now with plug-in power",
     description:
       "The Jeep Wrangler 4xe PHEV combines Jeep's legendary off-road DNA with a plug-in hybrid powertrain delivering 25 miles of electric range. It remains the go-anywhere benchmark while offering daily EV commuting efficiency.",
@@ -1057,7 +1046,6 @@ export const cars: Car[] = [
     basePrice: 42600,
     maxPrice: 61900,
     image: "https://images.unsplash.com/photo-1665127771643-0bc02014da61?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "The EV that wants to be a sports car",
     description:
       "The Kia EV6 GT-Line packs genuine excitement into an everyday crossover shape. With the GT variant hitting 0-60 in 3.4 seconds, 800V ultra-fast charging, and a dramatic design, the EV6 offers Tesla-rivaling performance at a lower price.",
@@ -1150,7 +1138,6 @@ export const cars: Car[] = [
     basePrice: 62150,
     maxPrice: 89900,
     image: "https://images.unsplash.com/photo-1611168935847-4bf3f7291cde?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "Luxury redefined — the flagship mid-size SUV",
     description:
       "The Mercedes-Benz GLE sets the benchmark for luxury mid-size SUVs. With the MBUX infotainment system, optional E-Active Body Control magic carpet ride, and a refined interior rivaling sedans costing twice as much, the GLE is the ultimate family hauler.",
@@ -1243,7 +1230,6 @@ export const cars: Car[] = [
     basePrice: 43790,
     maxPrice: 51610,
     image: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "The practical PHEV SUV that does everything right",
     description:
       "The Toyota RAV4 Prime is the perfect everyday SUV: 42 miles of EV range handles most commutes, then the 302hp combined system takes over for long trips. With standard AWD-e and Toyota's reliability, it's the most sensible plug-in on the market.",
@@ -1339,7 +1325,6 @@ export const cars: Car[] = [
     basePrice: 69900,
     maxPrice: 249000,
     image: "https://images.unsplash.com/photo-1740001574335-cd22a1313186?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "The longest range, fastest charging EV ever built",
     description:
       "The Lucid Air Pure starts under $70k but the Dream Edition at 1,234hp makes it the world's most powerful production sedan. The Grand Touring holds the EV range record at 516 miles on a single charge, demonstrating Lucid's engineering excellence.",
@@ -1436,7 +1421,6 @@ export const cars: Car[] = [
     basePrice: 24950,
     maxPrice: 32650,
     image: "https://images.unsplash.com/photo-1594070319944-7c0cbebb6f58?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "The benchmark compact sedan — sporty, reliable, affordable",
     description:
       "The 2024 Honda Civic continues to set the standard for compact cars with a sharp design, responsive handling, and a feature-rich interior that punches well above its price class. Whether you commute or carve backroads, the Civic delivers.",
@@ -1523,7 +1507,6 @@ export const cars: Car[] = [
     basePrice: 43990,
     maxPrice: 58990,
     image: "https://images.unsplash.com/photo-1676754568744-7852efc67c40?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "The world's best-selling EV — now even better",
     description:
       "The 2024 Tesla Model Y is the most popular vehicle on earth. With up to 330 miles of range, America's fastest-growing Supercharger network, and over-the-air updates that improve the car over time, it sets the bar for electric SUVs.",
@@ -1612,7 +1595,6 @@ export const cars: Car[] = [
     basePrice: 32515,
     maxPrice: 60000,
     image: "https://images.unsplash.com/photo-1625231334168-35067f8853ed?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "An American icon, completely reborn for 2024",
     description:
       "The all-new 7th generation Mustang debuts sharper styling, a new 5.0L V8 making 486 hp, a segment-first 12-inch digital cluster, and optional 10-speed automatic. It's the most driver-focused Mustang ever built.",
@@ -1699,7 +1681,6 @@ export const cars: Car[] = [
     basePrice: 38520,
     maxPrice: 72310,
     image: "https://images.unsplash.com/photo-1618609740315-de8a9088ea77?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "Toyota's full-size truck with a twin-turbo hybrid V6",
     description:
       "The 2024 Toyota Tundra ditches the old V8 for a twin-turbocharged hybrid V6 making 437 hp and a segment-leading 583 lb-ft of torque. It offers legendary Toyota reliability in a full-size truck package with class-competitive towing of 12,000 lbs.",
@@ -1790,7 +1771,6 @@ export const cars: Car[] = [
     basePrice: 37870,
     maxPrice: 52635,
     image: "https://images.unsplash.com/photo-1532564979029-bbf9fcbe7b0b?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "The gold standard of family minivans",
     description:
       "The 2024 Honda Odyssey remains the benchmark family hauler. With seating for 8, a magic sliding second-row seat that creates a conversation zone between rows, built-in vacuum cleaner, and a refined 3.5L V6, it's the smartest van on the market.",
@@ -1880,7 +1860,6 @@ export const cars: Car[] = [
     basePrice: 34995,
     maxPrice: 48995,
     image: "https://images.unsplash.com/photo-1697989716693-092a7ed5a21a?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "The most affordable electric SUV in America",
     description:
       "The 2024 Chevrolet Equinox EV shakes up the market by bringing an electric SUV to the $35k price point. With up to 319 miles of range, a well-equipped cabin, and Google built-in, it democratizes EV ownership for mainstream buyers.",
@@ -1969,7 +1948,6 @@ export const cars: Car[] = [
     basePrice: 38135,
     maxPrice: 77285,
     image: "https://images.unsplash.com/photo-1672125052834-937014e540c2?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "America's most comfortable full-size truck",
     description:
       "The 2024 Ram 1500 is the truck that redefined the segment with a coil-spring rear suspension for a car-like ride. With class-leading towing of 12,750 lbs, a luxurious Tungsten trim, and the available 3.0L Hurricane twin-turbo inline-six, it's as capable as it is comfortable.",
@@ -2059,7 +2037,6 @@ export const cars: Car[] = [
     basePrice: 38995,
     maxPrice: 50995,
     image: "https://images.unsplash.com/photo-1571872580550-5a0570339714?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "German engineering meets everyday electric SUV",
     description:
       "The 2024 Volkswagen ID.4 brings European craftsmanship and a polished driving experience to the EV SUV segment. With up to 291 miles of range, available AWD, and a spacious interior, the ID.4 is a compelling alternative to the Model Y.",
@@ -2149,7 +2126,6 @@ export const cars: Car[] = [
     basePrice: 29150,
     maxPrice: 41050,
     image: "https://images.unsplash.com/photo-1687292625389-664f8c39586b?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "The SUV that drives like a sports car",
     description:
       "The 2024 Mazda CX-5 is the driver's compact SUV — refined, premium-feeling, and exceptionally well-crafted for its price. With class-leading interior quality, available turbocharged engine, and AWD standard on most trims, it consistently rivals vehicles costing thousands more.",
@@ -2239,7 +2215,6 @@ export const cars: Car[] = [
     basePrice: 56950,
     maxPrice: 79000,
     image: "https://images.unsplash.com/photo-1709104761873-24cc12d23b28?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "Luxury SUV that redefines value",
     description:
       "The 2024 Genesis GV80 is the Korean luxury SUV punching squarely at the BMW X5 and Mercedes GLE — and winning on value. With a stunning interior, optional 3.5L twin-turbo V6, and a 5-year complimentary maintenance program, it's the most compelling luxury SUV deal on the market.",
@@ -2328,7 +2303,6 @@ export const cars: Car[] = [
     basePrice: 35000,
     maxPrice: 63000,
     image: "https://images.unsplash.com/photo-1677739115529-abf0fa4d3ea2?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
     tagline: "Born wild. Built for the trail.",
     description:
       "The 2024 Ford Bronco brought back an icon and made it even more capable than the original. With removable doors and roof, a go-anywhere 4x4 system with up to 13.1 inches of ground clearance, and trail-specific tech, the Bronco redefines what a fun SUV can be.",
@@ -2418,7 +2392,6 @@ export const cars: Car[] = [
     basePrice: 38000,
     maxPrice: 44000,
     image: "https://images.unsplash.com/photo-1575090536203-2a6193126514?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
     tagline: "Plug in, charge up, and go farther on less",
     description:
       "The 2024 Hyundai Tucson Plug-In Hybrid delivers the best of both worlds: 33 miles of all-electric range for daily commutes plus a gasoline engine for long trips, all wrapped in a handsome crossover body. It's one of the most practical PHEVs at this price point.",
@@ -2509,7 +2482,6 @@ export const cars: Car[] = [
     basePrice: 39125,
     maxPrice: 60125,
     image: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80",
     tagline: "Nissan's bold step into the electric future",
     description:
       "The 2024 Nissan Ariya is Nissan's flagship EV — a stylish, tech-forward electric crossover with up to 304 miles of range and a serene, minimalist interior. It combines Japanese attention to detail with smooth e-AWD performance for an everyday EV that impresses.",
@@ -2598,7 +2570,6 @@ export const cars: Car[] = [
     basePrice: 46895,
     maxPrice: 59995,
     image: "https://images.unsplash.com/photo-1622701579527-dcd1bb5fbb9b?w=800&q=80",
-    interiorImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "German luxury SUV with plug-in efficiency",
     description:
       "The 2024 Audi Q5 TFSI e combines a turbocharged 2.0L engine with an electric motor for 362 combined horsepower and 38 miles of EV range. It wraps this efficient powertrain in Audi's signature quattro AWD and a cabin full of premium materials and cutting-edge technology.",
