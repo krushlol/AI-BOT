@@ -190,14 +190,14 @@ export const cars: Car[] = [
     colors: ["Pearl White Multi-Coat", "Solid Black", "Midnight Cherry Red", "Deep Blue Metallic", "Stealth Grey"],
   },
   {
-    id: "ford-f150-2024",
+    id: "ford-f150-2023",
     brand: "Ford",
     model: "F-150",
-    year: 2024,
+    year: 2023,
     bodyStyle: "truck",
     fuelType: "gasoline",
-    basePrice: 36315,
-    maxPrice: 80885,
+    basePrice: 35200,
+    maxPrice: 78500,
     image: "https://images.unsplash.com/photo-1614484393797-257ee1d83a1e?w=800&q=80",
     tagline: "America's best-selling vehicle for 47 years running",
     description:
@@ -228,7 +228,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "5-Star Overall",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2023",
       features: [
         "Ford Co-Pilot360",
         "Pre-Collision Assist",
@@ -382,10 +382,10 @@ export const cars: Car[] = [
     colors: ["Sonic Gray Pearl", "Radiant Red Metallic", "Lunar Silver Metallic", "Crystal Black Pearl", "Aegean Blue"],
   },
   {
-    id: "bmw-3series-2024",
+    id: "bmw-3series-2025",
     brand: "BMW",
     model: "3 Series",
-    year: 2024,
+    year: 2025,
     bodyStyle: "sedan",
     fuelType: "gasoline",
     basePrice: 43800,
@@ -416,7 +416,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "TOP SAFETY PICK",
-      ratingSource: "IIHS 2024",
+      ratingSource: "IIHS 2025",
       features: [
         "Active Driving Assistant",
         "Frontal Collision Warning",
@@ -474,14 +474,14 @@ export const cars: Car[] = [
     colors: ["Alpine White", "Jet Black", "Portimao Blue", "Dravit Grey", "Brooklyn Grey", "Tanzanite Blue"],
   },
   {
-    id: "rivian-r1t-2024",
+    id: "rivian-r1t-2023",
     brand: "Rivian",
     model: "R1T",
-    year: 2024,
+    year: 2023,
     bodyStyle: "truck",
     fuelType: "electric",
-    basePrice: 69900,
-    maxPrice: 99900,
+    basePrice: 67800,
+    maxPrice: 96900,
     image: "https://images.unsplash.com/photo-1689702302312-8ef703f0d1d5?w=800&q=80",
     tagline: "The electric adventure truck that redefined the segment",
     description:
@@ -510,7 +510,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "5-Star Overall",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2023",
       features: [
         "Driver+ Assistance System",
         "Forward Collision Warning",
@@ -663,14 +663,14 @@ export const cars: Car[] = [
     colors: ["Atlas White", "Lucid Blue", "Gravity Gold", "Mystic Olive", "Digital Teal", "Phantom Black"],
   },
   {
-    id: "chevrolet-corvette-2024",
+    id: "chevrolet-corvette-2022",
     brand: "Chevrolet",
     model: "Corvette",
-    year: 2024,
+    year: 2022,
     bodyStyle: "coupe",
     fuelType: "gasoline",
-    basePrice: 67295,
-    maxPrice: 135000,
+    basePrice: 63300,
+    maxPrice: 126900,
     image: "https://images.unsplash.com/photo-1619405399517-d7fce0f13302?w=800&q=80",
     tagline: "Mid-engine American supercar — starting under $70k",
     description:
@@ -698,7 +698,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "4-Star Overall",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2022",
       features: [
         "Forward Collision Alert",
         "Lane Change Alert with Side Blind Zone Alert",
@@ -755,14 +755,14 @@ export const cars: Car[] = [
     colors: ["Arctic White", "Elkhart Lake Blue", "Accelerate Yellow", "Amplify Orange Tintcoat", "Red Mist", "Black"],
   },
   {
-    id: "subaru-outback-2024",
+    id: "subaru-outback-2023",
     brand: "Subaru",
     model: "Outback",
-    year: 2024,
+    year: 2023,
     bodyStyle: "wagon",
     fuelType: "gasoline",
-    basePrice: 28995,
-    maxPrice: 45645,
+    basePrice: 28100,
+    maxPrice: 44300,
     image: "https://images.unsplash.com/photo-1609772168547-d216c44c3f85?w=800&q=80",
     tagline: "Adventure-ready wagon with standard AWD",
     description:
@@ -791,7 +791,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "TOP SAFETY PICK+",
-      ratingSource: "IIHS 2024",
+      ratingSource: "IIHS 2023",
       features: [
         "EyeSight Driver Assist (standard)",
         "Pre-Collision Braking",
@@ -848,10 +848,10 @@ export const cars: Car[] = [
     colors: ["Crystal White Pearl", "Magnetite Gray", "Wilderness Green", "Geyser Blue", "Autumn Green", "Solar Orange"],
   },
   {
-    id: "porsche-taycan-2024",
+    id: "porsche-taycan-2025",
     brand: "Porsche",
     model: "Taycan",
-    year: 2024,
+    year: 2025,
     bodyStyle: "sedan",
     fuelType: "electric",
     basePrice: 93300,
@@ -884,7 +884,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "5-Star Overall",
-      ratingSource: "Euro NCAP 2024",
+      ratingSource: "Euro NCAP 2025",
       features: [
         "Porsche InnoDrive (ACC with navigation)",
         "Lane Keeping Assist",
@@ -942,14 +942,14 @@ export const cars: Car[] = [
     colors: ["Frozen Blue Metallic", "Chalk", "Gentian Blue", "Carmine Red", "Mamba Green", "Dolomite Silver"],
   },
   {
-    id: "jeep-wrangler-2024",
+    id: "jeep-wrangler-2021",
     brand: "Jeep",
     model: "Wrangler",
-    year: 2024,
+    year: 2021,
     bodyStyle: "suv",
     fuelType: "plug-in hybrid",
-    basePrice: 33395,
-    maxPrice: 61000,
+    basePrice: 30400,
+    maxPrice: 55500,
     image: "https://images.unsplash.com/photo-1506015391300-4802dc74de2e?w=800&q=80",
     tagline: "The original off-roader, now with plug-in power",
     description:
@@ -980,7 +980,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "4-Star Overall",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2021",
       features: [
         "Forward Collision Warning",
         "Automatic Emergency Braking",
@@ -1037,10 +1037,10 @@ export const cars: Car[] = [
     colors: ["Bright White", "Black", "Firecracker Red", "Hydro Blue", "Sarge Green", "Sting-Gray"],
   },
   {
-    id: "kia-ev6-2024",
+    id: "kia-ev6-2025",
     brand: "Kia",
     model: "EV6",
-    year: 2024,
+    year: 2025,
     bodyStyle: "suv",
     fuelType: "electric",
     basePrice: 42600,
@@ -1072,7 +1072,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "TOP SAFETY PICK+",
-      ratingSource: "IIHS 2024",
+      ratingSource: "IIHS 2025",
       features: [
         "Kia DriveWise",
         "Forward Collision Avoidance",
@@ -1316,10 +1316,10 @@ export const cars: Car[] = [
     colors: ["Wind Chill Pearl", "Blueprint", "Cavalry Blue", "Midnight Black", "Magnetic Gray", "Super White"],
   },
   {
-    id: "lucid-air-2024",
+    id: "lucid-air-2025",
     brand: "Lucid",
     model: "Air",
-    year: 2024,
+    year: 2025,
     bodyStyle: "sedan",
     fuelType: "electric",
     basePrice: 69900,
@@ -1351,7 +1351,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "5-Star Overall",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2025",
       features: [
         "DreamDrive Pro (standard)",
         "Automatic Emergency Braking",
@@ -1412,18 +1412,18 @@ export const cars: Car[] = [
   // ─── NEW CARS ────────────────────────────────────────────────────────────────
 
   {
-    id: "honda-civic-2024",
+    id: "honda-civic-2022",
     brand: "Honda",
     model: "Civic",
-    year: 2024,
+    year: 2022,
     bodyStyle: "sedan",
     fuelType: "gasoline",
-    basePrice: 24950,
-    maxPrice: 32650,
+    basePrice: 23500,
+    maxPrice: 30700,
     image: "https://images.unsplash.com/photo-1594070319944-7c0cbebb6f58?w=800&q=80",
     tagline: "The benchmark compact sedan — sporty, reliable, affordable",
     description:
-      "The 2024 Honda Civic continues to set the standard for compact cars with a sharp design, responsive handling, and a feature-rich interior that punches well above its price class. Whether you commute or carve backroads, the Civic delivers.",
+      "The 2022 Honda Civic continues to set the standard for compact cars with a sharp design, responsive handling, and a feature-rich interior that punches well above its price class. Whether you commute or carve backroads, the Civic delivers.",
     specs: {
       horsepower: 158,
       torque: 138,
@@ -1446,7 +1446,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "TOP SAFETY PICK+",
-      ratingSource: "IIHS 2024",
+      ratingSource: "IIHS 2022",
       features: [
         "Honda Sensing Standard",
         "Collision Mitigation Braking",
@@ -1498,18 +1498,18 @@ export const cars: Car[] = [
   },
 
   {
-    id: "tesla-model-y-2024",
+    id: "tesla-model-y-2023",
     brand: "Tesla",
     model: "Model Y",
-    year: 2024,
+    year: 2023,
     bodyStyle: "suv",
     fuelType: "electric",
-    basePrice: 43990,
-    maxPrice: 58990,
+    basePrice: 42700,
+    maxPrice: 57200,
     image: "https://images.unsplash.com/photo-1676754568744-7852efc67c40?w=800&q=80",
     tagline: "The world's best-selling EV — now even better",
     description:
-      "The 2024 Tesla Model Y is the most popular vehicle on earth. With up to 330 miles of range, America's fastest-growing Supercharger network, and over-the-air updates that improve the car over time, it sets the bar for electric SUVs.",
+      "The 2023 Tesla Model Y is the most popular vehicle on earth. With up to 330 miles of range, America's fastest-growing Supercharger network, and over-the-air updates that improve the car over time, it sets the bar for electric SUVs.",
     specs: {
       horsepower: 384,
       torque: 376,
@@ -1532,7 +1532,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "5",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2023",
       features: [
         "Autopilot standard",
         "Automatic Emergency Braking",
@@ -1586,16 +1586,16 @@ export const cars: Car[] = [
   },
 
   {
-    id: "ford-mustang-2024",
+    id: "ford-mustang-2025",
     brand: "Ford",
     model: "Mustang",
-    year: 2024,
+    year: 2025,
     bodyStyle: "coupe",
     fuelType: "gasoline",
     basePrice: 32515,
     maxPrice: 60000,
     image: "https://images.unsplash.com/photo-1625231334168-35067f8853ed?w=800&q=80",
-    tagline: "An American icon, completely reborn for 2024",
+    tagline: "An American icon, completely reborn for 2025",
     description:
       "The all-new 7th generation Mustang debuts sharper styling, a new 5.0L V8 making 486 hp, a segment-first 12-inch digital cluster, and optional 10-speed automatic. It's the most driver-focused Mustang ever built.",
     specs: {
@@ -1620,7 +1620,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "4",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2025",
       features: [
         "Pre-Collision Assist",
         "Automatic Emergency Braking",
@@ -1672,18 +1672,18 @@ export const cars: Car[] = [
   },
 
   {
-    id: "toyota-tundra-2024",
+    id: "toyota-tundra-2022",
     brand: "Toyota",
     model: "Tundra",
-    year: 2024,
+    year: 2022,
     bodyStyle: "truck",
     fuelType: "hybrid",
-    basePrice: 38520,
-    maxPrice: 72310,
+    basePrice: 36200,
+    maxPrice: 68000,
     image: "https://images.unsplash.com/photo-1618609740315-de8a9088ea77?w=800&q=80",
     tagline: "Toyota's full-size truck with a twin-turbo hybrid V6",
     description:
-      "The 2024 Toyota Tundra ditches the old V8 for a twin-turbocharged hybrid V6 making 437 hp and a segment-leading 583 lb-ft of torque. It offers legendary Toyota reliability in a full-size truck package with class-competitive towing of 12,000 lbs.",
+      "The 2022 Toyota Tundra ditches the old V8 for a twin-turbocharged hybrid V6 making 437 hp and a segment-leading 583 lb-ft of torque. It offers legendary Toyota reliability in a full-size truck package with class-competitive towing of 12,000 lbs.",
     specs: {
       horsepower: 437,
       torque: 583,
@@ -1709,7 +1709,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "5",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2022",
       features: [
         "Toyota Safety Sense 2.5+",
         "Pre-Collision System",
@@ -1762,18 +1762,18 @@ export const cars: Car[] = [
   },
 
   {
-    id: "honda-odyssey-2024",
+    id: "honda-odyssey-2021",
     brand: "Honda",
     model: "Odyssey",
-    year: 2024,
+    year: 2021,
     bodyStyle: "van",
     fuelType: "gasoline",
-    basePrice: 37870,
-    maxPrice: 52635,
+    basePrice: 34500,
+    maxPrice: 47900,
     image: "https://images.unsplash.com/photo-1532564979029-bbf9fcbe7b0b?w=800&q=80",
     tagline: "The gold standard of family minivans",
     description:
-      "The 2024 Honda Odyssey remains the benchmark family hauler. With seating for 8, a magic sliding second-row seat that creates a conversation zone between rows, built-in vacuum cleaner, and a refined 3.5L V6, it's the smartest van on the market.",
+      "The 2021 Honda Odyssey remains the benchmark family hauler. With seating for 8, a magic sliding second-row seat that creates a conversation zone between rows, built-in vacuum cleaner, and a refined 3.5L V6, it's the smartest van on the market.",
     specs: {
       horsepower: 280,
       torque: 262,
@@ -1797,7 +1797,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "TOP SAFETY PICK+",
-      ratingSource: "IIHS 2024",
+      ratingSource: "IIHS 2021",
       features: [
         "Honda Sensing Standard",
         "Collision Mitigation Braking",
@@ -1939,18 +1939,18 @@ export const cars: Car[] = [
   },
 
   {
-    id: "ram-1500-2024",
+    id: "ram-1500-2021",
     brand: "Ram",
     model: "1500",
-    year: 2024,
+    year: 2021,
     bodyStyle: "truck",
     fuelType: "gasoline",
-    basePrice: 38135,
-    maxPrice: 77285,
+    basePrice: 34700,
+    maxPrice: 70300,
     image: "https://images.unsplash.com/photo-1672125052834-937014e540c2?w=800&q=80",
     tagline: "America's most comfortable full-size truck",
     description:
-      "The 2024 Ram 1500 is the truck that redefined the segment with a coil-spring rear suspension for a car-like ride. With class-leading towing of 12,750 lbs, a luxurious Tungsten trim, and the available 3.0L Hurricane twin-turbo inline-six, it's as capable as it is comfortable.",
+      "The 2021 Ram 1500 is the truck that redefined the segment with a coil-spring rear suspension for a car-like ride. With class-leading towing of 12,750 lbs, a luxurious Tungsten trim, and the available 3.0L Hurricane twin-turbo inline-six, it's as capable as it is comfortable.",
     specs: {
       horsepower: 420,
       torque: 469,
@@ -1976,7 +1976,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "5",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2021",
       features: [
         "Forward Collision Warning",
         "Automatic Emergency Braking",
@@ -2028,18 +2028,18 @@ export const cars: Car[] = [
   },
 
   {
-    id: "volkswagen-id4-2024",
+    id: "volkswagen-id4-2023",
     brand: "Volkswagen",
     model: "ID.4",
-    year: 2024,
+    year: 2023,
     bodyStyle: "suv",
     fuelType: "electric",
-    basePrice: 38995,
-    maxPrice: 50995,
+    basePrice: 37800,
+    maxPrice: 49500,
     image: "https://images.unsplash.com/photo-1571872580550-5a0570339714?w=800&q=80",
     tagline: "German engineering meets everyday electric SUV",
     description:
-      "The 2024 Volkswagen ID.4 brings European craftsmanship and a polished driving experience to the EV SUV segment. With up to 291 miles of range, available AWD, and a spacious interior, the ID.4 is a compelling alternative to the Model Y.",
+      "The 2023 Volkswagen ID.4 brings European craftsmanship and a polished driving experience to the EV SUV segment. With up to 291 miles of range, available AWD, and a spacious interior, the ID.4 is a compelling alternative to the Model Y.",
     specs: {
       horsepower: 282,
       torque: 339,
@@ -2063,7 +2063,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "TOP SAFETY PICK+",
-      ratingSource: "IIHS 2024",
+      ratingSource: "IIHS 2023",
       features: [
         "IQ.DRIVE driver assistance suite",
         "Automatic Emergency Braking",
@@ -2294,18 +2294,18 @@ export const cars: Car[] = [
   },
 
   {
-    id: "ford-bronco-2024",
+    id: "ford-bronco-2022",
     brand: "Ford",
     model: "Bronco",
-    year: 2024,
+    year: 2022,
     bodyStyle: "suv",
     fuelType: "gasoline",
-    basePrice: 35000,
-    maxPrice: 63000,
+    basePrice: 32900,
+    maxPrice: 59200,
     image: "https://images.unsplash.com/photo-1677739115529-abf0fa4d3ea2?w=800&q=80",
     tagline: "Born wild. Built for the trail.",
     description:
-      "The 2024 Ford Bronco brought back an icon and made it even more capable than the original. With removable doors and roof, a go-anywhere 4x4 system with up to 13.1 inches of ground clearance, and trail-specific tech, the Bronco redefines what a fun SUV can be.",
+      "The 2022 Ford Bronco brought back an icon and made it even more capable than the original. With removable doors and roof, a go-anywhere 4x4 system with up to 13.1 inches of ground clearance, and trail-specific tech, the Bronco redefines what a fun SUV can be.",
     specs: {
       horsepower: 330,
       torque: 415,
@@ -2330,7 +2330,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "4",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2022",
       features: [
         "Pre-Collision Assist",
         "Automatic Emergency Braking",
@@ -2383,18 +2383,18 @@ export const cars: Car[] = [
   },
 
   {
-    id: "hyundai-tucson-phev-2024",
+    id: "hyundai-tucson-phev-2022",
     brand: "Hyundai",
     model: "Tucson PHEV",
-    year: 2024,
+    year: 2022,
     bodyStyle: "suv",
     fuelType: "plug-in hybrid",
-    basePrice: 38000,
-    maxPrice: 44000,
+    basePrice: 35700,
+    maxPrice: 41400,
     image: "https://images.unsplash.com/photo-1575090536203-2a6193126514?w=800&q=80",
     tagline: "Plug in, charge up, and go farther on less",
     description:
-      "The 2024 Hyundai Tucson Plug-In Hybrid delivers the best of both worlds: 33 miles of all-electric range for daily commutes plus a gasoline engine for long trips, all wrapped in a handsome crossover body. It's one of the most practical PHEVs at this price point.",
+      "The 2022 Hyundai Tucson Plug-In Hybrid delivers the best of both worlds: 33 miles of all-electric range for daily commutes plus a gasoline engine for long trips, all wrapped in a handsome crossover body. It's one of the most practical PHEVs at this price point.",
     specs: {
       horsepower: 261,
       torque: 258,
@@ -2420,7 +2420,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "TOP SAFETY PICK+",
-      ratingSource: "IIHS 2024",
+      ratingSource: "IIHS 2022",
       features: [
         "Hyundai SmartSense",
         "Forward Collision-Avoidance Assist",
@@ -2473,18 +2473,18 @@ export const cars: Car[] = [
   },
 
   {
-    id: "nissan-ariya-2024",
+    id: "nissan-ariya-2023",
     brand: "Nissan",
     model: "Ariya",
-    year: 2024,
+    year: 2023,
     bodyStyle: "suv",
     fuelType: "electric",
-    basePrice: 39125,
-    maxPrice: 60125,
+    basePrice: 38000,
+    maxPrice: 58300,
     image: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80",
     tagline: "Nissan's bold step into the electric future",
     description:
-      "The 2024 Nissan Ariya is Nissan's flagship EV — a stylish, tech-forward electric crossover with up to 304 miles of range and a serene, minimalist interior. It combines Japanese attention to detail with smooth e-AWD performance for an everyday EV that impresses.",
+      "The 2023 Nissan Ariya is Nissan's flagship EV — a stylish, tech-forward electric crossover with up to 304 miles of range and a serene, minimalist interior. It combines Japanese attention to detail with smooth e-AWD performance for an everyday EV that impresses.",
     specs: {
       horsepower: 389,
       torque: 442,
@@ -2508,7 +2508,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "5",
-      ratingSource: "NHTSA 2024",
+      ratingSource: "NHTSA 2023",
       features: [
         "Nissan Safety Shield 360",
         "ProPilot Assist (hands-on semi-autonomous)",
@@ -2561,18 +2561,18 @@ export const cars: Car[] = [
   },
 
   {
-    id: "audi-q5-2024",
+    id: "audi-q5-2023",
     brand: "Audi",
     model: "Q5",
-    year: 2024,
+    year: 2023,
     bodyStyle: "suv",
     fuelType: "plug-in hybrid",
-    basePrice: 46895,
-    maxPrice: 59995,
+    basePrice: 45500,
+    maxPrice: 58200,
     image: "https://images.unsplash.com/photo-1622701579527-dcd1bb5fbb9b?w=800&q=80",
     tagline: "German luxury SUV with plug-in efficiency",
     description:
-      "The 2024 Audi Q5 TFSI e combines a turbocharged 2.0L engine with an electric motor for 362 combined horsepower and 38 miles of EV range. It wraps this efficient powertrain in Audi's signature quattro AWD and a cabin full of premium materials and cutting-edge technology.",
+      "The 2023 Audi Q5 TFSI e combines a turbocharged 2.0L engine with an electric motor for 362 combined horsepower and 38 miles of EV range. It wraps this efficient powertrain in Audi's signature quattro AWD and a cabin full of premium materials and cutting-edge technology.",
     specs: {
       horsepower: 362,
       torque: 369,
@@ -2598,7 +2598,7 @@ export const cars: Car[] = [
     ],
     safety: {
       rating: "TOP SAFETY PICK",
-      ratingSource: "IIHS 2024",
+      ratingSource: "IIHS 2023",
       features: [
         "Audi pre sense front and city",
         "Adaptive Cruise Assist",
