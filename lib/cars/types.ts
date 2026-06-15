@@ -57,4 +57,5 @@ export interface Car {
   cons: string[]
   coolFeatures: string[]
   colors: string[]
+  gallery?: string[]
 }

@@ -13,8 +13,12 @@ import { Car } from "@/lib/cars/types"
 import Link from "next/link"
 import { getBestForTags } from "@/lib/cars/tags"
 import { scoreCarForAnswers } from "@/lib/cars/quiz"
+import { magazineReviews } from "@/lib/cars/reviews"
+import { ownerReviews } from "@/lib/cars/owner-reviews"
 import { useQuizAnswers } from "@/hooks/useQuizAnswers"
 import MatchBadge from "@/components/quiz/match-badge"
+import CarGallery from "@/components/cars/car-gallery"
+import { carGalleries } from "@/lib/cars/gallery"
 
 interface CarDetailClientProps {
   car: Car
@@ -82,13 +86,13 @@ export default function CarDetailClient({ car, user, relatedCars }: CarDetailCli
         {/* Hero section */}
         <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 mb-6">
           <div className="grid lg:grid-cols-2 gap-0">
-            <div className="relative h-64 lg:h-96 bg-gray-100">
-              <img
-                src={car.image}
-                alt={`${car.year} ${car.brand} ${car.model}`}
-                className="w-full h-full object-cover"
+            <div className="relative p-4 bg-gray-50">
+              <CarGallery
+                mainImage={car.image}
+                altText={`${car.year} ${car.brand} ${car.model}`}
+                gallery={carGalleries[car.id] ?? car.gallery}
               />
-              <div className="absolute top-4 left-4 flex gap-2">
+              <div className="absolute top-6 left-6 flex gap-2 z-10">
                 <Badge className="bg-blue-600 text-white capitalize">{car.bodyStyle}</Badge>
                 <Badge className="bg-white text-gray-800 border">{fuelLabel(car.fuelType)}</Badge>
               </div>
@@ -302,6 +306,62 @@ export default function CarDetailClient({ car, user, relatedCars }: CarDetailCli
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Reviews: Experts + Owners side by side */}
+        {(magazineReviews[car.id] || ownerReviews[car.id]) && (
+          <div className="grid lg:grid-cols-2 gap-6 mb-6">
+
+            {/* Expert Reviews */}
+            {magazineReviews[car.id] && (
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  📰 What the Experts Say
+                </h2>
+                <div className="space-y-3">
+                  {magazineReviews[car.id].map((rev) => (
+                    <div key={rev.magazine} className="bg-gray-50 rounded-xl border border-gray-100 p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-bold text-sm text-gray-800">{rev.magazine}</span>
+                        <span className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">⭐ {rev.rating}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 leading-relaxed italic">"{rev.quote}"</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Owner Reviews */}
+            {ownerReviews[car.id] && (
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  👤 What Owners Say
+                </h2>
+                <div className="space-y-3">
+                  {ownerReviews[car.id].map((rev, i) => (
+                    <div key={i} className="bg-gray-50 rounded-xl border border-gray-100 p-4">
+                      <div className="flex items-start justify-between mb-1">
+                        <div>
+                          <span className="font-bold text-sm text-gray-800">{rev.name}</span>
+                          <span className="text-xs text-gray-400 ml-2">· {rev.location}</span>
+                        </div>
+                        <span className="text-xs text-gray-400 flex-shrink-0 ml-2">{rev.owned}</span>
+                      </div>
+                      <div className="flex gap-0.5 mb-1">
+                        {Array.from({ length: 5 }).map((_, s) => (
+                          <span key={s} className={`text-xs ${s < rev.rating ? "text-amber-400" : "text-gray-200"}`}>★</span>
+                        ))}
+                      </div>
+                      <p className="text-xs font-semibold text-gray-700 mb-1">"{rev.title}"</p>
+                      <p className="text-sm text-gray-600 leading-relaxed">{rev.review}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+          </div>
+        )}
 
         {/* Available colors */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">

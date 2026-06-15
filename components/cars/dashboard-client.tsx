@@ -1,17 +1,19 @@
 "use client"
 
 import { useState } from "react"
-import { Heart, Search, GitCompare, User, Clock, Trash2 } from "lucide-react"
+import { Heart, Search, User, Clock, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Navbar from "./navbar"
 import CarCard from "./car-card"
 import { Car } from "@/lib/cars/types"
 import Link from "next/link"
+import { createClient } from "@/lib/supabase/client"
 
 interface DashboardClientProps {
-  user: { email?: string }
+  user: { id?: string; email?: string }
   allCars: Car[]
+  initialSavedIds: string[]
 }
 
 interface SavedSearch {
@@ -21,8 +23,8 @@ interface SavedSearch {
   date: string
 }
 
-export default function DashboardClient({ user, allCars }: DashboardClientProps) {
-  const [savedIds, setSavedIds] = useState<string[]>([allCars[0].id, allCars[2].id, allCars[4].id])
+export default function DashboardClient({ user, allCars, initialSavedIds }: DashboardClientProps) {
+  const [savedIds, setSavedIds] = useState<string[]>(initialSavedIds)
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([
     { id: "1", name: "Electric SUVs", query: "/search?fuelType=electric&bodyStyle=suv", date: "2 days ago" },
     { id: "2", name: "Family Cars under $50k", query: "/search?maxPrice=50000&seating=5", date: "1 week ago" },
@@ -31,7 +33,14 @@ export default function DashboardClient({ user, allCars }: DashboardClientProps)
 
   const savedCars = allCars.filter((c) => savedIds.includes(c.id))
 
-  const removeSaved = (id: string) => setSavedIds(savedIds.filter((i) => i !== id))
+  const removeSaved = async (id: string) => {
+    // Optimistic update
+    setSavedIds((prev) => prev.filter((i) => i !== id))
+    if (user.id) {
+      const supabase = createClient()
+      await supabase.from("saved_cars").delete().eq("user_id", user.id).eq("car_id", id)
+    }
+  }
   const removeSearch = (id: string) => setSavedSearches(savedSearches.filter((s) => s.id !== id))
 
   return (

@@ -9,5 +9,12 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/sign-in")
 
-  return <DashboardClient user={user} allCars={cars} />
+  const { data: savedRows } = await supabase
+    .from("saved_cars")
+    .select("car_id")
+    .eq("user_id", user.id)
+
+  const savedCarIds = (savedRows ?? []).map((r: { car_id: string }) => r.car_id)
+
+  return <DashboardClient user={user} allCars={cars} initialSavedIds={savedCarIds} />
 }

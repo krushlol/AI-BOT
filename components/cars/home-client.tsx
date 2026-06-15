@@ -9,6 +9,7 @@ import Navbar from "./navbar"
 import CarCard from "./car-card"
 import CompareBar from "./compare-bar"
 import { Car } from "@/lib/cars/types"
+import { cars as allCarsData } from "@/lib/cars/data"
 import Link from "next/link"
 
 const REVIEWS = [
@@ -68,7 +69,70 @@ interface HomeClientProps {
   allCars: Car[]
 }
 
-const bodyStyles = ["All", "Sedan", "SUV", "Truck", "Coupe", "Wagon", "Hatchback"]
+const BODY_STYLES = [
+  { label: "Sedan", value: "sedan", emoji: "🚗" },
+  { label: "SUV", value: "suv", emoji: "🚙" },
+  { label: "Truck", value: "truck", emoji: "🛻" },
+  { label: "Coupe", value: "coupe", emoji: "🏎" },
+  { label: "Wagon", value: "wagon", emoji: "🚐" },
+  { label: "Van", value: "van", emoji: "🚌" },
+]
+
+const styleImages: Record<string, string> = Object.fromEntries(
+  BODY_STYLES.map(({ value }) => {
+    const car = allCarsData.find((c) => c.bodyStyle === value)
+    return [value, car?.image ?? ""]
+  })
+)
+
+const FUEL_TYPES = [
+  { label: "Electric", value: "electric", emoji: "⚡", desc: "Zero emissions", color: "from-green-900/70" },
+  { label: "Hybrid", value: "hybrid", emoji: "🌿", desc: "Best of both", color: "from-teal-900/70" },
+  { label: "Plug-in Hybrid", value: "plug-in hybrid", emoji: "🔌", desc: "Electric + gas", color: "from-blue-900/70" },
+  { label: "Gas", value: "gasoline", emoji: "⛽", desc: "Classic power", color: "from-orange-900/70" },
+]
+
+const fuelImages: Record<string, string> = Object.fromEntries(
+  FUEL_TYPES.map(({ value }) => {
+    const car = allCarsData.find((c) => c.fuelType === value)
+    return [value, car?.image ?? ""]
+  })
+)
+
+const BRAND_CONFIG: Record<string, { color: string; bg: string }> = {
+  Toyota:          { color: "text-red-700",    bg: "bg-red-50 border-red-100" },
+  Tesla:           { color: "text-gray-800",   bg: "bg-gray-50 border-gray-200" },
+  Ford:            { color: "text-blue-800",   bg: "bg-blue-50 border-blue-100" },
+  Honda:           { color: "text-red-700",    bg: "bg-red-50 border-red-100" },
+  BMW:             { color: "text-blue-800",   bg: "bg-blue-50 border-blue-100" },
+  Rivian:          { color: "text-green-800",  bg: "bg-green-50 border-green-100" },
+  Hyundai:         { color: "text-blue-800",   bg: "bg-blue-50 border-blue-100" },
+  Chevrolet:       { color: "text-yellow-800", bg: "bg-yellow-50 border-yellow-100" },
+  Subaru:          { color: "text-blue-800",   bg: "bg-blue-50 border-blue-100" },
+  Porsche:         { color: "text-gray-800",   bg: "bg-gray-50 border-gray-200" },
+  Jeep:            { color: "text-green-800",  bg: "bg-green-50 border-green-100" },
+  Kia:             { color: "text-red-700",    bg: "bg-red-50 border-red-100" },
+  "Mercedes-Benz": { color: "text-gray-800",   bg: "bg-gray-50 border-gray-200" },
+  Lucid:           { color: "text-purple-800", bg: "bg-purple-50 border-purple-100" },
+  Ram:             { color: "text-red-700",    bg: "bg-red-50 border-red-100" },
+  Volkswagen:      { color: "text-blue-800",   bg: "bg-blue-50 border-blue-100" },
+  Mazda:           { color: "text-red-700",    bg: "bg-red-50 border-red-100" },
+  Genesis:         { color: "text-gray-800",   bg: "bg-gray-50 border-gray-200" },
+  Nissan:          { color: "text-red-700",    bg: "bg-red-50 border-red-100" },
+  Audi:            { color: "text-gray-800",   bg: "bg-gray-50 border-gray-200" },
+}
+
+const brandCards = (() => {
+  const seen = new Set<string>()
+  const out: { brand: string; image: string }[] = []
+  for (const car of allCarsData) {
+    if (!seen.has(car.brand)) {
+      seen.add(car.brand)
+      out.push({ brand: car.brand, image: car.image })
+    }
+  }
+  return out
+})()
 
 export default function HomeClient({ user, featuredCars, allCars }: HomeClientProps) {
   const [query, setQuery] = useState("")
@@ -108,8 +172,17 @@ export default function HomeClient({ user, featuredCars, allCars }: HomeClientPr
           <div className="absolute top-10 left-10 w-64 h-64 rounded-full bg-white blur-3xl" />
           <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-blue-300 blur-3xl" />
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="max-w-3xl">
+        {/* Decorative car photo — right side desktop only */}
+        <div className="absolute inset-y-0 right-0 w-1/2 hidden lg:block pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-800 via-blue-700/50 to-transparent z-10" />
+          <img
+            src="https://images.unsplash.com/photo-1584060622420-0673aad46076?w=900&q=80"
+            alt=""
+            className="w-full h-full object-cover object-center opacity-50"
+          />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-2xl">
             <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight">
               Find Your Perfect Car
             </h1>
@@ -136,21 +209,16 @@ export default function HomeClient({ user, featuredCars, allCars }: HomeClientPr
                 Search
               </Button>
             </form>
-
             <div className="flex flex-wrap gap-2 mt-6">
               {[
-                { label: "Electric", href: "/search?fuelType=electric" },
-                { label: "Hybrid", href: "/search?fuelType=hybrid" },
-                { label: "SUV", href: "/search?bodyStyle=suv" },
-                { label: "Under $40k", href: "/search?maxPrice=40000" },
-                { label: "Family Cars", href: "/search?seating=5" },
-                { label: "Sports Cars", href: "/search?bodyStyle=coupe" },
+                { label: "⚡ Electric", href: "/search?fuelType=electric" },
+                { label: "🌿 Hybrid", href: "/search?fuelType=hybrid" },
+                { label: "🚙 SUV", href: "/search?bodyStyle=suv" },
+                { label: "💰 Under $40k", href: "/search?maxPrice=40000" },
+                { label: "👨‍👩‍👧 Family Cars", href: "/search?seating=5" },
+                { label: "🏎 Sports Cars", href: "/search?bodyStyle=coupe" },
               ].map(({ label, href }) => (
-                <Link
-                  key={label}
-                  href={href}
-                  className="bg-blue-700/60 hover:bg-blue-600/80 text-white text-xs px-3 py-1.5 rounded-full transition-colors"
-                >
+                <Link key={label} href={href} className="bg-blue-700/60 hover:bg-blue-600/80 text-white text-xs px-3 py-1.5 rounded-full transition-colors">
                   {label}
                 </Link>
               ))}
@@ -174,26 +242,109 @@ export default function HomeClient({ user, featuredCars, allCars }: HomeClientPr
         </div>
       </div>
 
-      {/* Browse by type */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="flex items-center justify-between mb-6">
+      {/* Browse by Style — photo cards */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex items-center justify-between mb-5">
           <h2 className="text-2xl font-bold text-gray-900">Browse by Style</h2>
+          <Link href="/search" className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
+            See all <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
-        <div className="flex gap-3 flex-wrap">
-          {bodyStyles.map((style) => (
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          {BODY_STYLES.map(({ label, value, emoji }) => (
             <Link
-              key={style}
-              href={style === "All" ? "/search" : `/search?bodyStyle=${style.toLowerCase()}`}
-              className="px-5 py-2.5 rounded-full border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+              key={value}
+              href={`/search?bodyStyle=${value}`}
+              className="group relative rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-400 shadow-sm hover:shadow-lg transition-all"
             >
-              {style}
+              {styleImages[value] ? (
+                <img
+                  src={styleImages[value]}
+                  alt={label}
+                  className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className="w-full h-24 bg-gray-100 flex items-center justify-center text-3xl">{emoji}</div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+              <div className="absolute bottom-2 left-0 right-0 text-center">
+                <span className="text-white text-xs font-bold tracking-wide drop-shadow">{label}</span>
+              </div>
             </Link>
           ))}
         </div>
       </div>
 
+      {/* Browse by Fuel Type */}
+      <div className="bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-2xl font-bold text-gray-900">Browse by Fuel Type</h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {FUEL_TYPES.map(({ label, value, emoji, desc, color }) => (
+              <Link
+                key={value}
+                href={`/search?fuelType=${encodeURIComponent(value)}`}
+                className="group relative rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-400 shadow-sm hover:shadow-lg transition-all"
+              >
+                {fuelImages[value] ? (
+                  <img
+                    src={fuelImages[value]}
+                    alt={label}
+                    className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="w-full h-36 bg-gray-100 flex items-center justify-center text-5xl">{emoji}</div>
+                )}
+                <div className={`absolute inset-0 bg-gradient-to-t ${color} via-black/20 to-transparent`} />
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{emoji}</span>
+                    <div>
+                      <p className="text-white text-sm font-bold leading-tight">{label}</p>
+                      <p className="text-white/70 text-xs">{desc}</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Browse by Brand */}
+      <div className="bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-2xl font-bold text-gray-900">Browse by Brand</h2>
+            <Link href="/search" className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
+              All brands <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-5 sm:grid-cols-10 gap-3">
+            {brandCards.map(({ brand, image }) => {
+              const cfg = BRAND_CONFIG[brand] ?? { color: "text-gray-700", bg: "bg-gray-50 border-gray-200" }
+              const displayName = brand === "Mercedes-Benz" ? "Mercedes" : brand
+              return (
+                <Link
+                  key={brand}
+                  href={`/search?brand=${encodeURIComponent(brand)}`}
+                  className={`group flex flex-col items-center gap-2 p-3 rounded-2xl border ${cfg.bg} hover:shadow-md transition-all hover:-translate-y-0.5`}
+                >
+                  <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-white shadow">
+                    <img src={image} alt={brand} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <span className={`text-xs font-semibold text-center leading-tight ${cfg.color}`}>{displayName}</span>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
       {/* Featured cars */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Featured Cars</h2>
           <Link href="/search" className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 font-medium">
@@ -213,6 +364,30 @@ export default function HomeClient({ user, featuredCars, allCars }: HomeClientPr
               hideMatchBadge
             />
           ))}
+        </div>
+      </div>
+
+      {/* Feature highlights */}
+      <div className="bg-gradient-to-br from-blue-900 to-blue-800 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold mb-2">Everything you need to buy smarter</h2>
+            <p className="text-blue-200">All the tools, completely free</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { emoji: "🔍", title: "Deep Specs", desc: "50+ data points per car — from 0–60 times to cargo space and towing capacity." },
+              { emoji: "⚖️", title: "Side-by-Side Compare", desc: "Stack up to 4 cars and instantly see which wins on every spec." },
+              { emoji: "🎯", title: "Personalized Quiz", desc: "Answer 6 questions and we match you to cars that actually fit your life." },
+              { emoji: "💳", title: "Loan Calculator", desc: "See real monthly payments before you ever step inside a dealership." },
+            ].map(({ emoji, title, desc }) => (
+              <div key={title} className="bg-white/10 rounded-2xl p-5 text-center hover:bg-white/15 transition-colors">
+                <div className="text-4xl mb-3">{emoji}</div>
+                <h3 className="font-bold text-lg mb-2">{title}</h3>
+                <p className="text-blue-200 text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

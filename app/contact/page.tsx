@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import Navbar from "@/components/cars/navbar"
 import { Mail, MessageSquare, Clock, Car } from "lucide-react"
+import ContactForm from "@/components/contact/contact-form"
 
 export const metadata = {
   title: "Contact Us — AutoDrive",
@@ -89,70 +90,7 @@ export default async function ContactPage() {
           </div>
 
           {/* Contact form */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Send a Message</h2>
-            <form
-              action={`mailto:arushchirp@gmail.com`}
-              method="get"
-              encType="text/plain"
-              className="space-y-4"
-            >
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Jane Smith"
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Your Email</label>
-                <input
-                  type="email"
-                  name="from"
-                  placeholder="you@example.com"
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                <select
-                  name="subject"
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-                >
-                  <option value="General Question">General Question</option>
-                  <option value="Car Suggestion">Car Suggestion</option>
-                  <option value="Bug Report">Bug Report</option>
-                  <option value="Feature Request">Feature Request</option>
-                  <option value="Data Correction">Data Correction</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                <textarea
-                  name="body"
-                  rows={5}
-                  placeholder="Tell us what's on your mind..."
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
-              >
-                <Mail className="w-4 h-4" />
-                Send Message
-              </button>
-              <p className="text-xs text-gray-400 text-center">
-                This will open your email client with the message pre-filled.
-              </p>
-            </form>
-          </div>
+          <ContactForm />
         </div>
       </div>
     </div>

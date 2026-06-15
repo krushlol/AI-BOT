@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { X, Plus, CheckCircle, XCircle } from "lucide-react"
+import { X, Plus, CheckCircle, XCircle, Zap, DollarSign, Gauge, Leaf, Link2, Check, Printer } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Navbar from "./navbar"
 import { Car } from "@/lib/cars/types"
@@ -18,17 +18,17 @@ const fuelLabel = (f: string) => (f === "plug-in hybrid" ? "PHEV" : f.charAt(0).
 
 type RowGroup = {
   group: string
-  rows: { label: string; key: (car: Car) => string | number | null }[]
+  rows: { label: string; key: (car: Car) => string | number | null; goodHigher?: boolean; goodLower?: boolean }[]
 }
 
 const specGroups: RowGroup[] = [
   {
     group: "Performance",
     rows: [
-      { label: "Horsepower", key: (c) => `${c.specs.horsepower} hp` },
-      { label: "Torque", key: (c) => `${c.specs.torque} lb-ft` },
-      { label: "0–60 mph", key: (c) => c.specs.zeroToSixty ? `${c.specs.zeroToSixty}s` : "N/A" },
-      { label: "Top Speed", key: (c) => c.specs.topSpeed ? `${c.specs.topSpeed} mph` : "N/A" },
+      { label: "Horsepower", key: (c) => `${c.specs.horsepower} hp`, goodHigher: true },
+      { label: "Torque", key: (c) => `${c.specs.torque} lb-ft`, goodHigher: true },
+      { label: "0–60 mph", key: (c) => c.specs.zeroToSixty ? `${c.specs.zeroToSixty}s` : "N/A", goodLower: true },
+      { label: "Top Speed", key: (c) => c.specs.topSpeed ? `${c.specs.topSpeed} mph` : "N/A", goodHigher: true },
       { label: "Engine", key: (c) => c.specs.engine },
       { label: "Transmission", key: (c) => c.specs.transmission },
       { label: "Drive Type", key: (c) => c.specs.driveType },
@@ -37,11 +37,11 @@ const specGroups: RowGroup[] = [
   {
     group: "Efficiency",
     rows: [
-      { label: "MPG City", key: (c) => c.specs.mpgCity ?? "—" },
-      { label: "MPG Highway", key: (c) => c.specs.mpgHighway ?? "—" },
-      { label: "MPG Combined", key: (c) => c.specs.mpgCombined ?? "—" },
-      { label: "Electric Range", key: (c) => c.specs.electricRange ? `${c.specs.electricRange} mi` : "—" },
-      { label: "Total Range", key: (c) => c.specs.totalRange ? `${c.specs.totalRange} mi` : "—" },
+      { label: "MPG City", key: (c) => c.specs.mpgCity ?? "—", goodHigher: true },
+      { label: "MPG Highway", key: (c) => c.specs.mpgHighway ?? "—", goodHigher: true },
+      { label: "MPG Combined", key: (c) => c.specs.mpgCombined ?? "—", goodHigher: true },
+      { label: "Electric Range", key: (c) => c.specs.electricRange ? `${c.specs.electricRange} mi` : "—", goodHigher: true },
+      { label: "Total Range", key: (c) => c.specs.totalRange ? `${c.specs.totalRange} mi` : "—", goodHigher: true },
       { label: "Battery", key: (c) => c.specs.batteryCapacity ? `${c.specs.batteryCapacity} kWh` : "—" },
       { label: "Charge Time", key: (c) => c.specs.chargingTime ?? "—" },
     ],
@@ -49,23 +49,103 @@ const specGroups: RowGroup[] = [
   {
     group: "Dimensions & Capacity",
     rows: [
-      { label: "Seating", key: (c) => `${c.specs.seating} passengers` },
-      { label: "Cargo Space", key: (c) => `${c.specs.cargo} cu.ft.` },
-      { label: "Towing Capacity", key: (c) => c.specs.towingCapacity ? `${c.specs.towingCapacity.toLocaleString()} lbs` : "—" },
-      { label: "Payload", key: (c) => c.specs.payloadCapacity ? `${c.specs.payloadCapacity.toLocaleString()} lbs` : "—" },
+      { label: "Seating", key: (c) => `${c.specs.seating} passengers`, goodHigher: true },
+      { label: "Cargo Space", key: (c) => `${c.specs.cargo} cu.ft.`, goodHigher: true },
+      { label: "Towing Capacity", key: (c) => c.specs.towingCapacity ? `${c.specs.towingCapacity.toLocaleString()} lbs` : "—", goodHigher: true },
+      { label: "Payload", key: (c) => c.specs.payloadCapacity ? `${c.specs.payloadCapacity.toLocaleString()} lbs` : "—", goodHigher: true },
     ],
   },
   {
     group: "Pricing",
     rows: [
-      { label: "Starting Price", key: (c) => `$${c.basePrice.toLocaleString()}` },
-      { label: "Top Price", key: (c) => `$${c.maxPrice.toLocaleString()}` },
+      { label: "Starting Price", key: (c) => `$${c.basePrice.toLocaleString()}`, goodLower: true },
+      { label: "Top Price", key: (c) => `$${c.maxPrice.toLocaleString()}`, goodLower: true },
     ],
   },
 ]
 
+function generateSummary(cars: Car[]): string[] {
+  const lines: string[] = []
+
+  if (cars.length < 2) return lines
+
+  // Best performance (horsepower)
+  const sorted = [...cars].sort((a, b) => b.specs.horsepower - a.specs.horsepower)
+  if (sorted[0].specs.horsepower > sorted[1].specs.horsepower) {
+    lines.push(`⚡ The ${sorted[0].brand} ${sorted[0].model} has the most power with ${sorted[0].specs.horsepower} hp — ${sorted[0].specs.horsepower - sorted[sorted.length - 1].specs.horsepower} hp more than the ${sorted[sorted.length - 1].model}.`)
+  }
+
+  // Best 0-60
+  const with060 = cars.filter((c) => c.specs.zeroToSixty)
+  if (with060.length >= 2) {
+    const fastest = [...with060].sort((a, b) => a.specs.zeroToSixty! - b.specs.zeroToSixty!)[0]
+    const slowest = [...with060].sort((a, b) => b.specs.zeroToSixty! - a.specs.zeroToSixty!)[0]
+    if (fastest.id !== slowest.id) {
+      lines.push(`🏎 The ${fastest.brand} ${fastest.model} reaches 60 mph in just ${fastest.specs.zeroToSixty}s — ${(slowest.specs.zeroToSixty! - fastest.specs.zeroToSixty!).toFixed(1)}s faster than the ${slowest.model}.`)
+    }
+  }
+
+  // Best fuel economy
+  const withMpg = cars.filter((c) => c.specs.mpgCombined)
+  if (withMpg.length >= 2) {
+    const best = [...withMpg].sort((a, b) => b.specs.mpgCombined! - a.specs.mpgCombined!)[0]
+    const worst = [...withMpg].sort((a, b) => a.specs.mpgCombined! - b.specs.mpgCombined!)[0]
+    if (best.id !== worst.id) {
+      lines.push(`⛽ For fuel savings, the ${best.brand} ${best.model} leads with ${best.specs.mpgCombined} MPG combined, beating the ${worst.model} by ${best.specs.mpgCombined! - worst.specs.mpgCombined!} MPG.`)
+    }
+  }
+
+  // Electric range
+  const withEv = cars.filter((c) => c.specs.electricRange && c.specs.electricRange > 0)
+  if (withEv.length === 1) {
+    lines.push(`🔋 Only the ${withEv[0].brand} ${withEv[0].model} offers electric range (${withEv[0].specs.electricRange} mi) — the others run on gasoline only.`)
+  } else if (withEv.length >= 2) {
+    const bestEv = [...withEv].sort((a, b) => b.specs.electricRange! - a.specs.electricRange!)[0]
+    lines.push(`🔋 The ${bestEv.brand} ${bestEv.model} has the longest electric range at ${bestEv.specs.electricRange} miles.`)
+  }
+
+  // Best value (lowest price)
+  const cheapest = [...cars].sort((a, b) => a.basePrice - b.basePrice)[0]
+  const priciest = [...cars].sort((a, b) => b.basePrice - a.basePrice)[0]
+  if (cheapest.id !== priciest.id) {
+    lines.push(`💰 The ${cheapest.brand} ${cheapest.model} is the most affordable at $${cheapest.basePrice.toLocaleString()} — $${(priciest.basePrice - cheapest.basePrice).toLocaleString()} less than the ${priciest.model}.`)
+  }
+
+  // Most seating
+  const mostSeats = [...cars].sort((a, b) => b.specs.seating - a.specs.seating)[0]
+  const leastSeats = [...cars].sort((a, b) => a.specs.seating - b.specs.seating)[0]
+  if (mostSeats.specs.seating > leastSeats.specs.seating) {
+    lines.push(`👨‍👩‍👧 Need more room? The ${mostSeats.brand} ${mostSeats.model} seats ${mostSeats.specs.seating} — ${mostSeats.specs.seating - leastSeats.specs.seating} more than the ${leastSeats.model}.`)
+  }
+
+  // Best cargo
+  const mostCargo = [...cars].sort((a, b) => b.specs.cargo - a.specs.cargo)[0]
+  const leastCargo = [...cars].sort((a, b) => a.specs.cargo - b.specs.cargo)[0]
+  if (mostCargo.specs.cargo > leastCargo.specs.cargo + 5) {
+    lines.push(`📦 The ${mostCargo.brand} ${mostCargo.model} offers ${mostCargo.specs.cargo} cu.ft. of cargo space — significantly more than the ${leastCargo.model}'s ${leastCargo.specs.cargo} cu.ft.`)
+  }
+
+  // Towing
+  const withTowing = cars.filter((c) => c.specs.towingCapacity && c.specs.towingCapacity > 0)
+  if (withTowing.length === 1) {
+    lines.push(`🚛 Only the ${withTowing[0].brand} ${withTowing[0].model} is rated for towing (${withTowing[0].specs.towingCapacity!.toLocaleString()} lbs).`)
+  } else if (withTowing.length >= 2) {
+    const bestTow = [...withTowing].sort((a, b) => b.specs.towingCapacity! - a.specs.towingCapacity!)[0]
+    lines.push(`🚛 For towing, the ${bestTow.brand} ${bestTow.model} tops the group at ${bestTow.specs.towingCapacity!.toLocaleString()} lbs capacity.`)
+  }
+
+  return lines.slice(0, 5) // max 5 bullets
+}
+
 export default function CompareClient({ user, allCars, initialIds }: CompareClientProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>(initialIds)
+  const [copied, setCopied] = useState(false)
+
+  const handleCopyLink = async () => {
+    await navigator.clipboard.writeText(window.location.href)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   const selectedCars = useMemo(
     () => selectedIds.map((id) => allCars.find((c) => c.id === id)).filter(Boolean) as Car[],
@@ -80,19 +160,42 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
   const removeCar = (id: string) => setSelectedIds(selectedIds.filter((i) => i !== id))
 
   const availableCars = allCars.filter((c) => !selectedIds.includes(c.id))
+  const summaryLines = useMemo(() => generateSummary(selectedCars), [selectedCars])
+
+  const colCount = selectedCars.length + (selectedCars.length < COMPARE_LIMIT ? 1 : 0)
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar user={user} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Compare Cars</h1>
-          <p className="text-gray-600">Compare up to {COMPARE_LIMIT} cars side-by-side</p>
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Compare Cars</h1>
+            <p className="text-gray-600">Compare up to {COMPARE_LIMIT} cars side-by-side</p>
+          </div>
+          {selectedCars.length >= 2 && (
+            <div className="flex gap-2 flex-shrink-0">
+              <button
+                onClick={handleCopyLink}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-700 transition-all"
+              >
+                {copied ? <Check className="w-4 h-4 text-green-600" /> : <Link2 className="w-4 h-4" />}
+                {copied ? "Copied!" : "Copy Link"}
+              </button>
+              <button
+                onClick={() => window.print()}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-700 transition-all print:hidden"
+              >
+                <Printer className="w-4 h-4" />
+                Print / Save PDF
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Car selector row */}
-        <div className="grid gap-4 mb-8" style={{ gridTemplateColumns: `repeat(${Math.max(selectedCars.length + (selectedCars.length < COMPARE_LIMIT ? 1 : 0), 2)}, minmax(0, 1fr))` }}>
+        <div className="grid gap-4 mb-6" style={{ gridTemplateColumns: `repeat(${Math.max(colCount, 2)}, minmax(0, 1fr))` }}>
           {selectedCars.map((car) => (
             <div key={car.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <div className="relative">
@@ -137,39 +240,75 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
           </div>
         ) : (
           <div className="space-y-4">
+
+            {/* Quick Summary */}
+            {summaryLines.length > 0 && (
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="bg-blue-600 px-6 py-3">
+                  <h3 className="font-bold text-white">Quick Summary</h3>
+                  <p className="text-blue-200 text-xs mt-0.5">Key differences at a glance</p>
+                </div>
+                <div className="p-5 space-y-3">
+                  {summaryLines.map((line, i) => (
+                    <p key={i} className="text-sm text-gray-700 leading-relaxed">{line}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Spec tables */}
             {specGroups.map(({ group, rows }) => (
               <div key={group} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="bg-gray-50 px-6 py-3 border-b">
-                  <h3 className="font-bold text-gray-900">{group}</h3>
+                {/* Header row with car names */}
+                <div
+                  className="grid bg-gray-50 border-b"
+                  style={{ gridTemplateColumns: `180px repeat(${selectedCars.length}, minmax(0, 1fr))` }}
+                >
+                  <div className="px-6 py-3">
+                    <h3 className="font-bold text-gray-900">{group}</h3>
+                  </div>
+                  {selectedCars.map((car) => (
+                    <div key={car.id} className="px-4 py-3 text-center border-l border-gray-200">
+                      <p className="text-xs text-blue-600 font-semibold">{car.brand}</p>
+                      <p className="text-sm font-bold text-gray-900 leading-tight">{car.model}</p>
+                    </div>
+                  ))}
                 </div>
+
+                {/* Data rows */}
                 <div className="divide-y divide-gray-100">
-                  {rows.map(({ label, key }) => {
+                  {rows.map(({ label, key, goodHigher, goodLower }) => {
                     const values = selectedCars.map((c) => key(c))
                     const numVals = values.map((v) => {
                       const n = parseFloat(String(v).replace(/[^0-9.]/g, ""))
                       return isNaN(n) ? null : n
                     })
-                    const goodHigher = ["Horsepower", "Torque", "Top Speed", "Electric Range", "Total Range", "MPG City", "MPG Highway", "MPG Combined", "Seating", "Cargo Space", "Towing Capacity"]
-                    const goodLower = ["0–60 mph", "Starting Price", "Top Price"]
                     const validNums = numVals.filter((n) => n !== null) as number[]
                     const maxVal = validNums.length > 0 ? Math.max(...validNums) : null
                     const minVal = validNums.length > 0 ? Math.min(...validNums) : null
 
                     return (
-                      <div key={label} className="grid px-6 py-3" style={{ gridTemplateColumns: `180px repeat(${selectedCars.length}, minmax(0, 1fr))` }}>
-                        <span className="text-sm text-gray-600 font-medium self-center">{label}</span>
+                      <div
+                        key={label}
+                        className="grid"
+                        style={{ gridTemplateColumns: `180px repeat(${selectedCars.length}, minmax(0, 1fr))` }}
+                      >
+                        <span className="px-6 py-3 text-sm text-gray-500 font-medium self-center">{label}</span>
                         {values.map((val, idx) => {
                           const num = numVals[idx]
-                          let cellClass = ""
+                          let cellClass = "text-gray-800"
                           if (validNums.length > 1 && num !== null && maxVal !== null && minVal !== null && maxVal !== minVal) {
-                            if (goodHigher.includes(label)) {
-                              cellClass = num === maxVal ? "text-green-700 font-semibold bg-green-50 rounded" : num === minVal ? "text-red-600" : ""
-                            } else if (goodLower.includes(label)) {
-                              cellClass = num === minVal ? "text-green-700 font-semibold bg-green-50 rounded" : num === maxVal ? "text-red-600" : ""
+                            if (goodHigher) {
+                              cellClass = num === maxVal ? "text-green-700 font-semibold bg-green-50" : num === minVal ? "text-red-500" : "text-gray-800"
+                            } else if (goodLower) {
+                              cellClass = num === minVal ? "text-green-700 font-semibold bg-green-50" : num === maxVal ? "text-red-500" : "text-gray-800"
                             }
                           }
                           return (
-                            <span key={idx} className={`text-sm text-center px-2 py-0.5 ${cellClass}`}>
+                            <span
+                              key={idx}
+                              className={`px-4 py-3 text-sm text-center border-l border-gray-100 self-center ${cellClass}`}
+                            >
                               {String(val)}
                             </span>
                           )
@@ -183,13 +322,24 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
 
             {/* Pros vs Cons */}
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="bg-gray-50 px-6 py-3 border-b">
-                <h3 className="font-bold text-gray-900">Pros & Cons</h3>
+              {/* Header row */}
+              <div
+                className="grid bg-gray-50 border-b"
+                style={{ gridTemplateColumns: `repeat(${selectedCars.length}, minmax(0, 1fr))` }}
+              >
+                {selectedCars.map((car, i) => (
+                  <div key={car.id} className={`px-5 py-3 ${i > 0 ? "border-l border-gray-200" : ""}`}>
+                    <p className="text-xs text-blue-600 font-semibold">{car.brand}</p>
+                    <p className="font-bold text-gray-900 text-sm">{car.model} — Pros & Cons</p>
+                  </div>
+                ))}
               </div>
-              <div className="grid divide-x divide-gray-100" style={{ gridTemplateColumns: `repeat(${selectedCars.length}, minmax(0, 1fr))` }}>
+              <div
+                className="grid divide-x divide-gray-100"
+                style={{ gridTemplateColumns: `repeat(${selectedCars.length}, minmax(0, 1fr))` }}
+              >
                 {selectedCars.map((car) => (
                   <div key={car.id} className="p-4">
-                    <p className="font-semibold text-xs text-gray-600 mb-2">{car.brand} {car.model}</p>
                     <div className="space-y-1 mb-3">
                       {car.pros.map((p) => (
                         <div key={p} className="flex items-start gap-1.5 text-xs text-green-800">
@@ -210,6 +360,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
                 ))}
               </div>
             </div>
+
           </div>
         )}
       </div>

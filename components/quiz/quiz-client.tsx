@@ -11,6 +11,7 @@ import MatchBadge from "./match-badge"
 import { Car } from "@/lib/cars/types"
 import { QuizAnswers, scoreCarForAnswers, carPassesFilters, getMatchReason, BudgetRange, KidsCount, VehicleSize, UseCase, FuelPref, StylePref, PetOwner } from "@/lib/cars/quiz"
 import { useQuizAnswers } from "@/hooks/useQuizAnswers"
+import { magazineReviews } from "@/lib/cars/reviews"
 
 interface QuizClientProps {
   user: { email?: string } | null
@@ -194,6 +195,23 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
                     <h3 className="text-lg font-bold text-gray-900">{car.model} {car.year}</h3>
                     <p className="text-sm text-blue-600 font-medium mt-1">{reason}</p>
                     <p className="text-sm text-gray-500 mt-1">${car.basePrice.toLocaleString()} starting</p>
+
+                    {/* Magazine reviews */}
+                    {magazineReviews[car.id] && (
+                      <div className="mt-4 space-y-2 border-t border-gray-100 pt-3">
+                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">What the experts say</p>
+                        {magazineReviews[car.id].slice(0, 2).map((rev) => (
+                          <div key={rev.magazine} className="bg-gray-50 rounded-xl p-3">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-xs font-bold text-gray-700">{rev.magazine}</span>
+                              <span className="text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">⭐ {rev.rating}</span>
+                            </div>
+                            <p className="text-xs text-gray-600 leading-relaxed italic">"{rev.quote}"</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     <div className="flex gap-2 mt-4">
                       <Link href={`/cars/${car.id}`} className="flex-1">
                         <Button size="sm" className="w-full">View Details</Button>
