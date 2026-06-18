@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Params }) {
   const model = decodeURIComponent(params.model).replace(/-/g, " ")
   const make = decodeURIComponent(params.make)
   return {
-    title: `${params.year} ${make} ${model} — AutoDrive`,
+    title: `${params.year} ${make} ${model} — CarAdvisor`,
     description: `Specs, safety ratings, and details for the ${params.year} ${make} ${model}.`,
   }
 }

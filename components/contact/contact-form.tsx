@@ -1,13 +1,23 @@
 "use client"
 
-import { useActionState } from "react"
+import { useTransition } from "react"
+import { useFormState } from "react-dom"
 import { Mail, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
 import { submitContactForm, ContactFormState } from "@/app/contact/actions"
 
 const initialState: ContactFormState = { success: false }
 
 export default function ContactForm() {
-  const [state, formAction, isPending] = useActionState(submitContactForm, initialState)
+  const [state, formAction] = useFormState(submitContactForm, initialState)
+  const [isPending, startTransition] = useTransition()
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    startTransition(() => {
+      formAction(formData)
+    })
+  }
 
   if (state.success) {
     return (
@@ -21,7 +31,7 @@ export default function ContactForm() {
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="mt-2 text-sm text-blue-600 hover:underline"
+          className="mt-2 text-sm text-orange-500 hover:underline"
         >
           Send another message
         </button>
@@ -32,14 +42,14 @@ export default function ContactForm() {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-8">
       <h2 className="text-xl font-bold text-gray-900 mb-6">Send a Message</h2>
-      <form action={formAction} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
           <input
             type="text"
             name="name"
             placeholder="Jane Smith"
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             required
           />
         </div>
@@ -49,7 +59,7 @@ export default function ContactForm() {
             type="email"
             name="from"
             placeholder="you@example.com"
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             required
           />
         </div>
@@ -57,7 +67,7 @@ export default function ContactForm() {
           <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
           <select
             name="subject"
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
           >
             <option value="General Question">General Question</option>
             <option value="Car Suggestion">Car Suggestion</option>
@@ -73,7 +83,7 @@ export default function ContactForm() {
             name="body"
             rows={5}
             placeholder="Tell us what&apos;s on your mind..."
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
             required
           />
         </div>
@@ -88,7 +98,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full bg-blue-700 hover:bg-blue-800 disabled:opacity-60 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+          className="w-full bg-orange-600 hover:bg-slate-800 disabled:opacity-60 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
         >
           {isPending ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</>

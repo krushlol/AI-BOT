@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: CarDetailPageProps) {
   const car = getCarById(params.id)
   if (!car) return {}
   return {
-    title: `${car.year} ${car.brand} ${car.model} — AutoDrive`,
+    title: `${car.year} ${car.brand} ${car.model} — CarAdvisor`,
     description: car.description,
   }
 }
@@ -27,5 +27,16 @@ export default async function CarDetailPage({ params }: CarDetailPageProps) {
     .filter((c) => c.id !== car.id && (c.brand === car.brand || c.bodyStyle === car.bodyStyle))
     .slice(0, 3)
 
-  return <CarDetailClient car={car} user={user} relatedCars={relatedCars} />
+  let initialSaved = false
+  if (user) {
+    const { data } = await supabase
+      .from("saved_cars")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("car_id", car.id)
+      .single()
+    initialSaved = !!data
+  }
+
+  return <CarDetailClient car={car} user={user} relatedCars={relatedCars} initialSaved={initialSaved} />
 }

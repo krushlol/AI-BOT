@@ -122,10 +122,6 @@ export const magazineReviews: Record<string, MagazineReview[]> = {
     { magazine: "Car and Driver", rating: "8.5/10", quote: "The Q5 wraps Audi luxury around a capable platform. Polished, premium, and practical in equal measure." },
     { magazine: "Edmunds", rating: "8.5/10", quote: "For luxury SUV buyers, the Q5 delivers. Whisper-quiet cabin and unmistakable Audi quality throughout." },
   ],
-  "kia-ev6-2024": [
-    { magazine: "Car and Driver", rating: "9/10", quote: "The EV6 is a knockout — striking to look at, exciting to drive, and the 800V fast-charging is a genuine game-changer." },
-    { magazine: "Motor Trend", rating: "EV of the Year", quote: "Kia's EV6 redefines what a mainstream electric car can be. Fast, beautiful, and phenomenally practical." },
-  ],
   "mercedes-glc-2024": [
     { magazine: "Car and Driver", rating: "8.5/10", quote: "The GLC's all-new design inside and out is a major step forward. The MBUX system is the best infotainment in the segment." },
     { magazine: "Edmunds", rating: "8.8/10", quote: "The GLC sets the luxury compact SUV benchmark. Superb ride quality, beautiful interior, and tech that actually works." },

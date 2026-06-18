@@ -1,4 +1,5 @@
 "use client"
+import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useMemo } from "react"
 import { X, Plus, CheckCircle, XCircle, Zap, DollarSign, Gauge, Leaf, Link2, Check, Printer } from "lucide-react"
@@ -7,7 +8,7 @@ import Navbar from "./navbar"
 import { Car } from "@/lib/cars/types"
 
 interface CompareClientProps {
-  user: { email?: string } | null
+  user: SupabaseUser | null
   allCars: Car[]
   initialIds: string[]
 }
@@ -98,7 +99,11 @@ function generateSummary(cars: Car[]): string[] {
   // Electric range
   const withEv = cars.filter((c) => c.specs.electricRange && c.specs.electricRange > 0)
   if (withEv.length === 1) {
-    lines.push(`🔋 Only the ${withEv[0].brand} ${withEv[0].model} offers electric range (${withEv[0].specs.electricRange} mi) — the others run on gasoline only.`)
+    const others = cars.filter((c) => c !== withEv[0])
+    const restDesc = others.every((c) => c.fuelType === "gasoline" || c.fuelType === "diesel")
+      ? "the others run on gasoline only"
+      : "the others have no dedicated EV range"
+    lines.push(`🔋 Only the ${withEv[0].brand} ${withEv[0].model} offers electric range (${withEv[0].specs.electricRange} mi) — ${restDesc}.`)
   } else if (withEv.length >= 2) {
     const bestEv = [...withEv].sort((a, b) => b.specs.electricRange! - a.specs.electricRange!)[0]
     lines.push(`🔋 The ${bestEv.brand} ${bestEv.model} has the longest electric range at ${bestEv.specs.electricRange} miles.`)
@@ -178,14 +183,14 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
             <div className="flex gap-2 flex-shrink-0">
               <button
                 onClick={handleCopyLink}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-700 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-orange-600 transition-all"
               >
                 {copied ? <Check className="w-4 h-4 text-green-600" /> : <Link2 className="w-4 h-4" />}
                 {copied ? "Copied!" : "Copy Link"}
               </button>
               <button
                 onClick={() => window.print()}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-700 transition-all print:hidden"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-orange-600 transition-all print:hidden"
               >
                 <Printer className="w-4 h-4" />
                 Print / Save PDF
@@ -208,7 +213,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
                 </button>
               </div>
               <div className="p-3">
-                <p className="text-xs text-blue-600 font-semibold">{car.brand}</p>
+                <p className="text-xs text-orange-500 font-semibold">{car.brand}</p>
                 <p className="font-bold text-sm">{car.year} {car.model}</p>
                 <p className="text-xs text-gray-500">${car.basePrice.toLocaleString()}</p>
               </div>
@@ -244,9 +249,9 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
             {/* Quick Summary */}
             {summaryLines.length > 0 && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="bg-blue-600 px-6 py-3">
+                <div className="bg-orange-500 px-6 py-3">
                   <h3 className="font-bold text-white">Quick Summary</h3>
-                  <p className="text-blue-200 text-xs mt-0.5">Key differences at a glance</p>
+                  <p className="text-orange-200 text-xs mt-0.5">Key differences at a glance</p>
                 </div>
                 <div className="p-5 space-y-3">
                   {summaryLines.map((line, i) => (
@@ -269,7 +274,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
                   </div>
                   {selectedCars.map((car) => (
                     <div key={car.id} className="px-4 py-3 text-center border-l border-gray-200">
-                      <p className="text-xs text-blue-600 font-semibold">{car.brand}</p>
+                      <p className="text-xs text-orange-500 font-semibold">{car.brand}</p>
                       <p className="text-sm font-bold text-gray-900 leading-tight">{car.model}</p>
                     </div>
                   ))}
@@ -329,7 +334,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
               >
                 {selectedCars.map((car, i) => (
                   <div key={car.id} className={`px-5 py-3 ${i > 0 ? "border-l border-gray-200" : ""}`}>
-                    <p className="text-xs text-blue-600 font-semibold">{car.brand}</p>
+                    <p className="text-xs text-orange-500 font-semibold">{car.brand}</p>
                     <p className="font-bold text-gray-900 text-sm">{car.model} — Pros & Cons</p>
                   </div>
                 ))}

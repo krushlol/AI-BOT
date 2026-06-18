@@ -1,4 +1,5 @@
 "use client"
+import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
@@ -15,11 +16,12 @@ import CompareBar from "./compare-bar"
 import { Car } from "@/lib/cars/types"
 import { LiveCar } from "@/lib/cars/live-types"
 import { MAINSTREAM_BRANDS } from "@/lib/cars/nhtsa"
+import { toggleSavedCar } from "@/lib/cars/save"
 
 const YEARS = Array.from({ length: new Date().getFullYear() - 1989 }, (_, i) => new Date().getFullYear() - i)
 
 interface SearchClientProps {
-  user: { email?: string } | null
+  user: SupabaseUser | null
   allCars: Car[]
   brands: string[]
   bodyStyles: string[]
@@ -34,9 +36,10 @@ interface SearchClientProps {
     seating?: string
   }
   unsplashKey?: string
+  initialSavedIds?: string[]
 }
 
-export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTypes, initialParams, unsplashKey }: SearchClientProps) {
+export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTypes, initialParams, unsplashKey, initialSavedIds = [] }: SearchClientProps) {
   const router = useRouter()
 
   // Curated filters
@@ -52,7 +55,7 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
 
   // Compare
   const [compareIds, setCompareIds] = useState<string[]>([])
-  const [savedIds, setSavedIds] = useState<string[]>([])
+  const [savedIds, setSavedIds] = useState<string[]>(initialSavedIds)
 
   // Live catalog
   const [liveMake, setLiveMake] = useState("")
@@ -93,9 +96,16 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
   const handleCompare = (id: string) => {
     setCompareIds((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : prev.length < 4 ? [...prev, id] : prev)
   }
-  const handleSave = (id: string) => {
+  const handleSave = async (id: string) => {
     if (!user) { router.push("/sign-in"); return }
-    setSavedIds((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id])
+    const isSaved = savedIds.includes(id)
+    setSavedIds((prev) => isSaved ? prev.filter((i) => i !== id) : [...prev, id])
+    try {
+      await toggleSavedCar(user.id, id, isSaved)
+    } catch (err) {
+      setSavedIds((prev) => isSaved ? [...prev, id] : prev.filter((i) => i !== id))
+      alert("Failed to save car: " + (err instanceof Error ? err.message : String(err)))
+    }
   }
 
   const handleLiveSearch = async () => {

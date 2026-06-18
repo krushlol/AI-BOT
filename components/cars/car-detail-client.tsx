@@ -1,4 +1,5 @@
 "use client"
+import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -19,11 +20,13 @@ import { useQuizAnswers } from "@/hooks/useQuizAnswers"
 import MatchBadge from "@/components/quiz/match-badge"
 import CarGallery from "@/components/cars/car-gallery"
 import { carGalleries } from "@/lib/cars/gallery"
+import { toggleSavedCar } from "@/lib/cars/save"
 
 interface CarDetailClientProps {
   car: Car
-  user: { email?: string } | null
+  user: SupabaseUser | null
   relatedCars: Car[]
+  initialSaved?: boolean
 }
 
 const fuelLabel = (f: string) => {
@@ -33,17 +36,24 @@ const fuelLabel = (f: string) => {
   return f.charAt(0).toUpperCase() + f.slice(1)
 }
 
-export default function CarDetailClient({ car, user, relatedCars }: CarDetailClientProps) {
-  const [saved, setSaved] = useState(false)
+export default function CarDetailClient({ car, user, relatedCars, initialSaved = false }: CarDetailClientProps) {
+  const [saved, setSaved] = useState(initialSaved)
   const [showAllTrims, setShowAllTrims] = useState(false)
   const { answers } = useQuizAnswers()
   const matchScore = answers ? scoreCarForAnswers(car, answers) : null
   const bestForTags = getBestForTags(car)
   const router = useRouter()
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!user) { router.push("/sign-in"); return }
-    setSaved(!saved)
+    const wasSaved = saved
+    setSaved(!wasSaved)
+    try {
+      await toggleSavedCar(user.id, car.id, wasSaved)
+    } catch (err) {
+      setSaved(wasSaved)
+      alert("Failed to save car: " + (err instanceof Error ? err.message : String(err)))
+    }
   }
 
   const displayTrims = showAllTrims ? car.trimLevels : car.trimLevels.slice(0, 3)
@@ -79,7 +89,7 @@ export default function CarDetailClient({ car, user, relatedCars }: CarDetailCli
       <Navbar user={user} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <Link href="/search" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 mb-4">
+        <Link href="/search" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-500 mb-4">
           <ArrowLeft className="w-4 h-4" /> Back to Search
         </Link>
 
@@ -93,20 +103,20 @@ export default function CarDetailClient({ car, user, relatedCars }: CarDetailCli
                 gallery={carGalleries[car.id] ?? car.gallery}
               />
               <div className="absolute top-6 left-6 flex gap-2 z-10">
-                <Badge className="bg-blue-600 text-white capitalize">{car.bodyStyle}</Badge>
+                <Badge className="bg-orange-500 text-white capitalize">{car.bodyStyle}</Badge>
                 <Badge className="bg-white text-gray-800 border">{fuelLabel(car.fuelType)}</Badge>
               </div>
             </div>
             <div className="p-6 lg:p-8 flex flex-col justify-between">
               <div>
-                <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide mb-1">{car.brand}</p>
+                <p className="text-sm font-semibold text-orange-500 uppercase tracking-wide mb-1">{car.brand}</p>
                 <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
                   {car.year} {car.model}
                 </h1>
                 <p className="text-gray-500 mb-3">{car.tagline}</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {bestForTags.map((tag) => (
-                    <span key={tag.label} className="inline-flex items-center gap-1 text-sm bg-blue-50 text-blue-700 border border-blue-100 px-3 py-1 rounded-full font-medium">
+                    <span key={tag.label} className="inline-flex items-center gap-1 text-sm bg-orange-50 text-orange-600 border border-orange-100 px-3 py-1 rounded-full font-medium">
                       {tag.emoji} {tag.label}
                     </span>
                   ))}
@@ -195,7 +205,7 @@ export default function CarDetailClient({ car, user, relatedCars }: CarDetailCli
                   <div key={trim.name} className="border border-gray-200 rounded-xl p-4 hover:border-blue-300 transition-colors">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-semibold text-gray-900">{trim.name}</h3>
-                      <span className="text-lg font-bold text-blue-700">${trim.price.toLocaleString()}</span>
+                      <span className="text-lg font-bold text-orange-600">${trim.price.toLocaleString()}</span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {trim.highlights.map((h) => (
@@ -206,7 +216,7 @@ export default function CarDetailClient({ car, user, relatedCars }: CarDetailCli
                 ))}
                 {car.trimLevels.length > 3 && (
                   <button
-                    className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                    className="text-sm text-orange-500 hover:text-orange-700 flex items-center gap-1"
                     onClick={() => setShowAllTrims(!showAllTrims)}
                   >
                     {showAllTrims ? (

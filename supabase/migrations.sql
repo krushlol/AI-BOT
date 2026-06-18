@@ -60,3 +60,61 @@ create policy "Users can unsave cars"
   on saved_cars
   for delete
   using (auth.uid() = user_id);
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- 3. profiles — stores username and avatar_url for each user
+-- ─────────────────────────────────────────────────────────────────────────────
+create table if not exists profiles (
+  id          uuid primary key references auth.users(id) on delete cascade,
+  username    text unique,
+  avatar_url  text,
+  updated_at  timestamptz default now()
+);
+
+alter table profiles enable row level security;
+
+create policy "Users can view their own profile"
+  on profiles for select
+  using (auth.uid() = id);
+
+create policy "Users can update their own profile"
+  on profiles for update
+  using (auth.uid() = id);
+
+create policy "Users can insert their own profile"
+  on profiles for insert
+  with check (auth.uid() = id);
+
+-- Auto-create a profile row when a new user signs up
+create or replace function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.profiles (id, username)
+  values (new.id, split_part(new.email, '@', 1));
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- 4. avatars storage bucket
+-- ─────────────────────────────────────────────────────────────────────────────
+insert into storage.buckets (id, name, public)
+  values ('avatars', 'avatars', true)
+  on conflict (id) do nothing;
+
+create policy "Anyone can view avatars"
+  on storage.objects for select
+  using (bucket_id = 'avatars');
+
+create policy "Users can upload their own avatar"
+  on storage.objects for insert
+  with check (bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]);
+
+create policy "Users can update their own avatar"
+  on storage.objects for update
+  using (bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]);

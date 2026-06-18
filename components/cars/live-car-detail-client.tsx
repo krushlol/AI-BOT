@@ -1,4 +1,5 @@
 "use client"
+import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { ArrowLeft, Star, CheckCircle, AlertCircle, Shield } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -9,7 +10,7 @@ import Link from "next/link"
 
 interface LiveCarDetailClientProps {
   car: LiveCar
-  user: { email?: string } | null
+  user: SupabaseUser | null
   unsplashKey?: string
 }
 

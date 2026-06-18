@@ -3,7 +3,7 @@ import QuizClient from "@/components/quiz/quiz-client"
 import { cars } from "@/lib/cars/data"
 
 export const metadata = {
-  title: "Find My Car — AutoDrive",
+  title: "Find My Car — CarAdvisor",
   description: "Answer 6 quick questions about your lifestyle and we'll match you with the perfect car.",
 }
 

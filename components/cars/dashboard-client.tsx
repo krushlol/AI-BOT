@@ -1,5 +1,6 @@
 "use client"
 
+import type { User as SupabaseUser } from "@supabase/supabase-js"
 import { useState } from "react"
 import { Heart, Search, User, Clock, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,7 +12,7 @@ import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 
 interface DashboardClientProps {
-  user: { id?: string; email?: string }
+  user: SupabaseUser
   allCars: Car[]
   initialSavedIds: string[]
 }
@@ -51,8 +52,8 @@ export default function DashboardClient({ user, allCars, initialSavedIds }: Dash
         {/* Header */}
         <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center">
-              <User className="w-7 h-7 text-blue-700" />
+            <div className="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center">
+              <User className="w-7 h-7 text-orange-600" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">My Dashboard</h1>
@@ -128,8 +129,8 @@ export default function DashboardClient({ user, allCars, initialSavedIds }: Dash
                 {savedSearches.map((search) => (
                   <div key={search.id} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
-                        <Search className="w-5 h-5 text-blue-600" />
+                      <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center">
+                        <Search className="w-5 h-5 text-orange-500" />
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900">{search.name}</p>

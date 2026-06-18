@@ -1,133 +1,130 @@
 "use client"
+import type { User as SupabaseUser } from "@supabase/supabase-js"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { ChevronLeft, ChevronRight, RotateCcw, GitCompare, Car as CarIcon, CheckCircle2 } from "lucide-react"
+import { useState, useMemo } from "react"
+import { RotateCcw, GitCompare, Car as CarIcon, CheckCircle2, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Navbar from "@/components/cars/navbar"
-import CarCard from "@/components/cars/car-card"
 import MatchBadge from "./match-badge"
 import { Car } from "@/lib/cars/types"
-import { QuizAnswers, scoreCarForAnswers, carPassesFilters, getMatchReason, BudgetRange, KidsCount, VehicleSize, UseCase, FuelPref, StylePref, PetOwner } from "@/lib/cars/quiz"
+import { QuizAnswers, scoreCarForAnswers, carPassesFilters, getMatchReason } from "@/lib/cars/quiz"
 import { useQuizAnswers } from "@/hooks/useQuizAnswers"
 import { magazineReviews } from "@/lib/cars/reviews"
 
 interface QuizClientProps {
-  user: { email?: string } | null
+  user: SupabaseUser | null
   allCars: Car[]
 }
 
-type StepOption = { value: string; label: string; description: string; emoji: string }
-
-const STEPS: { key: keyof QuizAnswers; question: string; options: StepOption[] }[] = [
+const QUESTIONS: {
+  key: keyof QuizAnswers
+  question: string
+  options: { value: string; label: string; emoji: string }[]
+}[] = [
   {
     key: "budget",
-    question: "What's your car budget?",
+    question: "Budget",
     options: [
-      { value: "under35k", label: "Under $35k", description: "Great value options", emoji: "💰" },
-      { value: "35to60k", label: "$35k – $60k", description: "Mid-range & near-luxury", emoji: "💳" },
-      { value: "60kplus", label: "$60k+", description: "Premium & luxury", emoji: "🏆" },
-    ],
-  },
-  {
-    key: "kids",
-    question: "Do you have kids?",
-    options: [
-      { value: "none", label: "No kids", description: "Just me (or me + partner)", emoji: "🙋" },
-      { value: "oneTwo", label: "1 – 2 kids", description: "Need a back seat", emoji: "👶" },
-      { value: "threePlus", label: "3+ kids", description: "Need lots of room", emoji: "👨‍👩‍👧‍👦" },
-    ],
-  },
-  {
-    key: "pets",
-    question: "Do you have pets?",
-    options: [
-      { value: "no", label: "No pets", description: "Keep it clean and simple", emoji: "🧹" },
-      { value: "yes", label: "Yes, I have pets", description: "Need easy-to-clean space", emoji: "🐾" },
-    ],
-  },
-  {
-    key: "size",
-    question: "How big of a car do you want?",
-    options: [
-      { value: "small", label: "Small", description: "Easy to park & fuel-efficient", emoji: "🚗" },
-      { value: "midsize", label: "Mid-size", description: "Best of both worlds", emoji: "🚙" },
-      { value: "big", label: "Big & roomy", description: "Max space & capability", emoji: "🛻" },
-    ],
-  },
-  {
-    key: "useCase",
-    question: "How do you mainly use your car?",
-    options: [
-      { value: "commute", label: "Daily commute", description: "City driving & efficiency", emoji: "🏙" },
-      { value: "family", label: "Family trips", description: "Safety & comfort first", emoji: "🗺" },
-      { value: "offroad", label: "Off-road / adventure", description: "Trails and rough terrain", emoji: "🏔" },
-      { value: "hauling", label: "Hauling / towing", description: "Heavy loads & trailers", emoji: "⚙️" },
-    ],
-  },
-  {
-    key: "fuel",
-    question: "Any fuel preference?",
-    options: [
-      { value: "mpg", label: "Best MPG", description: "Maximize fuel savings", emoji: "⛽" },
-      { value: "electric", label: "Going electric", description: "Zero emissions, no gas", emoji: "⚡" },
-      { value: "hybrid", label: "Hybrid", description: "Best of gas + electric", emoji: "🌿" },
-      { value: "nopref", label: "No preference", description: "Show me everything", emoji: "🤷" },
+      { value: "under35k", label: "Under $35k", emoji: "💰" },
+      { value: "35to60k", label: "$35k – $60k", emoji: "💳" },
+      { value: "60kplus", label: "$60k+", emoji: "🏆" },
     ],
   },
   {
     key: "style",
-    question: "Preferred vehicle style?",
+    question: "Vehicle type",
     options: [
-      { value: "suv", label: "SUV / Crossover", description: "High ride, versatile", emoji: "🚐" },
-      { value: "sedan", label: "Sedan / Hatchback", description: "Sleek and efficient", emoji: "🚗" },
-      { value: "truck", label: "Truck", description: "Rugged and capable", emoji: "🛻" },
-      { value: "nopref", label: "No preference", description: "Surprise me!", emoji: "🎲" },
+      { value: "suv", label: "SUV / Crossover", emoji: "🚙" },
+      { value: "sedan", label: "Sedan", emoji: "🚗" },
+      { value: "truck", label: "Truck", emoji: "🛻" },
+      { value: "nopref", label: "No preference", emoji: "🎲" },
+    ],
+  },
+  {
+    key: "fuel",
+    question: "Fuel type",
+    options: [
+      { value: "electric", label: "Electric", emoji: "⚡" },
+      { value: "hybrid", label: "Hybrid / PHEV", emoji: "🌿" },
+      { value: "mpg", label: "Best MPG", emoji: "⛽" },
+      { value: "nopref", label: "No preference", emoji: "🤷" },
+    ],
+  },
+  {
+    key: "useCase",
+    question: "Main use",
+    options: [
+      { value: "commute", label: "Daily commute", emoji: "🏙" },
+      { value: "family", label: "Family trips", emoji: "🗺" },
+      { value: "offroad", label: "Off-road", emoji: "🏔" },
+      { value: "hauling", label: "Hauling / towing", emoji: "⚙️" },
+    ],
+  },
+  {
+    key: "kids",
+    question: "Kids?",
+    options: [
+      { value: "none", label: "No kids", emoji: "🙋" },
+      { value: "oneTwo", label: "1–2 kids", emoji: "👶" },
+      { value: "threePlus", label: "3+ kids", emoji: "👨‍👩‍👧‍👦" },
+    ],
+  },
+  {
+    key: "size",
+    question: "Size preference",
+    options: [
+      { value: "small", label: "Small", emoji: "🚗" },
+      { value: "midsize", label: "Mid-size", emoji: "🚙" },
+      { value: "big", label: "Big & roomy", emoji: "🛻" },
+    ],
+  },
+  {
+    key: "pets",
+    question: "Pets?",
+    options: [
+      { value: "no", label: "No pets", emoji: "🧹" },
+      { value: "yes", label: "Yes", emoji: "🐾" },
     ],
   },
 ]
 
 export default function QuizClient({ user, allCars }: QuizClientProps) {
-  const [step, setStep] = useState(0) // 0-5 = questions, 6 = results
-  const [partial, setPartial] = useState<Partial<QuizAnswers>>({})
-  const { saveAnswers, clearAnswers } = useQuizAnswers()
-  const [results, setResults] = useState<{ car: Car; score: number; reason: string }[]>([])
+  const [answers, setAnswers] = useState<Partial<QuizAnswers>>({})
   const [compareIds, setCompareIds] = useState<string[]>([])
-  const router = useRouter()
+  const { saveAnswers, clearAnswers } = useQuizAnswers()
 
-  const currentStep = STEPS[step]
-  const selectedValue = currentStep ? partial[currentStep.key] : undefined
-  const progress = ((step) / STEPS.length) * 100
+  const answeredCount = Object.keys(answers).length
+  const isComplete = answeredCount === QUESTIONS.length
 
-  const handleSelect = (value: string) => {
-    const updated = { ...partial, [STEPS[step].key]: value }
-    setPartial(updated)
-
-    if (step < STEPS.length - 1) {
-      setTimeout(() => setStep(step + 1), 180)
-    } else {
-      // Final step — compute results
-      const answers = updated as QuizAnswers
-      saveAnswers(answers)
-      const scored = allCars
-        .filter((car) => carPassesFilters(car, answers))
-        .map((car) => ({
-          car,
-          score: scoreCarForAnswers(car, answers),
-          reason: getMatchReason(car, answers),
-        }))
-        .sort((a, b) => b.score - a.score)
-      setResults(scored)
-      setTimeout(() => setStep(STEPS.length), 180)
+  const select = (key: keyof QuizAnswers, value: string) => {
+    const updated = { ...answers, [key]: value }
+    setAnswers(updated)
+    if (Object.keys(updated).length === QUESTIONS.length) {
+      saveAnswers(updated as QuizAnswers)
     }
   }
 
-  const handleRetake = () => {
+  const results = useMemo(() => {
+    if (answeredCount < 2) return []
+    const full = answers as QuizAnswers
+    return allCars
+      .filter((car) => {
+        try { return carPassesFilters(car, full) } catch { return true }
+      })
+      .map((car) => ({
+        car,
+        score: scoreCarForAnswers(car, full),
+        reason: getMatchReason(car, full),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 12)
+  }, [answers, allCars, answeredCount])
+
+  const handleReset = () => {
+    setAnswers({})
     clearAnswers()
-    setPartial({})
-    setResults([])
-    setStep(0)
+    setCompareIds([])
   }
 
   const handleCompare = (id: string) => {
@@ -136,188 +133,172 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
     )
   }
 
-  // Results screen
-  if (step === STEPS.length) {
-    const noResults = results.length === 0
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar user={user} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          {noResults ? (
-            <div className="text-center py-24">
-              <div className="text-6xl mb-6">🔍</div>
-              <h1 className="text-3xl font-extrabold text-gray-900 mb-3">No exact matches found</h1>
-              <p className="text-gray-500 text-lg mb-8 max-w-md mx-auto">
-                None of our curated cars check every box for your answers. Try adjusting a preference — like fuel type or style — to see more options.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button onClick={handleRetake} className="gap-2">
-                  <RotateCcw className="w-4 h-4" /> Retake Quiz
-                </Button>
-                <Link href="/search">
-                  <Button variant="outline" className="gap-2">
-                    <CarIcon className="w-4 h-4" /> Browse All Cars
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          ) : (
-          <>
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              <CheckCircle2 className="w-4 h-4" /> {results.length} car{results.length !== 1 ? "s" : ""} match your needs
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">Your Top Car Picks</h1>
-            <p className="text-gray-500 text-lg">Every result below meets all your requirements</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {results.map(({ car, score, reason }, i) => (
-              <div key={car.id} className="relative">
-                {i === 0 && (
-                  <div className="absolute -top-3 left-4 z-10 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                    🏆 Best Match
-                  </div>
-                )}
-                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                  <div className="relative">
-                    <img
-                      src={car.image}
-                      alt={`${car.brand} ${car.model}`}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="absolute top-3 right-3">
-                      <MatchBadge score={score} size="md" />
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">{car.brand}</p>
-                    <h3 className="text-lg font-bold text-gray-900">{car.model} {car.year}</h3>
-                    <p className="text-sm text-blue-600 font-medium mt-1">{reason}</p>
-                    <p className="text-sm text-gray-500 mt-1">${car.basePrice.toLocaleString()} starting</p>
-
-                    {/* Magazine reviews */}
-                    {magazineReviews[car.id] && (
-                      <div className="mt-4 space-y-2 border-t border-gray-100 pt-3">
-                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">What the experts say</p>
-                        {magazineReviews[car.id].slice(0, 2).map((rev) => (
-                          <div key={rev.magazine} className="bg-gray-50 rounded-xl p-3">
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-xs font-bold text-gray-700">{rev.magazine}</span>
-                              <span className="text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">⭐ {rev.rating}</span>
-                            </div>
-                            <p className="text-xs text-gray-600 leading-relaxed italic">"{rev.quote}"</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    <div className="flex gap-2 mt-4">
-                      <Link href={`/cars/${car.id}`} className="flex-1">
-                        <Button size="sm" className="w-full">View Details</Button>
-                      </Link>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleCompare(car.id)}
-                        className={compareIds.includes(car.id) ? "border-blue-500 text-blue-600" : ""}
-                      >
-                        <GitCompare className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button variant="outline" onClick={handleRetake} className="gap-2">
-              <RotateCcw className="w-4 h-4" /> Retake Quiz
-            </Button>
-            {compareIds.length >= 2 && (
-              <Link href={`/compare?ids=${compareIds.join(",")}`}>
-                <Button className="gap-2">
-                  <GitCompare className="w-4 h-4" /> Compare {compareIds.length} Cars
-                </Button>
-              </Link>
-            )}
-            <Link href="/search">
-              <Button variant="outline" className="gap-2">
-                <CarIcon className="w-4 h-4" /> Browse All Cars
-              </Button>
-            </Link>
-          </div>
-          </>
-          )}
-        </div>
-      </div>
-    )
-  }
-
-  // Quiz step screen
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 flex flex-col">
+    <div className="min-h-screen bg-gray-50">
       <Navbar user={user} />
 
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-10">
-        {/* Progress bar */}
-        <div className="w-full max-w-xl mb-8">
-          <div className="flex items-center justify-between text-blue-200 text-xs mb-2">
-            <span>Step {step + 1} of {STEPS.length}</span>
-            <span>{Math.round(progress)}% complete</span>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-1.5 rounded-full text-sm font-semibold mb-3">
+            <Sparkles className="w-4 h-4" /> Find My Car
           </div>
-          <div className="h-2 bg-blue-800 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-white rounded-full transition-all duration-500"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">
+            Tell us what you need
+          </h1>
+          <p className="text-gray-500 text-lg">Answer any questions below — results update instantly</p>
         </div>
 
-        {/* Question */}
-        <div className="w-full max-w-xl">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white text-center mb-8">
-            {currentStep.question}
-          </h2>
+        {/* Questions grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-10">
+          {QUESTIONS.map((q) => (
+            <div key={q.key} className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">{q.question}</p>
+              <div className="flex flex-col gap-2">
+                {q.options.map((opt) => {
+                  const selected = answers[q.key] === opt.value
+                  return (
+                    <button
+                      key={opt.value}
+                      onClick={() => select(q.key, opt.value)}
+                      className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 text-left transition-all text-sm font-medium ${
+                        selected
+                          ? "border-orange-500 bg-orange-50 text-orange-700"
+                          : "border-gray-100 bg-gray-50 text-gray-700 hover:border-orange-200 hover:bg-orange-50/50"
+                      }`}
+                    >
+                      <span className="text-lg leading-none">{opt.emoji}</span>
+                      <span className="flex-1">{opt.label}</span>
+                      {selected && <CheckCircle2 className="w-4 h-4 text-blue-500 flex-shrink-0" />}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
 
-          <div className="grid gap-3">
-            {currentStep.options.map((opt) => (
+          {/* Reset card */}
+          {answeredCount > 0 && (
+            <div className="flex items-center justify-center">
               <button
-                key={opt.value}
-                onClick={() => handleSelect(opt.value)}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl border-2 transition-all text-left ${
-                  selectedValue === opt.value
-                    ? "border-white bg-white text-blue-900"
-                    : "border-blue-600/60 bg-blue-800/40 text-white hover:border-white hover:bg-blue-700/60"
-                }`}
+                onClick={handleReset}
+                className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-600 transition"
               >
-                <span className="text-2xl flex-shrink-0">{opt.emoji}</span>
-                <div>
-                  <p className="font-semibold">{opt.label}</p>
-                  <p className={`text-sm ${selectedValue === opt.value ? "text-blue-600" : "text-blue-200"}`}>
-                    {opt.description}
-                  </p>
-                </div>
-                {selectedValue === opt.value && (
-                  <CheckCircle2 className="w-5 h-5 ml-auto flex-shrink-0 text-blue-600" />
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* Back button */}
-          {step > 0 && (
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => setStep(step - 1)}
-                className="text-blue-200 hover:text-white text-sm flex items-center gap-1 mx-auto"
-              >
-                <ChevronLeft className="w-4 h-4" /> Back
+                <RotateCcw className="w-4 h-4" /> Reset all
               </button>
             </div>
           )}
         </div>
+
+        {/* Results */}
+        {answeredCount === 0 && (
+          <div className="text-center py-16 text-gray-400">
+            <CarIcon className="w-12 h-12 mx-auto mb-3 opacity-30" />
+            <p className="text-lg">Select your preferences above to see matches</p>
+          </div>
+        )}
+
+        {answeredCount >= 2 && results.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-5xl mb-4">🔍</div>
+            <h2 className="text-xl font-bold text-gray-700 mb-2">No exact matches</h2>
+            <p className="text-gray-500 mb-4">Try relaxing your fuel type or style preference</p>
+            <Button variant="outline" onClick={handleReset} className="gap-2">
+              <RotateCcw className="w-4 h-4" /> Reset filters
+            </Button>
+          </div>
+        )}
+
+        {results.length > 0 && (
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">
+                  {isComplete ? "Your Top Picks" : "Best Matches So Far"}
+                  <span className="ml-2 text-sm font-normal text-gray-400">
+                    {results.length} car{results.length !== 1 ? "s" : ""}
+                    {!isComplete && ` · ${QUESTIONS.length - answeredCount} filter${QUESTIONS.length - answeredCount !== 1 ? "s" : ""} left`}
+                  </span>
+                </h2>
+                {!isComplete && (
+                  <p className="text-sm text-gray-400 mt-0.5">Results will refine as you answer more questions</p>
+                )}
+              </div>
+              {compareIds.length >= 2 && (
+                <Link href={`/compare?ids=${compareIds.join(",")}`}>
+                  <Button size="sm" className="gap-2">
+                    <GitCompare className="w-4 h-4" /> Compare {compareIds.length}
+                  </Button>
+                </Link>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {results.map(({ car, score, reason }, i) => (
+                <div key={car.id} className="relative">
+                  {i === 0 && (
+                    <div className="absolute -top-3 left-4 z-10 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                      🏆 Best Match
+                    </div>
+                  )}
+                  <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
+                    <div className="relative">
+                      <img
+                        src={car.image}
+                        alt={`${car.brand} ${car.model}`}
+                        className="w-full h-44 object-cover"
+                      />
+                      <div className="absolute top-3 right-3">
+                        <MatchBadge score={score} size="md" />
+                      </div>
+                    </div>
+                    <div className="p-4 flex flex-col flex-1">
+                      <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">{car.brand}</p>
+                      <h3 className="text-lg font-bold text-gray-900">{car.model} {car.year}</h3>
+                      <p className="text-sm text-orange-500 font-medium mt-1">{reason}</p>
+                      <p className="text-sm text-gray-500 mt-0.5">${car.basePrice.toLocaleString()} starting</p>
+
+                      {magazineReviews[car.id]?.[0] && (
+                        <div className="mt-3 bg-gray-50 rounded-xl p-3">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs font-bold text-gray-600">{magazineReviews[car.id][0].magazine}</span>
+                            <span className="text-xs font-semibold text-amber-600">⭐ {magazineReviews[car.id][0].rating}</span>
+                          </div>
+                          <p className="text-xs text-gray-500 italic leading-relaxed">"{magazineReviews[car.id][0].quote}"</p>
+                        </div>
+                      )}
+
+                      <div className="flex gap-2 mt-auto pt-4">
+                        <Link href={`/cars/${car.id}`} className="flex-1">
+                          <Button size="sm" className="w-full">View Details</Button>
+                        </Link>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleCompare(car.id)}
+                          className={compareIds.includes(car.id) ? "border-orange-500 text-orange-500" : ""}
+                        >
+                          <GitCompare className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-3 justify-center mt-8">
+              <Button variant="outline" onClick={handleReset} className="gap-2">
+                <RotateCcw className="w-4 h-4" /> Start over
+              </Button>
+              <Link href="/search">
+                <Button variant="outline" className="gap-2">
+                  <CarIcon className="w-4 h-4" /> Browse all cars
+                </Button>
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

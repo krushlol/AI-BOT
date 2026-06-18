@@ -18,6 +18,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  let initialSavedIds: string[] = []
+  if (user) {
+    const { data } = await supabase.from("saved_cars").select("car_id").eq("user_id", user.id)
+    initialSavedIds = (data ?? []).map((r: { car_id: string }) => r.car_id)
+  }
+
   const unsplashKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
 
   return (
@@ -29,6 +35,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       fuelTypes={fuelTypes}
       initialParams={searchParams}
       unsplashKey={unsplashKey}
+      initialSavedIds={initialSavedIds}
     />
   )
 }

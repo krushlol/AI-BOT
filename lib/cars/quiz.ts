@@ -35,6 +35,13 @@ function budgetToMax(budget: BudgetRange): number {
   return Infinity
 }
 
+// Map budget to a min base price (for luxury tier, filter out cheap cars)
+function budgetToMin(budget: BudgetRange): number {
+  if (budget === "60kplus") return 45000
+  if (budget === "35to60k") return 25000
+  return 0
+}
+
 // Ideal seating based on kids
 function kidsToMinSeating(kids: KidsCount): number {
   if (kids === "threePlus") return 7
@@ -47,9 +54,11 @@ function kidsToMinSeating(kids: KidsCount): number {
  * These are non-negotiable requirements, not scoring bonuses.
  */
 export function carPassesFilters(car: Car, answers: QuizAnswers): boolean {
-  // 1. Budget — car must be within the selected budget
+  // 1. Budget — car must be within the selected budget range (both max AND min)
   const budget = budgetToMax(answers.budget)
+  const minBudget = budgetToMin(answers.budget)
   if (car.basePrice > budget) return false
+  if (car.basePrice < minBudget) return false
 
   // 2. Seating — car must have enough seats for the family
   const minSeating = kidsToMinSeating(answers.kids)
@@ -99,10 +108,18 @@ export function scoreCarForAnswers(car: Car, answers: QuizAnswers): number {
 
   // --- Budget (20 pts) ---
   const budget = budgetToMax(answers.budget)
-  if (car.basePrice <= budget) {
-    score += 20
-  } else if (car.basePrice <= budget * 1.15) {
-    score += 10 // slightly over budget, partial credit
+  const minBudget = budgetToMin(answers.budget)
+  if (car.basePrice > budget) {
+    // Over budget — should have been filtered out, but no points
+  } else if (car.basePrice < minBudget) {
+    // Under the minimum for this tier — filtered out, no points
+  } else if (answers.budget === "60kplus") {
+    // For luxury tier: reward cars that are actually $60k+
+    if (car.basePrice >= 60000) score += 20
+    else if (car.basePrice >= 50000) score += 14
+    else score += 8
+  } else {
+    score += 20 // within range
   }
 
   // --- Kids / Seating (15 pts) ---

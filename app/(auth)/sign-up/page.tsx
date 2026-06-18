@@ -16,7 +16,7 @@ export default async function SignUpPage() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold mb-2">AutoDrive</h1>
+          <h1 className="text-3xl font-bold mb-2">CarAdvisor</h1>
           <p className="text-gray-600">Create your free account</p>
         </div>
         <SignUpForm />

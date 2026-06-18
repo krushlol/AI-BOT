@@ -2650,62 +2650,8 @@ export const cars: Car[] = [
     colors: ["Glacier White", "Mythos Black", "Florett Silver", "Navarra Blue", "Daytona Gray", "Siam Beige"],
   },
 
-  // ── 10 New Additions ────────────────────────────────────────────────────────
-
-  {
-    id: "kia-ev6-2024",
-    brand: "Kia",
-    model: "EV6",
-    year: 2024,
-    bodyStyle: "suv",
-    fuelType: "electric",
-    basePrice: 42600,
-    maxPrice: 56000,
-    image: "https://images.unsplash.com/photo-1652059174417-bf4a1f5e0cd9?w=800&q=80",
-    tagline: "Ultra-fast charging meets striking design",
-    description:
-      "The Kia EV6 is a bold crossover EV built on the E-GMP platform. It supports 800V ultra-fast charging, gaining 100 miles in just 4.5 minutes. With razor-sharp styling, a spacious interior, and impressive range, it punches well above its price class.",
-    specs: {
-      horsepower: 320,
-      torque: 446,
-      engine: "77.4 kWh Battery",
-      transmission: "Single-Speed Direct Drive",
-      driveType: "AWD",
-      zeroToSixty: 5.1,
-      topSpeed: 115,
-      electricRange: 274,
-      totalRange: 274,
-      batteryCapacity: 77.4,
-      chargingTime: "18 min (10–80%)",
-      cargo: 24.4,
-      seating: 5,
-    },
-    trimLevels: [
-      { name: "Light", price: 42600, highlights: ["RWD", "58 kWh battery", "310 mi range"] },
-      { name: "Standard", price: 46000, highlights: ["RWD", "77.4 kWh battery", "310 mi range"] },
-      { name: "GT-Line AWD", price: 51000, highlights: ["AWD", "320hp", "274 mi range"] },
-      { name: "GT", price: 56000, highlights: ["576hp dual motor", "3.4s 0-60", "Sports suspension"] },
-    ],
-    safety: {
-      rating: "TOP SAFETY PICK+",
-      ratingSource: "IIHS 2024",
-      features: [
-        "Forward Collision-Avoidance Assist",
-        "Lane Keeping Assist",
-        "Highway Driving Assist 2",
-        "Blind-Spot Collision Warning",
-        "Rear Cross-Traffic Collision-Avoidance Assist",
-        "Driver Attention Warning",
-      ],
-    },
-    interiorFeatures: ["12.3-in dual curved screens", "Heated & ventilated seats", "Head-up display", "Relaxation seats (rear)"],
-    exteriorFeatures: ["Sequential turn signals", "Flush door handles", "Sport-tuned suspension", "20-inch wheels (GT-Line)"],
-    techFeatures: ["Over-the-air updates", "Vehicle-to-Load (V2L)", "Navigation-based charging", "Kia Connect app"],
-    pros: ["800V ultra-fast charging is class-leading", "Bold exterior design", "Practical cargo space", "Smooth one-pedal driving"],
-    cons: ["Range slightly lower than Model Y", "No Apple CarPlay wireless on base", "Less brand prestige than Tesla or BMW"],
-    coolFeatures: ["V2L lets you power appliances (up to 3.6 kW) from the car's battery", "Transparent hood camera display"],
-    colors: ["Snow White Pearl", "Aurora Black", "Runway Red", "Yacht Blue", "Interstellar Gray", "Moonscape"],
-  },
+  // ── 9 New Additions ─────────────────────────────────────────────────────────
+  // (Kia EV6 already exists as kia-ev6-2025)
 
   {
     id: "mercedes-glc-2024",
@@ -2770,7 +2716,7 @@ export const cars: Car[] = [
     fuelType: "plug-in hybrid",
     basePrice: 48550,
     maxPrice: 67000,
-    image: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80",
     tagline: "The world's safest SUV, now goes electric",
     description:
       "The Volvo XC60 Recharge PHEV is a masterclass in Scandinavian design, delivering 35 miles of all-electric range and a total of 480hp in T8 trim. Volvo's commitment to safety is unmatched — and the interior is a serene, minimalist retreat.",
@@ -3044,7 +2990,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 26100,
     maxPrice: 33400,
-    image: "https://images.unsplash.com/photo-1604054923012-823b3a33f6b0?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1550355291-bbee04a92027?w=800&q=80",
     tagline: "The only midsize sedan with AWD under $30K",
     description:
       "The 2024 Nissan Altima stands out by offering AWD at an affordable price — unique in the midsize sedan segment. Its VC-Turbo variable compression engine delivers a mix of power and efficiency, backed by ProPILOT Assist on upper trims.",
@@ -3152,7 +3098,7 @@ export const cars: Car[] = [
     fuelType: "hybrid",
     basePrice: 38305,
     maxPrice: 55000,
-    image: "https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=800&q=80",
     tagline: "The only hybrid minivan — and the most practical",
     description:
       "The 2024 Toyota Sienna is the only minivan sold in the US with a hybrid powertrain — and it delivers 36 MPG combined, making a road trip with the family greener than ever. With standard AWD and available Captain's Chairs, it's the ultimate family hauler.",

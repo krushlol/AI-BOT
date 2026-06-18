@@ -1,12 +1,12 @@
 "use client"
+import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState } from "react"
 import Navbar from "./navbar"
 import Link from "next/link"
 import { cars } from "@/lib/cars/data"
-
 interface CalculatorClientProps {
-  user: { email?: string } | null
+  user: SupabaseUser | null
 }
 
 const TERMS = [36, 48, 60, 72, 84]
@@ -48,10 +48,10 @@ export default function CalculatorClient({ user }: CalculatorClientProps) {
         </div>
 
         {/* Monthly payment result — always visible at top */}
-        <div className="bg-blue-600 text-white rounded-2xl p-8 text-center mb-6 shadow-lg">
-          <p className="text-blue-200 text-sm font-medium mb-1">Estimated Monthly Payment</p>
+        <div className="bg-orange-500 text-white rounded-2xl p-8 text-center mb-6 shadow-lg">
+          <p className="text-orange-200 text-sm font-medium mb-1">Estimated Monthly Payment</p>
           <p className="text-6xl font-extrabold tracking-tight">${fmt(monthly)}</p>
-          <p className="text-blue-200 text-sm mt-3">
+          <p className="text-orange-200 text-sm mt-3">
             {term} months &nbsp;·&nbsp; {apr}% interest &nbsp;·&nbsp; ${fmt(downAmt)} down
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function CalculatorClient({ user }: CalculatorClientProps) {
                   onClick={() => setTerm(t)}
                   className={`py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                     term === t
-                      ? "bg-blue-600 text-white shadow"
+                      ? "bg-orange-500 text-white shadow"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
@@ -168,7 +168,7 @@ export default function CalculatorClient({ user }: CalculatorClientProps) {
         </div>
 
         {/* Tip */}
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800 mb-10">
+        <div className="bg-orange-50 border border-orange-100 rounded-xl p-4 text-sm text-orange-700 mb-10">
           💡 A good rule of thumb: keep your monthly payment under <strong>15% of your take-home pay</strong>. A bigger down payment means less interest overall.
         </div>
 
@@ -182,19 +182,19 @@ export default function CalculatorClient({ user }: CalculatorClientProps) {
                 onClick={() => setPrice(car.basePrice)}
                 className={`text-left p-3 rounded-xl border transition-all ${
                   price === car.basePrice
-                    ? "border-blue-500 bg-blue-50"
+                    ? "border-orange-500 bg-orange-50"
                     : "border-gray-200 bg-white hover:border-blue-300"
                 }`}
               >
                 <img src={car.image} alt={car.model} className="w-full h-20 object-cover rounded-lg mb-2" />
-                <p className="text-xs text-blue-600 font-medium">{car.brand}</p>
+                <p className="text-xs text-orange-500 font-medium">{car.brand}</p>
                 <p className="text-sm font-semibold text-gray-900 leading-tight">{car.model}</p>
                 <p className="text-xs text-gray-500 mt-0.5">${car.basePrice.toLocaleString()}</p>
               </button>
             ))}
           </div>
           <p className="text-sm text-gray-500 mt-4 text-center">
-            <Link href="/search" className="text-blue-600 hover:underline font-medium">Browse all 29 cars →</Link>
+            <Link href="/search" className="text-orange-500 hover:underline font-medium">Browse all 29 cars →</Link>
           </p>
         </div>
       </div>

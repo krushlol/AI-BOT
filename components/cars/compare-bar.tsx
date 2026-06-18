@@ -27,7 +27,7 @@ export default function CompareBar({ compareIds, onRemove, onClear }: CompareBar
         <div className="flex gap-2 flex-wrap flex-1">
           {selectedCars.map((car) =>
             car ? (
-              <div key={car.id} className="flex items-center gap-1.5 bg-blue-50 border border-blue-200 rounded-full px-3 py-1 text-xs font-medium text-blue-800">
+              <div key={car.id} className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 rounded-full px-3 py-1 text-xs font-medium text-orange-700">
                 {car.year} {car.brand} {car.model}
                 <button onClick={() => onRemove(car.id)} className="ml-1 hover:text-red-500">
                   <X className="w-3 h-3" />

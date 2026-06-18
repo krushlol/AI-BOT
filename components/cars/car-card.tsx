@@ -25,7 +25,7 @@ interface CarCardProps {
 const fuelColors: Record<string, string> = {
   electric: "bg-green-100 text-green-800",
   hybrid: "bg-teal-100 text-teal-800",
-  "plug-in hybrid": "bg-blue-100 text-blue-800",
+  "plug-in hybrid": "bg-orange-100 text-orange-700",
   gasoline: "bg-orange-100 text-orange-800",
   diesel: "bg-yellow-100 text-yellow-800",
 }
@@ -78,8 +78,8 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
             title={isInCompare ? "Remove from compare" : "Add to compare"}
             className={`absolute bottom-3 right-3 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
               isInCompare
-                ? "bg-blue-600 text-white"
-                : "bg-white/90 text-gray-600 hover:bg-blue-600 hover:text-white"
+                ? "bg-orange-500 text-white"
+                : "bg-white/90 text-gray-600 hover:bg-orange-500 hover:text-white"
             }`}
           >
             <GitCompare className="w-4 h-4" />
@@ -90,7 +90,7 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
       <div className="p-4">
         <Link href={`/cars/${car.id}`}>
           <div className="mb-1">
-            <span className="text-xs font-medium text-blue-600 uppercase tracking-wide">{car.brand}</span>
+            <span className="text-xs font-medium text-orange-500 uppercase tracking-wide">{car.brand}</span>
             <h3 className="text-lg font-bold text-gray-900 leading-tight">
               {car.year} {car.model}
             </h3>
@@ -99,7 +99,7 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
           {bestForTags.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-3">
               {bestForTags.map((tag) => (
-                <span key={tag.label} className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 rounded-full font-medium">
+                <span key={tag.label} className="inline-flex items-center gap-1 text-xs bg-orange-50 text-orange-600 border border-orange-100 px-2 py-0.5 rounded-full font-medium">
                   {tag.emoji} {tag.label}
                 </span>
               ))}
