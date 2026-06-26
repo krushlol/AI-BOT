@@ -1770,7 +1770,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 34500,
     maxPrice: 47900,
-    image: "https://images.unsplash.com/photo-1532564979029-bbf9fcbe7b0b?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1619279257014-3de5c279ed3e?w=800&q=80",
     tagline: "The gold standard of family minivans",
     description:
       "The 2021 Honda Odyssey remains the benchmark family hauler. With seating for 8, a magic sliding second-row seat that creates a conversation zone between rows, built-in vacuum cleaner, and a refined 3.5L V6, it's the smartest van on the market.",
@@ -2662,7 +2662,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 47700,
     maxPrice: 62000,
-    image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1617654112368-307921291f42?w=800&q=80",
     tagline: "Luxury SUV with head-turning elegance",
     description:
       "The 2024 Mercedes-Benz GLC 300 is the benchmark luxury compact SUV. It blends a sumptuous interior loaded with MBUX technology, a potent turbocharged engine, and Mercedes' signature ride refinement into a compelling everyday luxury package.",
@@ -2716,7 +2716,7 @@ export const cars: Car[] = [
     fuelType: "plug-in hybrid",
     basePrice: 48550,
     maxPrice: 67000,
-    image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&q=80",
     tagline: "The world's safest SUV, now goes electric",
     description:
       "The Volvo XC60 Recharge PHEV is a masterclass in Scandinavian design, delivering 35 miles of all-electric range and a total of 480hp in T8 trim. Volvo's commitment to safety is unmatched — and the interior is a serene, minimalist retreat.",
@@ -2773,7 +2773,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 32495,
     maxPrice: 62000,
-    image: "https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80",
     tagline: "Born for the trail, built for legend",
     description:
       "The Jeep Wrangler is the ultimate off-road icon. With solid front and rear axles, removable doors and roof, and legendary 4×4 systems, the 2024 Wrangler continues to dominate trail-rated adventures while adding modern tech creature comforts.",
@@ -2827,7 +2827,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 50025,
     maxPrice: 71000,
-    image: "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1633579706905-7be6a3c3f4dc?w=800&q=80",
     tagline: "Japanese luxury redefined with bold design",
     description:
       "The all-new 2024 Lexus RX 350 is a top-to-bottom redesign with sharper styling, a more powerful 2.4L turbo engine, and Lexus's most advanced tech to date. It offers three powertrain options including a 450h+ PHEV and delivers the serenity Lexus is famous for.",
@@ -2881,7 +2881,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 26500,
     maxPrice: 31000,
-    image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?w=800&q=80",
     tagline: "The most affordable electric crossover in America",
     description:
       "After a dramatic price cut, the 2023 Chevrolet Bolt EUV is now the most affordable new EV in the United States at under $27,000. With 247 miles of range, a roomy interior for a subcompact, and Super Cruise hands-free driving available, it's an incredible value.",
@@ -2934,7 +2934,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 37495,
     maxPrice: 57000,
-    image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
     tagline: "America's iconic family SUV, reimagined",
     description:
       "The 2024 Ford Explorer continues to be one of the best-selling SUVs in America. With three-row seating, a choice of EcoBoost engines, and the ST performance model, it blends family practicality with real driving engagement.",
@@ -3044,7 +3044,7 @@ export const cars: Car[] = [
     fuelType: "hybrid",
     basePrice: 31895,
     maxPrice: 38590,
-    image: "https://images.unsplash.com/photo-1540066019607-e5f69323a8dc?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1606152421802-db97b4c7f3b0?w=800&q=80",
     tagline: "The smarter midsize sedan with class-leading mpg",
     description:
       "The 2024 Honda Accord Hybrid combines a refined two-motor hybrid system with the Accord's best-ever interior and technology. It achieves an outstanding 46 MPG combined while offering a spacious cabin, excellent safety, and Honda Sensing standard across all trims.",
@@ -3098,7 +3098,7 @@ export const cars: Car[] = [
     fuelType: "hybrid",
     basePrice: 38305,
     maxPrice: 55000,
-    image: "https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
     tagline: "The only hybrid minivan — and the most practical",
     description:
       "The 2024 Toyota Sienna is the only minivan sold in the US with a hybrid powertrain — and it delivers 36 MPG combined, making a road trip with the family greener than ever. With standard AWD and available Captain's Chairs, it's the ultimate family hauler.",

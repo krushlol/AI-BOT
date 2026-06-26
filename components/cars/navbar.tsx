@@ -91,12 +91,13 @@ export default function Navbar({ user }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 26 L12 10 L16 10 L24 26Z" fill="#f97316" />
-              <rect x="13.2" y="22" width="1.6" height="3" rx="0.8" fill="white" opacity="0.9"/>
-              <rect x="13.5" y="17" width="1" height="2.5" rx="0.5" fill="white" opacity="0.7"/>
-              <rect x="13.7" y="13" width="0.6" height="1.8" rx="0.3" fill="white" opacity="0.5"/>
-              <circle cx="14" cy="9" r="1.2" fill="#fed7aa" />
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="15" cy="15" r="13" stroke="#f97316" strokeWidth="2.5"/>
+              <circle cx="15" cy="15" r="3.5" fill="#f97316"/>
+              <line x1="15" y1="2" x2="15" y2="11.5" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round"/>
+              <line x1="15" y1="18.5" x2="15" y2="28" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round"/>
+              <line x1="2" y1="15" x2="11.5" y2="15" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round"/>
+              <line x1="18.5" y1="15" x2="28" y2="15" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round"/>
             </svg>
             <span className="text-slate-900">Car<span className="text-orange-500">Advisor</span></span>
           </Link>

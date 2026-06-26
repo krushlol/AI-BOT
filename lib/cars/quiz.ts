@@ -93,9 +93,11 @@ export function carPassesFilters(car: Car, answers: QuizAnswers): boolean {
     if (!offRoadOk) return false
   }
 
-  // 6. Size — soft filter: small = no trucks/vans; big = no 2-seat coupes
-  if (answers.size === "small" && (car.bodyStyle === "truck" || car.bodyStyle === "van")) return false
-  if (answers.size === "big" && (car.bodyStyle === "coupe" || car.bodyStyle === "convertible")) return false
+  // 6. Size — small = compact cars only; big = SUV/truck/van only; wagon/midsize = no hard filter
+  const bigBodyStyles = ["suv", "truck", "van"]
+  const smallBodyStyles = ["sedan", "hatchback", "coupe", "convertible"]
+  if (answers.size === "small" && !smallBodyStyles.includes(car.bodyStyle)) return false
+  if (answers.size === "big" && !bigBodyStyles.includes(car.bodyStyle)) return false
 
   // 7. Pets — exclude luxury cars (hard to clean, light-colored interiors, low cargo)
   if (answers.pets === "yes" && LUXURY_CAR_IDS.has(car.id)) return false
@@ -133,9 +135,11 @@ export function scoreCarForAnswers(car: Car, answers: QuizAnswers): number {
   // --- Vehicle size (15 pts) ---
   const smallStyles = ["sedan", "hatchback", "coupe", "convertible"]
   const bigStyles = ["suv", "truck", "van"]
+  const midsizeStyles = ["sedan", "hatchback", "wagon", "suv"]
   if (answers.size === "small" && smallStyles.includes(car.bodyStyle)) score += 15
   else if (answers.size === "big" && bigStyles.includes(car.bodyStyle)) score += 15
-  else if (answers.size === "midsize") score += 10 // midsize is flexible
+  else if (answers.size === "midsize" && midsizeStyles.includes(car.bodyStyle)) score += 15
+  else if (answers.size === "midsize") score += 5 // trucks/vans are passable but not ideal for midsize
   else score += 3
 
   // --- Use case (20 pts) ---

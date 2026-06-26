@@ -21,6 +21,7 @@ import MatchBadge from "@/components/quiz/match-badge"
 import CarGallery from "@/components/cars/car-gallery"
 import { carGalleries } from "@/lib/cars/gallery"
 import { toggleSavedCar } from "@/lib/cars/save"
+import { getSpecExplanations } from "@/lib/cars/spec-explanations"
 
 interface CarDetailClientProps {
   car: Car
@@ -58,31 +59,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
   const displayTrims = showAllTrims ? car.trimLevels : car.trimLevels.slice(0, 3)
 
-  const primaryStats = [
-    { label: "Horsepower", value: `${car.specs.horsepower} hp` },
-    { label: "Torque", value: `${car.specs.torque} lb-ft` },
-    { label: "0–60 mph", value: car.specs.zeroToSixty ? `${car.specs.zeroToSixty}s` : "N/A" },
-    { label: "Top Speed", value: car.specs.topSpeed ? `${car.specs.topSpeed} mph` : "N/A" },
-    ...(car.fuelType === "electric"
-      ? [{ label: "Electric Range", value: `${car.specs.electricRange} mi` }]
-      : car.specs.electricRange
-      ? [
-          { label: "EV Range", value: `${car.specs.electricRange} mi` },
-          { label: "Total Range", value: `${car.specs.totalRange} mi` },
-        ]
-      : [
-          { label: "MPG City", value: `${car.specs.mpgCity}` },
-          { label: "MPG Hwy", value: `${car.specs.mpgHighway}` },
-          { label: "MPG Combined", value: `${car.specs.mpgCombined}` },
-        ]),
-    { label: "Seating", value: `${car.specs.seating} passengers` },
-    { label: "Cargo Space", value: `${car.specs.cargo} cu.ft.` },
-    { label: "Drive Type", value: car.specs.driveType },
-    { label: "Transmission", value: car.specs.transmission },
-    ...(car.specs.towingCapacity ? [{ label: "Towing Capacity", value: `${car.specs.towingCapacity?.toLocaleString()} lbs` }] : []),
-    ...(car.specs.batteryCapacity ? [{ label: "Battery", value: `${car.specs.batteryCapacity} kWh` }] : []),
-    ...(car.specs.chargingTime ? [{ label: "Charge Time", value: car.specs.chargingTime }] : []),
-  ]
+  const specExplanations = getSpecExplanations(car)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -161,10 +138,13 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
         {/* Quick stats */}
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 mb-6">
-          {primaryStats.slice(0, 6).map(({ label, value }) => (
+          {specExplanations.slice(0, 6).map(({ label, value, explanation }) => (
             <div key={label} className="bg-white border border-gray-200 rounded-xl p-3 text-center">
               <p className="text-xs text-gray-500 mb-1">{label}</p>
               <p className="font-bold text-gray-900 text-sm">{value}</p>
+              {explanation && (
+                <p className="text-xs text-gray-400 mt-1 leading-tight">{explanation}</p>
+              )}
             </div>
           ))}
         </div>
@@ -181,18 +161,20 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
           <TabsContent value="specs">
             <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-bold mb-4">Full Specifications</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {primaryStats.map(({ label, value }) => (
-                  <div key={label} className="flex justify-between py-2 border-b border-gray-100 last:border-0">
-                    <span className="text-sm text-gray-600">{label}</span>
-                    <span className="text-sm font-semibold text-gray-900">{value}</span>
+              <h2 className="text-lg font-bold mb-1">Full Specifications</h2>
+              <p className="text-sm text-gray-500 mb-4">Plain-English explanations alongside every number</p>
+              <div className="divide-y divide-gray-100">
+                {specExplanations.map(({ label, value, explanation }) => (
+                  <div key={label} className="py-3 grid grid-cols-[140px_1fr] sm:grid-cols-[180px_1fr] gap-4 items-start">
+                    <div>
+                      <p className="text-sm text-gray-500">{label}</p>
+                      <p className="text-sm font-bold text-gray-900 mt-0.5">{value}</p>
+                    </div>
+                    {explanation && (
+                      <p className="text-sm text-gray-600 leading-relaxed pt-0.5">{explanation}</p>
+                    )}
                   </div>
                 ))}
-                <div className="flex justify-between py-2 border-b border-gray-100">
-                  <span className="text-sm text-gray-600">Engine</span>
-                  <span className="text-sm font-semibold text-gray-900 text-right max-w-[180px]">{car.specs.engine}</span>
-                </div>
               </div>
             </div>
           </TabsContent>
