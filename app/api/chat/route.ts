@@ -38,12 +38,37 @@ Guidelines:
 export async function POST(req: Request) {
   const { messages } = await req.json()
 
-  const stream = await client.messages.stream({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 1024,
-    system: SYSTEM_PROMPT,
-    messages,
+  const encoder = new TextEncoder()
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      try {
+        const response = await client.messages.create({
+          model: "claude-haiku-4-5-20251001",
+          max_tokens: 1024,
+          system: SYSTEM_PROMPT,
+          messages,
+          stream: true,
+        })
+
+        for await (const event of response) {
+          if (
+            event.type === "content_block_delta" &&
+            event.delta.type === "text_delta"
+          ) {
+            controller.enqueue(encoder.encode(event.delta.text))
+          }
+        }
+      } catch (err) {
+        console.error("Chat API error:", err)
+        controller.enqueue(encoder.encode("Sorry, something went wrong."))
+      } finally {
+        controller.close()
+      }
+    },
   })
 
-  return new Response(stream.toReadableStream())
+  return new Response(stream, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  })
 }

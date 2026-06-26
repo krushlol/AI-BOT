@@ -87,37 +87,19 @@ export default function ChatWidget() {
 
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
-      let buffer = ""
 
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
-        buffer += decoder.decode(value, { stream: true })
-
-        // Parse SSE-style chunks from Anthropic streaming
-        const lines = buffer.split("\n")
-        buffer = lines.pop() ?? ""
-
-        for (const line of lines) {
-          if (!line.startsWith("data: ")) continue
-          const data = line.slice(6).trim()
-          if (data === "[DONE]" || data === "") continue
-          try {
-            const parsed = JSON.parse(data)
-            if (parsed.type === "content_block_delta" && parsed.delta?.type === "text_delta") {
-              setMessages((prev) => {
-                const updated = [...prev]
-                updated[updated.length - 1] = {
-                  ...updated[updated.length - 1],
-                  content: updated[updated.length - 1].content + parsed.delta.text,
-                }
-                return updated
-              })
-            }
-          } catch {
-            // ignore parse errors
+        const chunk = decoder.decode(value, { stream: true })
+        setMessages((prev) => {
+          const updated = [...prev]
+          updated[updated.length - 1] = {
+            ...updated[updated.length - 1],
+            content: updated[updated.length - 1].content + chunk,
           }
-        }
+          return updated
+        })
       }
     } catch {
       setMessages((prev) => {
