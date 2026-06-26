@@ -11,7 +11,6 @@ import Link from "next/link"
 interface LiveCarDetailClientProps {
   car: LiveCar
   user: SupabaseUser | null
-  unsplashKey?: string
 }
 
 function StarRating({ rating, label }: { rating?: number; label: string }) {
@@ -29,10 +28,33 @@ function StarRating({ rating, label }: { rating?: number; label: string }) {
   )
 }
 
-export default function LiveCarDetailClient({ car, user, unsplashKey }: LiveCarDetailClientProps) {
-  const imageUrl = unsplashKey
-    ? `https://source.unsplash.com/800x450/?${encodeURIComponent(`${car.brand} ${car.model} car automobile`)}`
-    : null
+const BRAND_IMAGES: Record<string, string> = {
+  toyota: "photo-1621007947382-bb3c3994e3fb",
+  honda: "photo-1606152421802-db97b4c7f3b0",
+  ford: "photo-1614484393797-257ee1d83a1e",
+  chevrolet: "photo-1603386329225-868f9b1ee6c9",
+  bmw: "photo-1594051673969-172a6f721d3c",
+  mercedes: "photo-1617654112368-307921291f42",
+  audi: "photo-1622701579527-dcd1bb5fbb9b",
+  tesla: "photo-1560958089-b8a1929cea89",
+  hyundai: "photo-1647418552401-f3958302b72a",
+  kia: "photo-1665127771643-0bc02014da61",
+  nissan: "photo-1550355291-bbee04a92027",
+  subaru: "photo-1609772168547-d216c44c3f85",
+  volkswagen: "photo-1571872580550-5a0570339714",
+  jeep: "photo-1533473359331-0135ef1b58bf",
+  ram: "photo-1672125052834-937014e540c2",
+  mazda: "photo-1687292625389-664f8c39586b",
+  lexus: "photo-1633579706905-7be6a3c3f4dc",
+  volvo: "photo-1617806118233-18e1de247200",
+  porsche: "photo-1584060622420-0673aad46076",
+  genesis: "photo-1709104761873-24cc12d23b28",
+}
+
+export default function LiveCarDetailClient({ car, user }: LiveCarDetailClientProps) {
+  const brandKey = car.brand.toLowerCase().split("-")[0]
+  const photoId = BRAND_IMAGES[brandKey] ?? "photo-1502877338535-766e1452684a"
+  const imageUrl = `https://images.unsplash.com/${photoId}?w=800&q=80`
 
   const specRows = car.specs
     ? [

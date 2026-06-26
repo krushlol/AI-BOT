@@ -42,7 +42,5 @@ export default async function LiveCarDetailPage({ params }: { params: Params }) 
     safety: safety ?? undefined,
   }
 
-  const unsplashKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
-
-  return <LiveCarDetailClient car={car} user={user} unsplashKey={unsplashKey} />
+  return <LiveCarDetailClient car={car} user={user} />
 }

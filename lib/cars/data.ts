@@ -294,7 +294,7 @@ export const cars: Car[] = [
     fuelType: "plug-in hybrid",
     basePrice: 31895,
     maxPrice: 42240,
-    image: "https://images.unsplash.com/photo-1623597780975-38ccd5030c83?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1674742836277-3c2e27e83d27?w=800&q=80",
     tagline: "The world's best-selling SUV, now with plug-in power",
     description:
       "Honda's perennial best-seller gets a plug-in hybrid variant that offers 40 miles of electric-only range alongside a practical, spacious interior. The CR-V PHEV combines everyday EV efficiency with the confidence of gas backup.",
