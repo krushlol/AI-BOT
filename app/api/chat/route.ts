@@ -5,19 +5,15 @@ const client = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 const carContext = cars.map((c) => ({
   id: c.id,
-  brand: c.brand,
-  model: c.model,
-  year: c.year,
-  bodyStyle: c.bodyStyle,
-  fuelType: c.fuelType,
-  basePrice: c.basePrice,
-  maxPrice: c.maxPrice,
+  name: `${c.brand} ${c.model} ${c.year}`,
+  type: c.bodyStyle,
+  fuel: c.fuelType,
+  price: `$${c.basePrice.toLocaleString()}`,
   seating: c.specs?.seating,
-  mpgCombined: c.specs?.mpgCombined,
-  electricRange: c.specs?.electricRange,
-  towingCapacity: c.specs?.towingCapacity,
-  pros: c.pros,
-  cons: c.cons,
+  mpg: c.specs?.mpgCombined,
+  range: c.specs?.electricRange,
+  towing: c.specs?.towingCapacity,
+  pros: c.pros?.slice(0, 3),
   tagline: c.tagline,
 }))
 
@@ -57,9 +53,11 @@ export async function POST(req: Request) {
           const text = chunk.choices[0]?.delta?.content ?? ""
           if (text) controller.enqueue(encoder.encode(text))
         }
-      } catch (err) {
-        console.error("Chat API error:", err)
-        controller.enqueue(encoder.encode("Sorry, something went wrong."))
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err)
+        console.error("Chat API error:", msg)
+        controller.enqueue(encoder.encode(`Sorry, I hit an error. Please try again. (${msg.slice(0, 80)})`))
+
       } finally {
         controller.close()
       }

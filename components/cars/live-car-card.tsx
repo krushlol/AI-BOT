@@ -6,81 +6,71 @@ import { Button } from "@/components/ui/button"
 import { Zap, Fuel, Star } from "lucide-react"
 import Link from "next/link"
 
-const BRAND_IMAGES: Record<string, string> = {
-  toyota: "photo-1621007947382-bb3c3994e3fb",
-  honda: "photo-1606152421802-db97b4c7f3b0",
-  ford: "photo-1614484393797-257ee1d83a1e",
-  chevrolet: "photo-1603386329225-868f9b1ee6c9",
-  buick: "photo-1503376780353-7e6692767b70",
-  gmc: "photo-1551522435-a13afa10f103",
-  bmw: "photo-1594051673969-172a6f721d3c",
-  mercedes: "photo-1617654112368-307921291f42",
-  audi: "photo-1622701579527-dcd1bb5fbb9b",
-  tesla: "photo-1560958089-b8a1929cea89",
-  hyundai: "photo-1647418552401-f3958302b72a",
-  kia: "photo-1665127771643-0bc02014da61",
-  nissan: "photo-1550355291-bbee04a92027",
-  subaru: "photo-1609772168547-d216c44c3f85",
-  volkswagen: "photo-1571872580550-5a0570339714",
-  jeep: "photo-1533473359331-0135ef1b58bf",
-  ram: "photo-1672125052834-937014e540c2",
-  dodge: "photo-1612544448445-b8232cff3b6c",
-  mazda: "photo-1687292625389-664f8c39586b",
-  lexus: "photo-1633579706905-7be6a3c3f4dc",
-  volvo: "photo-1617806118233-18e1de247200",
-  porsche: "photo-1584060622420-0673aad46076",
-  genesis: "photo-1709104761873-24cc12d23b28",
-  cadillac: "photo-1552519507-da3b142c6e3d",
-  lincoln: "photo-1619279257014-3de5c279ed3e",
-  acura: "photo-1606611013016-969c19ba27bb",
-  infiniti: "photo-1631295868223-63265b2b8f23",
-  chrysler: "photo-1502161254066-6c74afbf07aa",
-  bentley: "photo-1563720223185-11003d516935",
-  "rolls-royce": "photo-1631295868223-63265b2b8f23",
-  ferrari: "photo-1583121274602-3e2820c69888",
-  lamborghini: "photo-1544636331-e26879cd4d9b",
-  maserati: "photo-1637466603-6fc1f0e2fc0c",
-  aston: "photo-1555215695-3004980ad54e",
-  jaguar: "photo-1568605117036-5fe5e7bab0b7",
-  "land rover": "photo-1551522435-a13afa10f103",
-  "land": "photo-1551522435-a13afa10f103",
-  polestar: "photo-1560958089-b8a1929cea89",
-  rivian: "photo-1671219558085-9a09c6148930",
-  lucid: "photo-1657303916369-dbbeb3dc3738",
-  mini: "photo-1494976388531-d1058494cdd8",
-  mitsubishi: "photo-1570733117-9c0cf1a09a44",
-  alfa: "photo-1583121274602-3e2820c69888",
-  fiat: "photo-1494976388531-d1058494cdd8",
+// Multiple verified Unsplash photos per brand — model hash picks which one
+const BRAND_PHOTOS: Record<string, string[]> = {
+  toyota:     ["photo-1621007947382-bb3c3994e3fb","photo-1617469767053-d3b523a0b982","photo-1618609740315-de8a9088ea77","photo-1503376780353-7e6692767b70"],
+  honda:      ["photo-1606152421802-db97b4c7f3b0","photo-1594070319944-7c0cbebb6f58","photo-1674742836277-3c2e27e83d27","photo-1619279257014-3de5c279ed3e"],
+  ford:       ["photo-1614484393797-257ee1d83a1e","photo-1625231334168-35067f8853ed","photo-1677739115529-abf0fa4d3ea2","photo-1551522435-a13afa10f103"],
+  chevrolet:  ["photo-1603386329225-868f9b1ee6c9","photo-1619405399517-d7fce0f13302","photo-1697989716693-092a7ed5a21a"],
+  bmw:        ["photo-1594051673969-172a6f721d3c","photo-1555215695-3004980ad54e","photo-1556189250-72ba954cfc2b"],
+  mercedes:   ["photo-1617654112368-307921291f42","photo-1611168935847-4bf3f7291cde"],
+  "mercedes-benz": ["photo-1617654112368-307921291f42","photo-1611168935847-4bf3f7291cde"],
+  audi:       ["photo-1622701579527-dcd1bb5fbb9b"],
+  tesla:      ["photo-1560958089-b8a1929cea89","photo-1676754568744-7852efc67c40"],
+  hyundai:    ["photo-1647418552401-f3958302b72a","photo-1575090536203-2a6193126514"],
+  kia:        ["photo-1665127771643-0bc02014da61"],
+  nissan:     ["photo-1550355291-bbee04a92027","photo-1551817280-6d59c77ce1b8"],
+  subaru:     ["photo-1609772168547-d216c44c3f85"],
+  volkswagen: ["photo-1571872580550-5a0570339714"],
+  jeep:       ["photo-1506015391300-4802dc74de2e","photo-1533473359331-0135ef1b58bf"],
+  ram:        ["photo-1672125052834-937014e540c2"],
+  mazda:      ["photo-1687292625389-664f8c39586b"],
+  lexus:      ["photo-1633579706905-7be6a3c3f4dc"],
+  volvo:      ["photo-1617806118233-18e1de247200"],
+  porsche:    ["photo-1584060622420-0673aad46076"],
+  genesis:    ["photo-1709104761873-24cc12d23b28"],
+  rivian:     ["photo-1689702302312-8ef703f0d1d5"],
+  lucid:      ["photo-1666846865276-a997a6ada2c3"],
+  // less-common brands: use verified general car photos
+  buick:      ["photo-1503376780353-7e6692767b70","photo-1617469767053-d3b523a0b982"],
+  gmc:        ["photo-1551522435-a13afa10f103","photo-1672125052834-937014e540c2"],
+  cadillac:   ["photo-1619405399517-d7fce0f13302","photo-1611168935847-4bf3f7291cde"],
+  lincoln:    ["photo-1619279257014-3de5c279ed3e","photo-1594070319944-7c0cbebb6f58"],
+  acura:      ["photo-1606152421802-db97b4c7f3b0","photo-1594070319944-7c0cbebb6f58"],
+  infiniti:   ["photo-1550355291-bbee04a92027","photo-1609772168547-d216c44c3f85"],
+  chrysler:   ["photo-1617469767053-d3b523a0b982"],
+  dodge:      ["photo-1625231334168-35067f8853ed","photo-1619405399517-d7fce0f13302"],
+  mitsubishi: ["photo-1609772168547-d216c44c3f85"],
+  mini:       ["photo-1594070319944-7c0cbebb6f58"],
+  polestar:   ["photo-1560958089-b8a1929cea89","photo-1676754568744-7852efc67c40"],
+  jaguar:     ["photo-1611168935847-4bf3f7291cde","photo-1617654112368-307921291f42"],
+  "land rover": ["photo-1551522435-a13afa10f103","photo-1533473359331-0135ef1b58bf"],
+  bentley:    ["photo-1617654112368-307921291f42","photo-1611168935847-4bf3f7291cde"],
+  "rolls-royce": ["photo-1617654112368-307921291f42"],
+  ferrari:    ["photo-1619405399517-d7fce0f13302","photo-1625231334168-35067f8853ed"],
+  lamborghini:["photo-1619405399517-d7fce0f13302"],
+  maserati:   ["photo-1617654112368-307921291f42"],
+  "aston martin": ["photo-1625231334168-35067f8853ed","photo-1555215695-3004980ad54e"],
+  alfa:       ["photo-1594070319944-7c0cbebb6f58"],
+  "alfa romeo": ["photo-1594070319944-7c0cbebb6f58"],
+  fiat:       ["photo-1594070319944-7c0cbebb6f58"],
 }
 
-// Large pool of diverse car photos — each model gets a unique one via hash
-const CAR_PHOTO_POOL = [
-  "photo-1494976388531-d1058494cdd8",
-  "photo-1502877338535-766e1452684a",
-  "photo-1555215695-3004980ad54e",
-  "photo-1568605117036-5fe5e7bab0b7",
-  "photo-1570733117-9c0cf1a09a44",
-  "photo-1583121274602-3e2820c69888",
-  "photo-1609772168547-d216c44c3f85",
-  "photo-1614484393797-257ee1d83a1e",
-  "photo-1637466603-6fc1f0e2fc0c",
-  "photo-1650103071985-a62b678d9dc7",
-  "photo-1657303916369-dbbeb3dc3738",
-  "photo-1671219558085-9a09c6148930",
-  "photo-1550355291-bbee04a92027",
-  "photo-1503376780353-7e6692767b70",
-  "photo-1533473359331-0135ef1b58bf",
-  "photo-1571872580550-5a0570339714",
-  "photo-1584060622420-0673aad46076",
-  "photo-1560958089-b8a1929cea89",
-  "photo-1647418552401-f3958302b72a",
-  "photo-1665127771643-0bc02014da61",
-]
-
 function hashStr(s: string): number {
-  let h = 0
-  for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0
-  return Math.abs(h)
+  let h = 5381
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) & 0x7fffffff
+  return h
+}
+
+function getBrandPhotos(brand: string): string[] {
+  const b = brand.toLowerCase()
+  return BRAND_PHOTOS[b] ?? BRAND_PHOTOS[b.split(/[\s-]/)[0]] ?? [
+    "photo-1621007947382-bb3c3994e3fb",
+    "photo-1594051673969-172a6f721d3c",
+    "photo-1560958089-b8a1929cea89",
+    "photo-1584060622420-0673aad46076",
+    "photo-1614484393797-257ee1d83a1e",
+  ]
 }
 
 interface LiveCarCardProps {
@@ -88,11 +78,8 @@ interface LiveCarCardProps {
 }
 
 export default function LiveCarCard({ car }: LiveCarCardProps) {
-  const brandLower = car.brand.toLowerCase()
-  const brandPhoto = BRAND_IMAGES[brandLower] ?? BRAND_IMAGES[brandLower.split(/[\s-]/)[0]]
-  // Each model gets its own image: cycle through pool offset by model hash
-  const poolIndex = hashStr(`${car.brand}-${car.model}`) % CAR_PHOTO_POOL.length
-  const photoId = poolIndex % 3 === 0 && brandPhoto ? brandPhoto : (CAR_PHOTO_POOL[poolIndex] ?? brandPhoto ?? "photo-1502877338535-766e1452684a")
+  const photos = getBrandPhotos(car.brand)
+  const photoId = photos[hashStr(car.model) % photos.length]
   const imageUrl = car.image ?? `https://images.unsplash.com/${photoId}?w=400&q=80`
   const fuelLabel = car.specs?.fuelType ?? car.fuelType ?? "Gas"
   const isElectric = fuelLabel.toLowerCase().includes("electric")
