@@ -12,35 +12,28 @@ interface Message {
 const GREETING = "Hi! I'm your CarAdvisor AI 👋 Tell me about your situation — budget, family size, how you drive — and I'll find your perfect car."
 
 function renderContent(text: string) {
-  // Convert [text](/path) markdown links to JSX
-  const parts = text.split(/(\[([^\]]+)\]\(([^)]+)\))/g)
   const result: React.ReactNode[] = []
-  let i = 0
-  while (i < parts.length) {
-    const part = parts[i]
-    if (part?.match(/^\[([^\]]+)\]\(([^)]+)\)$/)) {
-      const labelMatch = part.match(/^\[([^\]]+)\]/)
-      const hrefMatch = part.match(/\(([^)]+)\)$/)
-      if (labelMatch && hrefMatch) {
-        result.push(
-          <Link key={i} href={hrefMatch[1]} className="text-orange-500 underline font-medium">
-            {labelMatch[1]}
-          </Link>
-        )
-      }
-    } else if (part) {
-      // Bold text
-      const boldParts = part.split(/(\*\*[^*]+\*\*)/g)
-      boldParts.forEach((bp, j) => {
-        if (bp.startsWith("**") && bp.endsWith("**")) {
-          result.push(<strong key={`${i}-${j}`}>{bp.slice(2, -2)}</strong>)
-        } else {
-          result.push(<span key={`${i}-${j}`}>{bp}</span>)
-        }
-      })
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+  let lastIndex = 0
+  let match
+  let key = 0
+
+  while ((match = linkRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      result.push(<span key={key++}>{text.slice(lastIndex, match.index)}</span>)
     }
-    i++
+    result.push(
+      <Link key={key++} href={match[2]} className="text-orange-500 underline font-medium">
+        {match[1]}
+      </Link>
+    )
+    lastIndex = match.index + match[0].length
   }
+
+  if (lastIndex < text.length) {
+    result.push(<span key={key++}>{text.slice(lastIndex)}</span>)
+  }
+
   return result
 }
 
@@ -79,7 +72,7 @@ export default function ChatWidget() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
+          messages: newMessages.slice(-6).map((m) => ({ role: m.role, content: m.content })),
         }),
       })
 

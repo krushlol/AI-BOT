@@ -35,7 +35,8 @@ Rules:
 - Be confident. No hedging, no thinking out loud.`
 
 export async function POST(req: Request) {
-  const { messages } = await req.json()
+  const { messages: allMessages } = await req.json()
+  const messages = allMessages.slice(-6)
 
   const encoder = new TextEncoder()
 
