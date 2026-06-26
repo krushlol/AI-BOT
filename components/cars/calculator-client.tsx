@@ -172,31 +172,6 @@ export default function CalculatorClient({ user }: CalculatorClientProps) {
           💡 A good rule of thumb: keep your monthly payment under <strong>15% of your take-home pay</strong>. A bigger down payment means less interest overall.
         </div>
 
-        {/* Quick-pick from catalog */}
-        <div>
-          <h2 className="text-lg font-bold text-gray-900 mb-3">Try a car from our catalog</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {popularCars.map((car) => (
-              <button
-                key={car.id}
-                onClick={() => setPrice(car.basePrice)}
-                className={`text-left p-3 rounded-xl border transition-all ${
-                  price === car.basePrice
-                    ? "border-orange-500 bg-orange-50"
-                    : "border-gray-200 bg-white hover:border-blue-300"
-                }`}
-              >
-                <img src={car.image} alt={car.model} className="w-full h-20 object-cover rounded-lg mb-2" />
-                <p className="text-xs text-orange-500 font-medium">{car.brand}</p>
-                <p className="text-sm font-semibold text-gray-900 leading-tight">{car.model}</p>
-                <p className="text-xs text-gray-500 mt-0.5">${car.basePrice.toLocaleString()}</p>
-              </button>
-            ))}
-          </div>
-          <p className="text-sm text-gray-500 mt-4 text-center">
-            <Link href="/search" className="text-orange-500 hover:underline font-medium">Browse all 29 cars →</Link>
-          </p>
-        </div>
       </div>
     </div>
   )
