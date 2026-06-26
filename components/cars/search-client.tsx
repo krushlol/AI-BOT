@@ -268,9 +268,9 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
                   </SelectContent>
                 </Select>
                 <Select
-                  value={liveModel}
-                  onValueChange={setLiveModel}
-                  disabled={liveModels.length === 0}
+                  value={liveModel || "__all__"}
+                  onValueChange={(v) => setLiveModel(v === "__all__" ? "" : v)}
+                  disabled={liveModels.length === 0 && !liveModelsLoading}
                 >
                   <SelectTrigger className="w-44">
                     {liveModelsLoading
@@ -278,7 +278,7 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
                       : <SelectValue placeholder={liveMake ? "All Models" : "Model (optional)"} />}
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Models</SelectItem>
+                    <SelectItem value="__all__">All Models</SelectItem>
                     {liveModels.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
                   </SelectContent>
                 </Select>
