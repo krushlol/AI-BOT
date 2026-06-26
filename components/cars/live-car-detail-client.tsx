@@ -57,11 +57,23 @@ const BRAND_IMAGES: Record<string, string> = {
   acura: "photo-1606611013016-969c19ba27bb",
   infiniti: "photo-1631295868223-63265b2b8f23",
   chrysler: "photo-1502161254066-6c74afbf07aa",
+  bentley: "photo-1563720223185-11003d516935",
+  "rolls-royce": "photo-1631295868223-63265b2b8f23",
+  ferrari: "photo-1583121274602-3e2820c69888",
+  lamborghini: "photo-1544636331-e26879cd4d9b",
+  maserati: "photo-1637466603-6fc1f0e2fc0c",
+  jaguar: "photo-1568605117036-5fe5e7bab0b7",
+  "land rover": "photo-1551522435-a13afa10f103",
+  polestar: "photo-1560958089-b8a1929cea89",
+  rivian: "photo-1671219558085-9a09c6148930",
+  lucid: "photo-1657303916369-dbbeb3dc3738",
+  mini: "photo-1494976388531-d1058494cdd8",
+  mitsubishi: "photo-1570733117-9c0cf1a09a44",
 }
 
 export default function LiveCarDetailClient({ car, user }: LiveCarDetailClientProps) {
-  const brandKey = car.brand.toLowerCase().split("-")[0]
-  const photoId = BRAND_IMAGES[brandKey] ?? "photo-1502877338535-766e1452684a"
+  const brandLower = car.brand.toLowerCase()
+  const photoId = BRAND_IMAGES[brandLower] ?? BRAND_IMAGES[brandLower.split(/[\s-]/)[0]] ?? "photo-1502877338535-766e1452684a"
   const imageUrl = `https://images.unsplash.com/${photoId}?w=800&q=80`
 
   const specRows = car.specs

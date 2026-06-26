@@ -18,10 +18,18 @@ export async function generateMetadata({ params }: { params: Params }) {
   }
 }
 
+function toTitleCase(s: string) {
+  return s.replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 export default async function LiveCarDetailPage({ params }: { params: Params }) {
-  const make = decodeURIComponent(params.make)
-  const model = decodeURIComponent(params.model).replace(/-/g, " ")
+  const makeRaw = decodeURIComponent(params.make)
+  const modelRaw = decodeURIComponent(params.model).replace(/-/g, " ")
   const year = parseInt(params.year)
+
+  // API Ninjas and NHTSA are case-sensitive — use title case
+  const make = toTitleCase(makeRaw)
+  const model = toTitleCase(modelRaw)
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
