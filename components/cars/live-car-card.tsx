@@ -30,7 +30,7 @@ const BRAND_IMAGES: Record<string, string> = {
   volvo: "photo-1617806118233-18e1de247200",
   porsche: "photo-1584060622420-0673aad46076",
   genesis: "photo-1709104761873-24cc12d23b28",
-  cadillac: "photo-1544636331-e26879cd4d9b",
+  cadillac: "photo-1552519507-da3b142c6e3d",
   lincoln: "photo-1619279257014-3de5c279ed3e",
   acura: "photo-1606611013016-969c19ba27bb",
   infiniti: "photo-1631295868223-63265b2b8f23",

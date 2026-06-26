@@ -59,10 +59,30 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
   // Live catalog
   const [liveMake, setLiveMake] = useState("")
   const [liveYear, setLiveYear] = useState(String(new Date().getFullYear()))
+  const [liveModel, setLiveModel] = useState("")
+  const [liveModels, setLiveModels] = useState<string[]>([])
+  const [liveModelsLoading, setLiveModelsLoading] = useState(false)
   const [liveResults, setLiveResults] = useState<LiveCar[]>([])
   const [liveLoading, setLiveLoading] = useState(false)
   const [liveError, setLiveError] = useState("")
   const [liveSearched, setLiveSearched] = useState(false)
+
+  const fetchModels = async (make: string, year: string) => {
+    if (!make) return
+    setLiveModelsLoading(true)
+    setLiveModel("")
+    setLiveModels([])
+    try {
+      const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/${encodeURIComponent(make)}/modelyear/${year}?format=json`)
+      const json = await res.json()
+      const models: string[] = (json.Results ?? []).map((r: { Model_Name: string }) => r.Model_Name).sort()
+      setLiveModels(models)
+    } catch {
+      setLiveModels([])
+    } finally {
+      setLiveModelsLoading(false)
+    }
+  }
 
   const filtered = useMemo(() => {
     let result = allCars.filter((car) => {
@@ -113,7 +133,9 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
     setLiveError("")
     setLiveSearched(true)
     try {
-      const res = await fetch(`/api/cars/search?make=${encodeURIComponent(liveMake)}&year=${liveYear}`)
+      let url = `/api/cars/search?make=${encodeURIComponent(liveMake)}&year=${liveYear}`
+      if (liveModel) url += `&model=${encodeURIComponent(liveModel)}`
+      const res = await fetch(url)
       if (!res.ok) throw new Error("Failed to fetch")
       const json = await res.json()
       setLiveResults(json.results ?? [])
@@ -229,20 +251,35 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
             {/* Live catalog search bar */}
             <TabsContent value="live" className="mt-0">
               <div className="flex gap-3 flex-wrap items-center">
-                <Select value={liveMake} onValueChange={setLiveMake}>
-                  <SelectTrigger className="w-48">
+                <Select value={liveMake} onValueChange={(v) => { setLiveMake(v); fetchModels(v, liveYear) }}>
+                  <SelectTrigger className="w-44">
                     <SelectValue placeholder="Select Brand..." />
                   </SelectTrigger>
                   <SelectContent>
                     {MAINSTREAM_BRANDS.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                   </SelectContent>
                 </Select>
-                <Select value={liveYear} onValueChange={setLiveYear}>
-                  <SelectTrigger className="w-32">
+                <Select value={liveYear} onValueChange={(v) => { setLiveYear(v); if (liveMake) fetchModels(liveMake, v) }}>
+                  <SelectTrigger className="w-28">
                     <SelectValue placeholder="Year" />
                   </SelectTrigger>
                   <SelectContent>
                     {YEARS.slice(0, 10).map((y) => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+                <Select
+                  value={liveModel}
+                  onValueChange={setLiveModel}
+                  disabled={liveModels.length === 0}
+                >
+                  <SelectTrigger className="w-44">
+                    {liveModelsLoading
+                      ? <span className="text-gray-400 text-sm flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Loading...</span>
+                      : <SelectValue placeholder={liveMake ? "All Models" : "Model (optional)"} />}
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">All Models</SelectItem>
+                    {liveModels.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
                   </SelectContent>
                 </Select>
                 <Button onClick={handleLiveSearch} disabled={!liveMake || liveLoading} className="gap-2">

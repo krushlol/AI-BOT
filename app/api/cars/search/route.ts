@@ -15,6 +15,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "invalid year" }, { status: 400 })
   }
 
-  const results = await fetchNHTSAModels(make, yearNum)
+  const model = searchParams.get("model") || undefined
+  let results = await fetchNHTSAModels(make, yearNum)
+  if (model) {
+    results = results.filter((r) => r.model.toLowerCase() === model.toLowerCase())
+  }
   return NextResponse.json({ results })
 }

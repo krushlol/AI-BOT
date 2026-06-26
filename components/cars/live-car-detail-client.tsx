@@ -49,6 +49,14 @@ const BRAND_IMAGES: Record<string, string> = {
   volvo: "photo-1617806118233-18e1de247200",
   porsche: "photo-1584060622420-0673aad46076",
   genesis: "photo-1709104761873-24cc12d23b28",
+  cadillac: "photo-1552519507-da3b142c6e3d",
+  lincoln: "photo-1619279257014-3de5c279ed3e",
+  buick: "photo-1503376780353-7e6692767b70",
+  gmc: "photo-1551522435-a13afa10f103",
+  dodge: "photo-1612544448445-b8232cff3b6c",
+  acura: "photo-1606611013016-969c19ba27bb",
+  infiniti: "photo-1631295868223-63265b2b8f23",
+  chrysler: "photo-1502161254066-6c74afbf07aa",
 }
 
 export default function LiveCarDetailClient({ car, user }: LiveCarDetailClientProps) {
