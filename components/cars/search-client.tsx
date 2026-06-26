@@ -35,11 +35,10 @@ interface SearchClientProps {
     maxPrice?: string
     seating?: string
   }
-  unsplashKey?: string
   initialSavedIds?: string[]
 }
 
-export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTypes, initialParams, unsplashKey, initialSavedIds = [] }: SearchClientProps) {
+export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTypes, initialParams, initialSavedIds = [] }: SearchClientProps) {
   const router = useRouter()
 
   // Curated filters
@@ -308,7 +307,7 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {liveResults.map((car) => (
-                    <LiveCarCard key={car.id} car={car} unsplashKey={unsplashKey} />
+                    <LiveCarCard key={car.id} car={car} />
                   ))}
                 </div>
               </>

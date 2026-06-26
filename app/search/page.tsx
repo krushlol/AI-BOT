@@ -24,8 +24,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     initialSavedIds = (data ?? []).map((r: { car_id: string }) => r.car_id)
   }
 
-  const unsplashKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
-
   return (
     <SearchClient
       user={user}
@@ -34,7 +32,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       bodyStyles={bodyStyles}
       fuelTypes={fuelTypes}
       initialParams={searchParams}
-      unsplashKey={unsplashKey}
       initialSavedIds={initialSavedIds}
     />
   )
