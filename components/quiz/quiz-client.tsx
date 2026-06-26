@@ -91,6 +91,7 @@ const QUESTIONS: {
 
 export default function QuizClient({ user, allCars }: QuizClientProps) {
   const [answers, setAnswers] = useState<Partial<QuizAnswers>>({})
+  const [confirmed, setConfirmed] = useState(false)
   const [compareIds, setCompareIds] = useState<string[]>([])
   const { saveAnswers, clearAnswers } = useQuizAnswers()
 
@@ -98,11 +99,14 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
   const isComplete = answeredCount === QUESTIONS.length
 
   const select = (key: keyof QuizAnswers, value: string) => {
+    setConfirmed(false)
     const updated = { ...answers, [key]: value }
     setAnswers(updated)
-    if (Object.keys(updated).length === QUESTIONS.length) {
-      saveAnswers(updated as QuizAnswers)
-    }
+  }
+
+  const handleConfirm = () => {
+    saveAnswers(answers as QuizAnswers)
+    setConfirmed(true)
   }
 
   const results = useMemo(() => {
@@ -123,6 +127,7 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
 
   const handleReset = () => {
     setAnswers({})
+    setConfirmed(false)
     clearAnswers()
     setCompareIds([])
   }
@@ -190,6 +195,19 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
           )}
         </div>
 
+        {/* Confirm button */}
+        {answeredCount >= 2 && !confirmed && (
+          <div className="flex justify-center mb-10">
+            <button
+              onClick={handleConfirm}
+              className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg px-10 py-4 rounded-2xl shadow-lg transition-all hover:scale-105 flex items-center gap-3"
+            >
+              <Sparkles className="w-5 h-5" />
+              {isComplete ? "See My Results" : "Find My Car"}
+            </button>
+          </div>
+        )}
+
         {/* Results */}
         {answeredCount === 0 && (
           <div className="text-center py-16 text-gray-400">
@@ -198,7 +216,7 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
           </div>
         )}
 
-        {answeredCount >= 2 && results.length === 0 && (
+        {confirmed && answeredCount >= 2 && results.length === 0 && (
           <div className="text-center py-16">
             <div className="text-5xl mb-4">🔍</div>
             <h2 className="text-xl font-bold text-gray-700 mb-2">No exact matches</h2>
@@ -209,7 +227,7 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
           </div>
         )}
 
-        {results.length > 0 && (
+        {confirmed && results.length > 0 && (
           <>
             <div className="flex items-center justify-between mb-6">
               <div>

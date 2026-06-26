@@ -37,13 +37,46 @@ const BRAND_IMAGES: Record<string, string> = {
   chrysler: "photo-1502161254066-6c74afbf07aa",
 }
 
+// Large pool of diverse car photos — each model gets a unique one via hash
+const CAR_PHOTO_POOL = [
+  "photo-1494976388531-d1058494cdd8",
+  "photo-1502877338535-766e1452684a",
+  "photo-1555215695-3004980ad54e",
+  "photo-1568605117036-5fe5e7bab0b7",
+  "photo-1570733117-9c0cf1a09a44",
+  "photo-1583121274602-3e2820c69888",
+  "photo-1609772168547-d216c44c3f85",
+  "photo-1614484393797-257ee1d83a1e",
+  "photo-1637466603-6fc1f0e2fc0c",
+  "photo-1650103071985-a62b678d9dc7",
+  "photo-1657303916369-dbbeb3dc3738",
+  "photo-1671219558085-9a09c6148930",
+  "photo-1550355291-bbee04a92027",
+  "photo-1503376780353-7e6692767b70",
+  "photo-1533473359331-0135ef1b58bf",
+  "photo-1571872580550-5a0570339714",
+  "photo-1584060622420-0673aad46076",
+  "photo-1560958089-b8a1929cea89",
+  "photo-1647418552401-f3958302b72a",
+  "photo-1665127771643-0bc02014da61",
+]
+
+function hashStr(s: string): number {
+  let h = 0
+  for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0
+  return Math.abs(h)
+}
+
 interface LiveCarCardProps {
   car: LiveCar
 }
 
 export default function LiveCarCard({ car }: LiveCarCardProps) {
   const brandKey = car.brand.toLowerCase().split("-")[0].split(" ")[0]
-  const photoId = BRAND_IMAGES[brandKey] ?? "photo-1502877338535-766e1452684a"
+  const brandPhoto = BRAND_IMAGES[brandKey]
+  // Each model gets its own image: cycle through pool offset by model hash
+  const poolIndex = hashStr(`${car.brand}-${car.model}`) % CAR_PHOTO_POOL.length
+  const photoId = poolIndex % 3 === 0 && brandPhoto ? brandPhoto : (CAR_PHOTO_POOL[poolIndex] ?? brandPhoto ?? "photo-1502877338535-766e1452684a")
   const imageUrl = car.image ?? `https://images.unsplash.com/${photoId}?w=400&q=80`
   const fuelLabel = car.specs?.fuelType ?? car.fuelType ?? "Gas"
   const isElectric = fuelLabel.toLowerCase().includes("electric")
