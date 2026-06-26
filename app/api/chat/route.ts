@@ -1,7 +1,7 @@
-import Anthropic from "@anthropic-ai/sdk"
+import Groq from "groq-sdk"
 import { cars } from "@/lib/cars/data"
 
-const client = new Anthropic()
+const client = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 const carContext = cars.map((c) => ({
   id: c.id,
@@ -43,21 +43,19 @@ export async function POST(req: Request) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const response = await client.messages.create({
-          model: "claude-haiku-4-5-20251001",
+        const response = await client.chat.completions.create({
+          model: "llama-3.3-70b-versatile",
           max_tokens: 1024,
-          system: SYSTEM_PROMPT,
-          messages,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            ...messages,
+          ],
           stream: true,
         })
 
-        for await (const event of response) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            controller.enqueue(encoder.encode(event.delta.text))
-          }
+        for await (const chunk of response) {
+          const text = chunk.choices[0]?.delta?.content ?? ""
+          if (text) controller.enqueue(encoder.encode(text))
         }
       } catch (err) {
         console.error("Chat API error:", err)
