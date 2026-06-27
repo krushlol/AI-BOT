@@ -198,7 +198,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 35200,
     maxPrice: 78500,
-    image: "https://images.unsplash.com/photo-1614484393797-257ee1d83a1e?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1551830820-330a71b99659?w=800&q=80",
     tagline: "America's best-selling vehicle for 47 years running",
     description:
       "The Ford F-150 is the undisputed king of full-size pickups. Offering unmatched versatility, a wide range of powertrains (including hybrid), and clever features like the Pro Power Onboard generator, the F-150 does it all.",
@@ -294,7 +294,7 @@ export const cars: Car[] = [
     fuelType: "plug-in hybrid",
     basePrice: 31895,
     maxPrice: 42240,
-    image: "https://images.unsplash.com/photo-1674742836277-3c2e27e83d27?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1681697390363-1142eb46b76d?w=800&q=80",
     tagline: "The world's best-selling SUV, now with plug-in power",
     description:
       "Honda's perennial best-seller gets a plug-in hybrid variant that offers 40 miles of electric-only range alongside a practical, spacious interior. The CR-V PHEV combines everyday EV efficiency with the confidence of gas backup.",
@@ -390,7 +390,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 43800,
     maxPrice: 59500,
-    image: "https://images.unsplash.com/photo-1594051673969-172a6f721d3c?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1588568913041-b72063097be7?w=800&q=80",
     tagline: "The ultimate driving machine — still the benchmark",
     description:
       "The BMW 3 Series remains the definitive sports sedan benchmark. With its perfect 50/50 weight distribution, communicative steering, and powerful engine options, the 3 Series delivers an unmatched driving experience in the luxury compact segment.",
@@ -856,7 +856,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 93300,
     maxPrice: 185000,
-    image: "https://images.unsplash.com/photo-1584060622420-0673aad46076?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1774740460595-a16168fdc452?w=800&q=80",
     tagline: "Electric performance that doesn't compromise the Porsche DNA",
     description:
       "The Porsche Taycan redefined what an electric performance car can be. With 800V charging, authentic sports car handling and feel, and a stunning interior, the Taycan proves EVs can excite, not just transport.",
@@ -1137,7 +1137,7 @@ export const cars: Car[] = [
     fuelType: "hybrid",
     basePrice: 62150,
     maxPrice: 89900,
-    image: "https://images.unsplash.com/photo-1611168935847-4bf3f7291cde?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1563721911289-ada2924d66f1?w=800&q=80",
     tagline: "Luxury redefined — the flagship mid-size SUV",
     description:
       "The Mercedes-Benz GLE sets the benchmark for luxury mid-size SUVs. With the MBUX infotainment system, optional E-Active Body Control magic carpet ride, and a refined interior rivaling sedans costing twice as much, the GLE is the ultimate family hauler.",
@@ -1420,7 +1420,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 23500,
     maxPrice: 30700,
-    image: "https://images.unsplash.com/photo-1594070319944-7c0cbebb6f58?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1605816988069-b11383b50717?w=800&q=80",
     tagline: "The benchmark compact sedan — sporty, reliable, affordable",
     description:
       "The 2022 Honda Civic continues to set the standard for compact cars with a sharp design, responsive handling, and a feature-rich interior that punches well above its price class. Whether you commute or carve backroads, the Civic delivers.",
@@ -1506,7 +1506,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 42700,
     maxPrice: 57200,
-    image: "https://images.unsplash.com/photo-1676754568744-7852efc67c40?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1669625397388-32934837bd3a?w=800&q=80",
     tagline: "The world's best-selling EV — now even better",
     description:
       "The 2023 Tesla Model Y is the most popular vehicle on earth. With up to 330 miles of range, America's fastest-growing Supercharger network, and over-the-air updates that improve the car over time, it sets the bar for electric SUVs.",
@@ -1770,7 +1770,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 34500,
     maxPrice: 47900,
-    image: "https://images.unsplash.com/photo-1619279257014-3de5c279ed3e?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1742021923146-039f25019c0a?w=800&q=80",
     tagline: "The gold standard of family minivans",
     description:
       "The 2021 Honda Odyssey remains the benchmark family hauler. With seating for 8, a magic sliding second-row seat that creates a conversation zone between rows, built-in vacuum cleaner, and a refined 3.5L V6, it's the smartest van on the market.",
@@ -1947,7 +1947,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 34700,
     maxPrice: 70300,
-    image: "https://images.unsplash.com/photo-1672125052834-937014e540c2?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1649793395985-967862a3b73f?w=800&q=80",
     tagline: "America's most comfortable full-size truck",
     description:
       "The 2021 Ram 1500 is the truck that redefined the segment with a coil-spring rear suspension for a car-like ride. With class-leading towing of 12,750 lbs, a luxurious Tungsten trim, and the available 3.0L Hurricane twin-turbo inline-six, it's as capable as it is comfortable.",
@@ -2036,7 +2036,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 37800,
     maxPrice: 49500,
-    image: "https://images.unsplash.com/photo-1571872580550-5a0570339714?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1628753495700-603e492d16e4?w=800&q=80",
     tagline: "German engineering meets everyday electric SUV",
     description:
       "The 2023 Volkswagen ID.4 brings European craftsmanship and a polished driving experience to the EV SUV segment. With up to 291 miles of range, available AWD, and a spacious interior, the ID.4 is a compelling alternative to the Model Y.",
@@ -2662,7 +2662,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 47700,
     maxPrice: 62000,
-    image: "https://images.unsplash.com/photo-1617654112368-307921291f42?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1616874946938-69c1374f3e60?w=800&q=80",
     tagline: "Luxury SUV with head-turning elegance",
     description:
       "The 2024 Mercedes-Benz GLC 300 is the benchmark luxury compact SUV. It blends a sumptuous interior loaded with MBUX technology, a potent turbocharged engine, and Mercedes' signature ride refinement into a compelling everyday luxury package.",
@@ -2716,7 +2716,7 @@ export const cars: Car[] = [
     fuelType: "plug-in hybrid",
     basePrice: 48550,
     maxPrice: 67000,
-    image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1629897048514-3dd7414fe72a?w=800&q=80",
     tagline: "The world's safest SUV, now goes electric",
     description:
       "The Volvo XC60 Recharge PHEV is a masterclass in Scandinavian design, delivering 35 miles of all-electric range and a total of 480hp in T8 trim. Volvo's commitment to safety is unmatched — and the interior is a serene, minimalist retreat.",
@@ -2827,7 +2827,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 50025,
     maxPrice: 71000,
-    image: "https://images.unsplash.com/photo-1633579706905-7be6a3c3f4dc?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1664427356346-c31b46248e71?w=800&q=80",
     tagline: "Japanese luxury redefined with bold design",
     description:
       "The all-new 2024 Lexus RX 350 is a top-to-bottom redesign with sharper styling, a more powerful 2.4L turbo engine, and Lexus's most advanced tech to date. It offers three powertrain options including a 450h+ PHEV and delivers the serenity Lexus is famous for.",
@@ -2881,7 +2881,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 26500,
     maxPrice: 31000,
-    image: "https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1697989716697-e1964f9fbc85?w=800&q=80",
     tagline: "The most affordable electric crossover in America",
     description:
       "After a dramatic price cut, the 2023 Chevrolet Bolt EUV is now the most affordable new EV in the United States at under $27,000. With 247 miles of range, a roomy interior for a subcompact, and Super Cruise hands-free driving available, it's an incredible value.",
@@ -2934,7 +2934,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 37495,
     maxPrice: 57000,
-    image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1670069247956-1a6dfee5338e?w=800&q=80",
     tagline: "America's iconic family SUV, reimagined",
     description:
       "The 2024 Ford Explorer continues to be one of the best-selling SUVs in America. With three-row seating, a choice of EcoBoost engines, and the ST performance model, it blends family practicality with real driving engagement.",
@@ -2990,7 +2990,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 26100,
     maxPrice: 33400,
-    image: "https://images.unsplash.com/photo-1550355291-bbee04a92027?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1581540222194-0def2dda95b8?w=800&q=80",
     tagline: "The only midsize sedan with AWD under $30K",
     description:
       "The 2024 Nissan Altima stands out by offering AWD at an affordable price — unique in the midsize sedan segment. Its VC-Turbo variable compression engine delivers a mix of power and efficiency, backed by ProPILOT Assist on upper trims.",
@@ -3044,7 +3044,7 @@ export const cars: Car[] = [
     fuelType: "hybrid",
     basePrice: 31895,
     maxPrice: 38590,
-    image: "https://images.unsplash.com/photo-1606152421802-db97b4c7f3b0?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1634737581963-5a22ba471961?w=800&q=80",
     tagline: "The smarter midsize sedan with class-leading mpg",
     description:
       "The 2024 Honda Accord Hybrid combines a refined two-motor hybrid system with the Accord's best-ever interior and technology. It achieves an outstanding 46 MPG combined while offering a spacious cabin, excellent safety, and Honda Sensing standard across all trims.",
@@ -3098,7 +3098,7 @@ export const cars: Car[] = [
     fuelType: "hybrid",
     basePrice: 38305,
     maxPrice: 55000,
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1720545044233-d2ac77fa6030?w=800&q=80",
     tagline: "The only hybrid minivan — and the most practical",
     description:
       "The 2024 Toyota Sienna is the only minivan sold in the US with a hybrid powertrain — and it delivers 36 MPG combined, making a road trip with the family greener than ever. With standard AWD and available Captain's Chairs, it's the ultimate family hauler.",
