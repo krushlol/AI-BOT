@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button"
 import Navbar from "./navbar"
 import { LiveCar } from "@/lib/cars/live-types"
 import Link from "next/link"
+import { useState, useEffect } from "react"
+
+const detailImageCache = new Map<string, string | null>()
 
 interface LiveCarDetailClientProps {
   car: LiveCar
@@ -28,27 +31,28 @@ function StarRating({ rating, label }: { rating?: number; label: string }) {
   )
 }
 
+// Legacy brand photos kept as fallback only
 const BRAND_PHOTOS: Record<string, string[]> = {
   toyota:          ["photo-1621007947382-bb3c3994e3fb","photo-1617469767053-d3b523a0b982","photo-1618609740315-de8a9088ea77","photo-1503376780353-7e6692767b70"],
   honda:           ["photo-1571127236794-81c0bbfe1ce3","photo-1605816988069-b11383b50717","photo-1547245324-d777c6f05e80","photo-1503376780353-7e6692767b70"],
   ford:            ["photo-1551830820-330a71b99659","photo-1625231334168-35067f8853ed","photo-1677739115529-abf0fa4d3ea2","photo-1551522435-a13afa10f103"],
   chevrolet:       ["photo-1697989716697-e1964f9fbc85","photo-1619405399517-d7fce0f13302","photo-1697989716693-092a7ed5a21a"],
   bmw:             ["photo-1588568913041-b72063097be7","photo-1701985470695-e430a8fdc8d6","photo-1696294586764-6baffd088b71","photo-1615908397724-6dc711db34a7","photo-1643793019410-b6ff1112da9b","photo-1605822102629-918beea85679","photo-1615644190630-c6c6f230a6ed","photo-1555215695-3004980ad54e"],
-  mercedes:        ["photo-1616874946938-69c1374f3e60","photo-1563721911289-ada2924d66f1"],
-  "mercedes-benz": ["photo-1616874946938-69c1374f3e60","photo-1563721911289-ada2924d66f1"],
+  mercedes:        ["photo-1616874946938-69c1374f3e60","photo-1563721911289-ada2924d66f1","photo-1669234226129-8ede05b40eff"],
+  "mercedes-benz": ["photo-1616874946938-69c1374f3e60","photo-1563721911289-ada2924d66f1","photo-1669234226129-8ede05b40eff"],
   audi:            ["photo-1622701579527-dcd1bb5fbb9b"],
-  tesla:           ["photo-1560958089-b8a1929cea89","photo-1669625397388-32934837bd3a"],
+  tesla:           ["photo-1560958089-b8a1929cea89","photo-1669625397388-32934837bd3a","photo-1606016159991-dfe4f2746ad5","photo-1638398417409-dd54452eccdf","photo-1674749960478-dc2fcda41f6f"],
   hyundai:         ["photo-1647418552401-f3958302b72a","photo-1575090536203-2a6193126514"],
-  kia:             ["photo-1665127771643-0bc02014da61"],
+  kia:             ["photo-1665127771643-0bc02014da61","photo-1649921777129-a28a26031a03","photo-1688893287874-ac7fbd686c24"],
   nissan:          ["photo-1581540222194-0def2dda95b8","photo-1551817280-6d59c77ce1b8"],
-  subaru:          ["photo-1609772168547-d216c44c3f85"],
-  volkswagen:      ["photo-1628753495700-603e492d16e4"],
-  jeep:            ["photo-1506015391300-4802dc74de2e","photo-1533473359331-0135ef1b58bf"],
-  ram:             ["photo-1649793395985-967862a3b73f"],
-  mazda:           ["photo-1687292625389-664f8c39586b"],
-  lexus:           ["photo-1540066019607-e5f69323a8dc"],
-  volvo:           ["photo-1629897048514-3dd7414fe72a"],
-  porsche:         ["photo-1774740460595-a16168fdc452"],
+  subaru:          ["photo-1609772168547-d216c44c3f85","photo-1722542517938-aa6a98d25235"],
+  volkswagen:      ["photo-1628753495700-603e492d16e4","photo-1605475300318-c377291697ac","photo-1564988190342-4976fa6445c9"],
+  jeep:            ["photo-1506015391300-4802dc74de2e","photo-1533473359331-0135ef1b58bf","photo-1591738802175-709fedef8288"],
+  ram:             ["photo-1649793395985-967862a3b73f","photo-1648690679794-056238ad1acd"],
+  mazda:           ["photo-1687292625389-664f8c39586b","photo-1643142311296-304953706775"],
+  lexus:           ["photo-1664427356346-c31b46248e71","photo-1777015558094-f92d538f9c80","photo-1698122660387-64acb063dabe"],
+  volvo:           ["photo-1629897048514-3dd7414fe72a","photo-1596704135285-689f255de50b"],
+  porsche:         ["photo-1774740460595-a16168fdc452","photo-1597858520171-563a8e8b9925"],
   genesis:         ["photo-1709104761873-24cc12d23b28"],
   rivian:          ["photo-1689702302312-8ef703f0d1d5"],
   lucid:           ["photo-1666846865276-a997a6ada2c3"],
@@ -92,7 +96,32 @@ function getBrandPhoto(brand: string, model: string): string {
 }
 
 export default function LiveCarDetailClient({ car, user }: LiveCarDetailClientProps) {
-  const imageUrl = `https://images.unsplash.com/${getBrandPhoto(car.brand, car.model)}?w=800&q=80`
+  const fallbackPhoto = (() => {
+    const b = car.brand.toLowerCase()
+    const photos = BRAND_PHOTOS[b] ?? BRAND_PHOTOS[b.split(/[\s-]/)[0]] ?? ["photo-1621007947382-bb3c3994e3fb"]
+    let h = 5381
+    for (let i = 0; i < car.model.length; i++) h = ((h << 5) + h + car.model.charCodeAt(i)) & 0x7fffffff
+    return `https://images.unsplash.com/${photos[h % photos.length]}?w=800&q=80`
+  })()
+
+  const [imageUrl, setImageUrl] = useState<string>(car.image ?? fallbackPhoto)
+
+  useEffect(() => {
+    if (car.image) return
+    const key = `${car.brand}|${car.model}|${car.year}`
+    if (detailImageCache.has(key)) {
+      setImageUrl(detailImageCache.get(key) ?? fallbackPhoto)
+      return
+    }
+    fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}`)
+      .then((r) => r.json())
+      .then((data) => {
+        const resolved = data.imageUrl ?? fallbackPhoto
+        detailImageCache.set(key, resolved)
+        setImageUrl(resolved)
+      })
+      .catch(() => setImageUrl(fallbackPhoto))
+  }, [car.brand, car.model, car.year, car.image, fallbackPhoto])
 
   const specRows = car.specs
     ? [

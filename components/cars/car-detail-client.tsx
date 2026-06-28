@@ -1,7 +1,9 @@
 "use client"
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+
+const detailWikiCache = new Map<string, string>()
 import { useRouter } from "next/navigation"
 import { Heart, GitCompare, Star, CheckCircle, XCircle, Sparkles, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -40,10 +42,20 @@ const fuelLabel = (f: string) => {
 export default function CarDetailClient({ car, user, relatedCars, initialSaved = false }: CarDetailClientProps) {
   const [saved, setSaved] = useState(initialSaved)
   const [showAllTrims, setShowAllTrims] = useState(false)
+  const [heroImage, setHeroImage] = useState(car.image)
   const { answers } = useQuizAnswers()
   const matchScore = answers ? scoreCarForAnswers(car, answers) : null
   const bestForTags = getBestForTags(car)
   const router = useRouter()
+
+  useEffect(() => {
+    const key = `${car.brand}|${car.model}|${car.year}`
+    if (detailWikiCache.has(key)) { setHeroImage(detailWikiCache.get(key)!); return }
+    fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}`)
+      .then(r => r.json())
+      .then(d => { if (d.imageUrl) { detailWikiCache.set(key, d.imageUrl); setHeroImage(d.imageUrl) } })
+      .catch(() => {})
+  }, [car.brand, car.model, car.year])
 
   const handleSave = async () => {
     if (!user) { router.push("/sign-in"); return }
@@ -75,7 +87,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
           <div className="grid lg:grid-cols-2 gap-0">
             <div className="relative p-4 bg-gray-50">
               <CarGallery
-                mainImage={car.image}
+                mainImage={heroImage}
                 altText={`${car.year} ${car.brand} ${car.model}`}
                 gallery={carGalleries[car.id] ?? car.gallery}
               />

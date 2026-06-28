@@ -11,6 +11,22 @@ import { scoreCarForAnswers } from "@/lib/cars/quiz"
 import { useQuizAnswers } from "@/hooks/useQuizAnswers"
 import MatchBadge from "@/components/quiz/match-badge"
 import { magazineReviews } from "@/lib/cars/reviews"
+import { useState, useEffect } from "react"
+
+const wikiImageCache = new Map<string, string>()
+
+function useYearAccurateImage(car: Car): string {
+  const [src, setSrc] = useState(car.image)
+  useEffect(() => {
+    const key = `${car.brand}|${car.model}|${car.year}`
+    if (wikiImageCache.has(key)) { setSrc(wikiImageCache.get(key)!); return }
+    fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}`)
+      .then(r => r.json())
+      .then(d => { if (d.imageUrl) { wikiImageCache.set(key, d.imageUrl); setSrc(d.imageUrl) } })
+      .catch(() => {})
+  }, [car.brand, car.model, car.year])
+  return src
+}
 
 interface CarCardProps {
   car: Car
@@ -44,6 +60,7 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
   const { answers } = useQuizAnswers()
   const matchScore = answers && !hideMatchBadge ? scoreCarForAnswers(car, answers) : null
   const bestForTags = getBestForTags(car)
+  const imageUrl = useYearAccurateImage(car)
 
   const fuelStat = car.fuelType === "electric"
     ? `${car.specs.electricRange} mi range`
@@ -56,7 +73,7 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
       <div className="relative h-48 bg-gray-100 overflow-hidden">
         <Link href={`/cars/${car.id}`} className="block w-full h-full">
           <img
-            src={car.image}
+            src={imageUrl}
             alt={`${car.year} ${car.brand} ${car.model}`}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
