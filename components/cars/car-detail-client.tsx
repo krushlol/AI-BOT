@@ -24,6 +24,7 @@ import CarGallery from "@/components/cars/car-gallery"
 import { carGalleries } from "@/lib/cars/gallery"
 import { toggleSavedCar } from "@/lib/cars/save"
 import { getSpecExplanations } from "@/lib/cars/spec-explanations"
+import KnownIssues from "@/components/cars/known-issues"
 
 interface CarDetailClientProps {
   car: Car
@@ -308,6 +309,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                 ))}
               </ul>
             </div>
+            <KnownIssues brand={car.brand} model={car.model} year={car.year} />
           </TabsContent>
         </Tabs>
 
