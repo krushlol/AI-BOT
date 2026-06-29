@@ -102,8 +102,8 @@ async function searchCommons(query: string, targetYear: number, model?: string):
 }
 
 // Wikipedia article title lookup (follows redirects)
-// Returns the article's main thumbnail if it passes exterior and year checks
-async function wikiTitleLookup(title: string, targetYear?: number): Promise<string | null> {
+// Wikipedia editors maintain the main article image to show current-gen — no year filtering needed
+async function wikiTitleLookup(title: string): Promise<string | null> {
   const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&redirects=1&prop=pageimages&pithumbsize=800&format=json&origin=*`
   try {
     const res = await fetch(url, {})
@@ -112,11 +112,6 @@ async function wikiTitleLookup(title: string, targetYear?: number): Promise<stri
     for (const page of Object.values(pages) as Record<string, unknown>[]) {
       const thumb = (page as { thumbnail?: { source?: string } }).thumbnail?.source
       if (!thumb || !isExteriorImage(thumb)) continue
-      if (targetYear) {
-        const y = yearFromUrl(thumb)
-        // Reject if photo year is clearly older than the target (> 6 year gap)
-        if (y && Math.abs(y - targetYear) > MAX_YEAR_GAP) return null
-      }
       return thumb
     }
   } catch { /* */ }
@@ -141,8 +136,7 @@ export async function GET(req: Request) {
   let imageUrl: string | null = null
 
   // Strategy 1: Wikipedia article thumbnail — most reliable for current-generation photos
-  // (Wikipedia editors maintain the main article image to show the current gen model)
-  imageUrl = await wikiTitleLookup(`${brand} ${model}`, requestedYear)
+  imageUrl = await wikiTitleLookup(`${brand} ${model}`)
 
   // Strategy 2: Commons search with capped year + "front" for clearest exterior shots
   if (!imageUrl) imageUrl = await searchCommons(`${searchYear} ${brand} ${model} front`, requestedYear, model)
@@ -155,10 +149,37 @@ export async function GET(req: Request) {
     imageUrl = await searchCommons(`${searchYear - back} ${brand} ${model}`, requestedYear, model)
   }
 
-  // Strategy 10: Generic Commons search — requires image to have a year in filename
+  // Strategy 10: Generic Commons search with year in filename
   if (!imageUrl) {
     const generic = await searchCommons(`${brand} ${model} automobile`, requestedYear, model)
     if (generic && yearFromUrl(generic) !== null) imageUrl = generic
+  }
+
+  // Strategy 11: Last resort — any model-relevant photo, no year restriction
+  // Better to show a slightly older photo of the right car than a generic placeholder
+  if (!imageUrl) {
+    try {
+      const url = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(`${brand} ${model}`)}&srnamespace=6&srlimit=20&format=json&origin=*`
+      const res = await fetch(url, {})
+      const data = await res.json()
+      const results: { title: string }[] = data.query?.search ?? []
+      const titles = results.map(r => encodeURIComponent(r.title)).join("|")
+      if (titles) {
+        const imgRes = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&titles=${titles}&prop=imageinfo&iiprop=url%7Cmime&iiurlwidth=800&format=json&origin=*`, {})
+        const imgData = await imgRes.json()
+        const pages = Object.values(imgData.query?.pages ?? {}) as { imageinfo?: { thumburl?: string; url?: string; mime?: string }[] }[]
+        for (const page of pages) {
+          const info = page.imageinfo?.[0]
+          const mime = info?.mime ?? ""
+          if (mime !== "image/jpeg" && mime !== "image/png") continue
+          const thumbUrl = info?.thumburl ?? info?.url ?? ""
+          if (thumbUrl && isExteriorImage(thumbUrl) && isModelRelevant(thumbUrl, model)) {
+            imageUrl = thumbUrl
+            break
+          }
+        }
+      }
+    } catch { /* */ }
   }
 
   // Only cache successful lookups — null results may succeed on retry (rate limit, transient error)
