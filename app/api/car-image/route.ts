@@ -19,6 +19,8 @@ const SKIP_KEYWORDS = [
   "%28f30%29","(f30)","_f30_",
   "%28f31%29","(f31)","_f31_",
   "%28f32%29","(f32)","_f32_",
+  // Refresh/facelift generations look different from base model year
+  "juniper","facelift","_lci_","_mk2_","_mk3_","second_generation","third_generation",
   ".djvu",".svg",".tif",".gif","book","page1",
 ]
 
