@@ -28,7 +28,7 @@ export default function KnownIssues({ brand, model, year }: KnownIssuesProps) {
       .catch(() => setLoading(false))
   }, [brand, model, year])
 
-  const nhtsaUrl = `https://www.nhtsa.gov/complaints#complaints?make=${encodeURIComponent(brand.toUpperCase())}&model=${encodeURIComponent(model.toUpperCase())}&modelYear=${year}`
+  const nhtsaUrl = "https://www.nhtsa.gov/complaints"
 
   if (loading) {
     return (
