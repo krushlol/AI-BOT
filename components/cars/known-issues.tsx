@@ -32,11 +32,14 @@ export default function KnownIssues({ brand, model, year }: KnownIssuesProps) {
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 animate-pulse">
-        <div className="h-4 bg-amber-200 rounded w-48 mb-3" />
-        <div className="space-y-2">
-          <div className="h-3 bg-amber-100 rounded w-full" />
-          <div className="h-3 bg-amber-100 rounded w-3/4" />
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="h-5 bg-gray-200 rounded w-40 mb-4 animate-pulse" />
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 animate-pulse">
+          <div className="h-4 bg-amber-200 rounded w-48 mb-3" />
+          <div className="space-y-2">
+            <div className="h-3 bg-amber-100 rounded w-full" />
+            <div className="h-3 bg-amber-100 rounded w-3/4" />
+          </div>
         </div>
       </div>
     )
@@ -47,12 +50,16 @@ export default function KnownIssues({ brand, model, year }: KnownIssuesProps) {
   const noComplaints = data.total === 0
 
   return (
-    <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+        👤 What Owners Say
+      </h2>
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
           <h3 className="font-semibold text-amber-900 text-sm">
-            Owner-Reported Issues
+            Real Owner Complaints
           </h3>
         </div>
         <span className="text-xs text-amber-600 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full font-medium">
@@ -104,6 +111,7 @@ export default function KnownIssues({ brand, model, year }: KnownIssuesProps) {
         {noComplaints ? "View NHTSA record" : `View all ${data.total} complaints`} on NHTSA.gov
         <ExternalLink className="w-3 h-3" />
       </a>
+      </div>
     </div>
   )
 }

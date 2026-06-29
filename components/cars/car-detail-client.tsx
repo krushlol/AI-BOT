@@ -17,7 +17,6 @@ import Link from "next/link"
 import { getBestForTags } from "@/lib/cars/tags"
 import { scoreCarForAnswers } from "@/lib/cars/quiz"
 import { magazineReviews } from "@/lib/cars/reviews"
-import { ownerReviews } from "@/lib/cars/owner-reviews"
 import { useQuizAnswers } from "@/hooks/useQuizAnswers"
 import MatchBadge from "@/components/quiz/match-badge"
 import CarGallery from "@/components/cars/car-gallery"
@@ -309,65 +308,34 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                 ))}
               </ul>
             </div>
-            <KnownIssues brand={car.brand} model={car.model} year={car.year} />
           </TabsContent>
         </Tabs>
 
-        {/* Reviews: Experts + Owners side by side */}
-        {(magazineReviews[car.id] || ownerReviews[car.id]) && (
-          <div className="grid lg:grid-cols-2 gap-6 mb-6">
+        {/* Reviews: Experts + Real Owner Complaints side by side */}
+        <div className="grid lg:grid-cols-2 gap-6 mb-6">
 
-            {/* Expert Reviews */}
-            {magazineReviews[car.id] && (
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  📰 What the Experts Say
-                </h2>
-                <div className="space-y-3">
-                  {magazineReviews[car.id].map((rev) => (
-                    <div key={rev.magazine} className="bg-gray-50 rounded-xl border border-gray-100 p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-bold text-sm text-gray-800">{rev.magazine}</span>
-                        <span className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">⭐ {rev.rating}</span>
-                      </div>
-                      <p className="text-sm text-gray-600 leading-relaxed italic">"{rev.quote}"</p>
+          {magazineReviews[car.id] && (
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                📰 What the Experts Say
+              </h2>
+              <div className="space-y-3">
+                {magazineReviews[car.id].map((rev) => (
+                  <div key={rev.magazine} className="bg-gray-50 rounded-xl border border-gray-100 p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-sm text-gray-800">{rev.magazine}</span>
+                      <span className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">⭐ {rev.rating}</span>
                     </div>
-                  ))}
-                </div>
+                    <p className="text-sm text-gray-600 leading-relaxed italic">"{rev.quote}"</p>
+                  </div>
+                ))}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Owner Reviews */}
-            {ownerReviews[car.id] && (
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  👤 What Owners Say
-                </h2>
-                <div className="space-y-3">
-                  {ownerReviews[car.id].map((rev, i) => (
-                    <div key={i} className="bg-gray-50 rounded-xl border border-gray-100 p-4">
-                      <div className="flex items-start justify-between mb-1">
-                        <div>
-                          <span className="font-bold text-sm text-gray-800">{rev.name}</span>
-                          <span className="text-xs text-gray-400 ml-2">· {rev.location}</span>
-                        </div>
-                        <span className="text-xs text-gray-400 flex-shrink-0 ml-2">{rev.owned}</span>
-                      </div>
-                      <div className="flex gap-0.5 mb-1">
-                        {Array.from({ length: 5 }).map((_, s) => (
-                          <span key={s} className={`text-xs ${s < rev.rating ? "text-amber-400" : "text-gray-200"}`}>★</span>
-                        ))}
-                      </div>
-                      <p className="text-xs font-semibold text-gray-700 mb-1">"{rev.title}"</p>
-                      <p className="text-sm text-gray-600 leading-relaxed">{rev.review}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+          <KnownIssues brand={car.brand} model={car.model} year={car.year} />
 
-          </div>
-        )}
+        </div>
 
         {/* Available colors */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
