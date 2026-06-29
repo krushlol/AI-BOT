@@ -28,7 +28,7 @@ export default function KnownIssues({ brand, model, year }: KnownIssuesProps) {
       .catch(() => setLoading(false))
   }, [brand, model, year])
 
-  const nhtsaUrl = "https://www.nhtsa.gov/complaints"
+  const nhtsaUrl = `https://www.google.com/search?q=${encodeURIComponent(`${year} ${brand} ${model} NHTSA complaints site:nhtsa.gov`)}`
 
   if (loading) {
     return (
