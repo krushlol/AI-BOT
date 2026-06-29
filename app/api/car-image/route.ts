@@ -7,6 +7,7 @@ const SKIP_KEYWORDS = [
   "diagram","blueprint","factory","plant","assembly","schematic","prototype",
   "classic","vintage","historic","oldtimer","retro_classic","heritage","klassik",
   "museum","motorsport","race","rally","nurburgring","concours","btcc","dtm","wtcr","gt3","touring_car",
+  "police","polizei","carabinieri","gendarmerie","ambulance","fire","taxi","test_drive","prototype_spy",
   // Old BMW generation codes — URL-encoded form (%28E36%29) and decoded form ((e36))
   "%28e30%29","(e30)","_e30_",
   "%28e36%29","(e36)","_e36_",
@@ -149,12 +150,12 @@ export async function GET(req: Request) {
   // Strategy 3: Commons without "front"
   if (!imageUrl) imageUrl = await searchCommons(`${searchYear} ${brand} ${model}`, requestedYear, model)
 
-  // Strategies 4-7: Try years 1-4 back (covers 2025/2026 models with 2021-2024 photos on Commons)
-  for (let back = 1; back <= 4 && !imageUrl; back++) {
+  // Strategies 4-9: Try years 1-6 back (covers 2025/2026 models with 2020-2024 photos on Commons)
+  for (let back = 1; back <= 6 && !imageUrl; back++) {
     imageUrl = await searchCommons(`${searchYear - back} ${brand} ${model}`, requestedYear, model)
   }
 
-  // Strategy 8: Generic Commons search — requires image to have a year in filename
+  // Strategy 10: Generic Commons search — requires image to have a year in filename
   if (!imageUrl) {
     const generic = await searchCommons(`${brand} ${model} automobile`, requestedYear, model)
     if (generic && yearFromUrl(generic) !== null) imageUrl = generic
