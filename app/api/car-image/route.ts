@@ -7,8 +7,8 @@ const SKIP_KEYWORDS = [
   "diagram","blueprint","factory","plant","assembly","schematic","prototype",
   "classic","vintage","historic","oldtimer","retro_classic","heritage","klassik",
   "museum","motorsport","race","rally","nurburgring","concours","btcc","dtm","wtcr","gt3","touring_car",
-  "police","polizei","carabinieri","gendarmerie","ambulance","fire","taxi","test_drive","prototype_spy",
-  // Old BMW generation codes — URL-encoded form (%28E36%29) and decoded form ((e36))
+  "police","polizei","carabinieri","gendarmerie","ambulance","fire_truck","taxi","test_drive","prototype_spy",
+  // Old BMW generation codes
   "%28e30%29","(e30)","_e30_",
   "%28e36%29","(e36)","_e36_",
   "%28e46%29","(e46)","_e46_",
@@ -20,7 +20,7 @@ const SKIP_KEYWORDS = [
   "%28f30%29","(f30)","_f30_",
   "%28f31%29","(f31)","_f31_",
   "%28f32%29","(f32)","_f32_",
-  // Refresh/facelift generations look different from base model year
+  // Refresh/facelift generations
   "juniper","facelift","_lci_","_mk2_","_mk3_","second_generation","third_generation",
   ".djvu",".svg",".tif",".gif","book","page1",
 ]
@@ -33,21 +33,14 @@ function isExteriorImage(url: string): boolean {
   return !SKIP_KEYWORDS.some((kw) => lower.includes(kw))
 }
 
-// Extract 4-digit year from a URL — returns the FIRST year-like value found (leftmost)
-// The leftmost year in a filename like "2005_Honda_Civic..._05-23-2024" is the car year, not the photo date
 function yearFromUrl(url: string): number | null {
   const all = url.match(/(19[5-9]\d|20[0-3]\d)/g)
   if (!all) return null
   return parseInt(all[0])
 }
 
-// Max acceptable year gap between photo and target year
-// 6 allows 2021 G22 440i photo to be used for a 2026 model year
 const MAX_YEAR_GAP = 6
 
-// Check if the filename contains the model name as a phrase
-// e.g. model="3 Series" → checks for "3_series" in filename
-// Prevents "BMW 7 Series" photos when searching "BMW 3 Series"
 function safeDecode(s: string): string {
   try { return decodeURIComponent(s) } catch { return s }
 }
@@ -61,23 +54,27 @@ function isModelRelevant(thumbUrl: string, model: string): boolean {
   return filename.includes(withUnderscore) || filename.includes(withHyphen) || filename.includes(m)
 }
 
-// Search Wikimedia Commons for image files matching query, return best exterior shot
-async function searchCommons(query: string, targetYear: number, model?: string): Promise<string | null> {
-  const url = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srnamespace=6&srlimit=10&format=json&origin=*`
+// Cache Wikimedia responses on disk for 24h so repeated lookups don't hit the live API
+const WIKI_FETCH_OPTS = { next: { revalidate: 86400 } } as RequestInit
+
+async function searchCommons(query: string, targetYear: number, model: string, strict = true): Promise<string | null> {
   try {
-    const res = await fetch(url, {})
+    const res = await fetch(
+      `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srnamespace=6&srlimit=15&format=json&origin=*`,
+      WIKI_FETCH_OPTS
+    )
     const data = await res.json()
     const results: { title: string }[] = data.query?.search ?? []
     if (!results.length) return null
 
-    // Get actual image URLs — use raw pipe separator (NOT encodeURIComponent for multi-values)
-    const titles = results.map(r => encodeURIComponent(r.title)).join("|")
-    const imgUrl = `https://commons.wikimedia.org/w/api.php?action=query&titles=${titles}&prop=imageinfo&iiprop=url%7Cmime&iiurlwidth=800&format=json&origin=*`
-    const imgRes = await fetch(imgUrl, {})
+    const joined = results.map(r => encodeURIComponent(r.title)).join("|")
+    const imgRes = await fetch(
+      `https://commons.wikimedia.org/w/api.php?action=query&titles=${joined}&prop=imageinfo&iiprop=url%7Cmime&iiurlwidth=800&format=json&origin=*`,
+      WIKI_FETCH_OPTS
+    )
     const imgData = await imgRes.json()
     const pages = Object.values(imgData.query?.pages ?? {}) as { imageinfo?: { thumburl?: string; url?: string; mime?: string }[] }[]
 
-    // Collect candidates: only jpg/png exterior shots
     const candidates: { url: string; yearDiff: number }[] = []
     for (const page of pages) {
       const info = page.imageinfo?.[0]
@@ -85,34 +82,31 @@ async function searchCommons(query: string, targetYear: number, model?: string):
       if (mime !== "image/jpeg" && mime !== "image/png" && mime !== "image/webp") continue
       const thumbUrl = info?.thumburl ?? info?.url ?? ""
       if (!thumbUrl || !isExteriorImage(thumbUrl)) continue
-      if (model && !isModelRelevant(thumbUrl, model)) continue
+      if (!isModelRelevant(thumbUrl, model)) continue
       const y = yearFromUrl(thumbUrl)
-      // Dateless photos get yearDiff=999 so they can't win over dated ones in year-targeted strategies
       const yearDiff = y !== null ? Math.abs(y - targetYear) : 999
       candidates.push({ url: thumbUrl, yearDiff })
     }
     if (!candidates.length) return null
     candidates.sort((a, b) => a.yearDiff - b.yearDiff)
-    // Reject if the best match is too far from the target year
-    if (candidates[0].yearDiff > MAX_YEAR_GAP) return null
+    if (strict && candidates[0].yearDiff > MAX_YEAR_GAP) return null
     return candidates[0].url
   } catch {
     return null
   }
 }
 
-// Wikipedia article title lookup (follows redirects)
-// Wikipedia editors maintain the main article image to show current-gen — no year filtering needed
 async function wikiTitleLookup(title: string): Promise<string | null> {
-  const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&redirects=1&prop=pageimages&pithumbsize=800&format=json&origin=*`
   try {
-    const res = await fetch(url, {})
+    const res = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&redirects=1&prop=pageimages&pithumbsize=800&format=json&origin=*`,
+      WIKI_FETCH_OPTS
+    )
     const data = await res.json()
     const pages = data.query?.pages ?? {}
     for (const page of Object.values(pages) as Record<string, unknown>[]) {
       const thumb = (page as { thumbnail?: { source?: string } }).thumbnail?.source
-      if (!thumb || !isExteriorImage(thumb)) continue
-      return thumb
+      if (thumb && isExteriorImage(thumb)) return thumb
     }
   } catch { /* */ }
   return null
@@ -129,60 +123,28 @@ export async function GET(req: Request) {
   const cacheKey = `${brand}|${model}|${requestedYear}`
   if (cache.has(cacheKey)) return Response.json({ imageUrl: cache.get(cacheKey) })
 
-  // Cap search year to current year — future model years don't have Commons photos yet
   const currentYear = new Date().getFullYear()
-  const searchYear = Math.min(requestedYear, currentYear)
+  const sy = Math.min(requestedYear, currentYear)
 
   let imageUrl: string | null = null
 
-  // Strategy 1: Wikipedia article thumbnail — most reliable for current-generation photos
+  // Strategy 1: Wikipedia — curated current-gen thumbnail, single fast call
   imageUrl = await wikiTitleLookup(`${brand} ${model}`)
 
-  // Strategy 2: Commons search with capped year + "front" for clearest exterior shots
-  if (!imageUrl) imageUrl = await searchCommons(`${searchYear} ${brand} ${model} front`, requestedYear, model)
+  // Strategy 2+3: Year-targeted Commons with and without "front"
+  if (!imageUrl) imageUrl = await searchCommons(`${sy} ${brand} ${model} front`, requestedYear, model)
+  if (!imageUrl) imageUrl = await searchCommons(`${sy} ${brand} ${model}`, requestedYear, model)
 
-  // Strategy 3: Commons without "front"
-  if (!imageUrl) imageUrl = await searchCommons(`${searchYear} ${brand} ${model}`, requestedYear, model)
-
-  // Strategies 4-9: Try years 1-6 back (covers 2025/2026 models with 2020-2024 photos on Commons)
+  // Strategies 4-9: Walk back up to 6 years for models with no current photos yet
   for (let back = 1; back <= 6 && !imageUrl; back++) {
-    imageUrl = await searchCommons(`${searchYear - back} ${brand} ${model}`, requestedYear, model)
+    imageUrl = await searchCommons(`${sy - back} ${brand} ${model}`, requestedYear, model)
   }
 
-  // Strategy 10: Generic Commons search with year in filename
-  if (!imageUrl) {
-    const generic = await searchCommons(`${brand} ${model} automobile`, requestedYear, model)
-    if (generic && yearFromUrl(generic) !== null) imageUrl = generic
-  }
+  // Strategy 10: Loose search — any model-relevant photo, no year restriction
+  if (!imageUrl) imageUrl = await searchCommons(`${brand} ${model} automobile`, requestedYear, model, false)
+  if (!imageUrl) imageUrl = await searchCommons(`${brand} ${model} car`, requestedYear, model, false)
 
-  // Strategy 11: Last resort — any model-relevant photo, no year restriction
-  // Better to show a slightly older photo of the right car than a generic placeholder
-  if (!imageUrl) {
-    try {
-      const url = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(`${brand} ${model}`)}&srnamespace=6&srlimit=20&format=json&origin=*`
-      const res = await fetch(url, {})
-      const data = await res.json()
-      const results: { title: string }[] = data.query?.search ?? []
-      const titles = results.map(r => encodeURIComponent(r.title)).join("|")
-      if (titles) {
-        const imgRes = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&titles=${titles}&prop=imageinfo&iiprop=url%7Cmime&iiurlwidth=800&format=json&origin=*`, {})
-        const imgData = await imgRes.json()
-        const pages = Object.values(imgData.query?.pages ?? {}) as { imageinfo?: { thumburl?: string; url?: string; mime?: string }[] }[]
-        for (const page of pages) {
-          const info = page.imageinfo?.[0]
-          const mime = info?.mime ?? ""
-          if (mime !== "image/jpeg" && mime !== "image/png") continue
-          const thumbUrl = info?.thumburl ?? info?.url ?? ""
-          if (thumbUrl && isExteriorImage(thumbUrl) && isModelRelevant(thumbUrl, model)) {
-            imageUrl = thumbUrl
-            break
-          }
-        }
-      }
-    } catch { /* */ }
-  }
-
-  // Only cache successful lookups — null results may succeed on retry (rate limit, transient error)
-  if (imageUrl !== null) cache.set(cacheKey, imageUrl)
+  // Only cache hits — null may succeed on retry
+  if (imageUrl) cache.set(cacheKey, imageUrl)
   return Response.json({ imageUrl })
 }

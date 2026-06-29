@@ -10,39 +10,40 @@ import { useState, useEffect } from "react"
 // Module-level cache so repeat renders don't re-fetch
 const imageCache = new Map<string, string | null>()
 
-function useLiveCarImage(car: LiveCar): string | null {
-  const fallback = `https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&q=80`
+function useLiveCarImage(car: LiveCar, index = 0): string | null {
   const [url, setUrl] = useState<string | null>(car.image ?? null)
 
   useEffect(() => {
-    if (car.image) return // already has a specific image
+    if (car.image) return
     const key = `${car.brand}|${car.model}|${car.year}`
     if (imageCache.has(key)) {
-      setUrl(imageCache.get(key) ?? fallback)
+      setUrl(imageCache.get(key) ?? null)
       return
     }
-    fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}`)
-      .then((r) => r.json())
-      .then((data) => {
-        const resolved = data.imageUrl ?? fallback
-        imageCache.set(key, resolved)
-        setUrl(resolved)
-      })
-      .catch(() => {
-        imageCache.set(key, fallback)
-        setUrl(fallback)
-      })
-  }, [car.brand, car.model, car.year, car.image, fallback])
+    // Stagger requests: 300ms per card so we don't hammer Wikimedia all at once
+    const delay = index * 300
+    const timer = setTimeout(() => {
+      fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}`)
+        .then((r) => r.json())
+        .then((data) => {
+          imageCache.set(key, data.imageUrl ?? null)
+          if (data.imageUrl) setUrl(data.imageUrl)
+        })
+        .catch(() => { /* leave as null — show brand letter placeholder */ })
+    }, delay)
+    return () => clearTimeout(timer)
+  }, [car.brand, car.model, car.year, car.image, index])
 
   return url
 }
 
 interface LiveCarCardProps {
   car: LiveCar
+  index?: number
 }
 
-export default function LiveCarCard({ car }: LiveCarCardProps) {
-  const imageUrl = useLiveCarImage(car)
+export default function LiveCarCard({ car, index = 0 }: LiveCarCardProps) {
+  const imageUrl = useLiveCarImage(car, index)
   const fuelLabel = car.specs?.fuelType ?? car.fuelType ?? "Gas"
   const isElectric = fuelLabel.toLowerCase().includes("electric")
 

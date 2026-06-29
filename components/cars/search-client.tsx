@@ -341,8 +341,8 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
                   {liveResults.length} {liveMake} models for {liveYear} — click any car to load specs & safety ratings
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {liveResults.map((car) => (
-                    <LiveCarCard key={car.id} car={car} />
+                  {liveResults.map((car, idx) => (
+                    <LiveCarCard key={car.id} car={car} index={idx} />
                   ))}
                 </div>
               </>
