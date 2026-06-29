@@ -20,7 +20,8 @@ function useYearAccurateImage(car: Car): string {
   useEffect(() => {
     const key = `${car.brand}|${car.model}|${car.year}`
     if (wikiImageCache.has(key)) { setSrc(wikiImageCache.get(key)!); return }
-    fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}`)
+    const bs = car.bodyStyle ? `&bodyStyle=${encodeURIComponent(car.bodyStyle)}` : ""
+    fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}${bs}`)
       .then(r => r.json())
       .then(d => { if (d.imageUrl) { wikiImageCache.set(key, d.imageUrl); setSrc(d.imageUrl) } })
       .catch(() => {})

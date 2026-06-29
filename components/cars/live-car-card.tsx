@@ -23,7 +23,8 @@ function useLiveCarImage(car: LiveCar, index = 0): string | null {
     // Stagger requests: 300ms per card so we don't hammer Wikimedia all at once
     const delay = index * 300
     const timer = setTimeout(() => {
-      fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}`)
+      const bs = car.bodyStyle ? `&bodyStyle=${encodeURIComponent(car.bodyStyle)}` : ""
+    fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}${bs}`)
         .then((r) => r.json())
         .then((data) => {
           imageCache.set(key, data.imageUrl ?? null)
