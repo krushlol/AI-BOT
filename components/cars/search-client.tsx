@@ -1,7 +1,7 @@
 "use client"
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Search, SlidersHorizontal, X, Globe, BookOpen, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -16,6 +16,7 @@ import CompareBar from "./compare-bar"
 import { Car } from "@/lib/cars/types"
 import { LiveCar } from "@/lib/cars/live-types"
 import { MAINSTREAM_BRANDS } from "@/lib/cars/nhtsa"
+import { parseLiveQuery } from "@/lib/cars/parse-query"
 import { toggleSavedCar } from "@/lib/cars/save"
 
 const YEARS = Array.from({ length: new Date().getFullYear() - 1989 }, (_, i) => new Date().getFullYear() - i)
@@ -66,6 +67,11 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
   const [liveLoading, setLiveLoading] = useState(false)
   const [liveError, setLiveError] = useState("")
   const [liveSearched, setLiveSearched] = useState(false)
+  const [liveTextQuery, setLiveTextQuery] = useState("")
+  const [suggestions, setSuggestions] = useState<{ make: string; model: string; year: number }[]>([])
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false)
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const suggestionsRef = useRef<HTMLDivElement>(null)
 
   const fetchModels = async (make: string, year: string) => {
     if (!make) return
@@ -83,6 +89,42 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
       setLiveModelsLoading(false)
     }
   }
+
+  // Debounced autocomplete — fetch NHTSA models as user types
+  useEffect(() => {
+    if (!liveTextQuery.trim()) {
+      setSuggestions([])
+      setShowSuggestions(false)
+      return
+    }
+    const parsed = parseLiveQuery(liveTextQuery)
+    if (!parsed) { setSuggestions([]); return }
+
+    // Only query NHTSA when we have a recognized make
+    const makeMatch = MAINSTREAM_BRANDS.find(b => b.toLowerCase() === parsed.make.toLowerCase())
+    if (!makeMatch) { setSuggestions([]); return }
+
+    setSuggestionsLoading(true)
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/${encodeURIComponent(makeMatch)}/modelyear/${parsed.year}?format=json`
+        )
+        const json = await res.json()
+        const allModels: string[] = (json.Results ?? []).map((r: { Model_Name: string }) => r.Model_Name).sort()
+        const filtered = parsed.model
+          ? allModels.filter(m => m.toLowerCase().startsWith(parsed.model.toLowerCase()))
+          : allModels
+        setSuggestions(filtered.slice(0, 8).map(m => ({ make: makeMatch, model: m, year: parsed.year })))
+        setShowSuggestions(true)
+      } catch {
+        setSuggestions([])
+      } finally {
+        setSuggestionsLoading(false)
+      }
+    }, 300)
+    return () => { clearTimeout(timer); setSuggestionsLoading(false) }
+  }, [liveTextQuery])
 
   const filtered = useMemo(() => {
     let result = allCars.filter((car) => {
@@ -144,6 +186,34 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
       setLiveResults([])
     } finally {
       setLiveLoading(false)
+    }
+  }
+
+  const navigateToSuggestion = (s: { make: string; model: string; year: number }) => {
+    setShowSuggestions(false)
+    setLiveTextQuery(`${s.make} ${s.model} ${s.year}`)
+    router.push(`/cars/live/${encodeURIComponent(s.make)}/${encodeURIComponent(s.model)}/${s.year}`)
+  }
+
+  const handleLiveTextSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (suggestions.length > 0) { navigateToSuggestion(suggestions[0]); return }
+    const parsed = parseLiveQuery(liveTextQuery)
+    if (!parsed) return
+    if (parsed.model) {
+      router.push(`/cars/live/${encodeURIComponent(parsed.make)}/${encodeURIComponent(parsed.model)}/${parsed.year}`)
+    } else {
+      setLiveMake(parsed.make)
+      setLiveYear(String(parsed.year))
+      fetchModels(parsed.make, String(parsed.year))
+      setLiveLoading(true)
+      setLiveError("")
+      setLiveSearched(true)
+      fetch(`/api/cars/search?make=${encodeURIComponent(parsed.make)}&year=${parsed.year}`)
+        .then(r => r.json())
+        .then(json => { setLiveResults(json.results ?? []) })
+        .catch(() => { setLiveError("Could not load live data. Please try again.") })
+        .finally(() => setLiveLoading(false))
     }
   }
 
@@ -250,6 +320,55 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
 
             {/* Live catalog search bar */}
             <TabsContent value="live" className="mt-0">
+              {/* Autocomplete text search */}
+              <form onSubmit={handleLiveTextSearch} className="mb-3">
+                <div className="relative" ref={suggestionsRef}>
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10" />
+                      {suggestionsLoading && (
+                        <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 animate-spin z-10" />
+                      )}
+                      <Input
+                        value={liveTextQuery}
+                        onChange={(e) => setLiveTextQuery(e.target.value)}
+                        onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+                        onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                        onKeyDown={(e) => e.key === "Escape" && setShowSuggestions(false)}
+                        placeholder='Type any car — e.g. "Tesla Model Y" or "2024 Honda Civic"'
+                        className="pl-9"
+                        autoComplete="off"
+                      />
+                    </div>
+                    <Button type="submit" disabled={!liveTextQuery.trim() || liveLoading} className="shrink-0">
+                      Go
+                    </Button>
+                  </div>
+                  {/* Suggestions dropdown */}
+                  {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute top-full left-0 right-10 z-50 mt-1 bg-white border rounded-lg shadow-lg overflow-hidden">
+                      {suggestions.map((s, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          className="w-full text-left px-4 py-2.5 text-sm hover:bg-orange-50 hover:text-orange-700 flex items-center gap-2 border-b last:border-b-0 transition-colors"
+                          onMouseDown={() => navigateToSuggestion(s)}
+                        >
+                          <span className="font-medium">{s.make} {s.model}</span>
+                          <span className="text-gray-400 ml-auto text-xs">{s.year}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </form>
+
+              <div className="flex items-center gap-2 text-xs text-gray-400 mb-2">
+                <div className="flex-1 h-px bg-gray-200" />
+                <span>or browse by brand &amp; year</span>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+
               <div className="flex gap-3 flex-wrap items-center">
                 <Select value={liveMake} onValueChange={(v) => { setLiveMake(v); fetchModels(v, liveYear) }}>
                   <SelectTrigger className="w-44">
@@ -264,7 +383,7 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
                     <SelectValue placeholder="Year" />
                   </SelectTrigger>
                   <SelectContent>
-                    {YEARS.slice(0, 10).map((y) => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
+                    {YEARS.map((y) => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
                   </SelectContent>
                 </Select>
                 <Select

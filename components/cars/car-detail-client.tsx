@@ -333,7 +333,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
             </div>
           )}
 
-          <KnownIssues brand={car.brand} model={car.model} year={car.year} />
+          <KnownIssues brand={car.brand} model={car.model} year={car.year} carId={car.id} />
 
         </div>
 

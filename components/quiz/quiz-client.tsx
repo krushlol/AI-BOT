@@ -2,7 +2,7 @@
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useMemo } from "react"
-import { RotateCcw, GitCompare, Car as CarIcon, CheckCircle2, Sparkles } from "lucide-react"
+import { RotateCcw, GitCompare, Car as CarIcon, Sparkles, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Navbar from "@/components/cars/navbar"

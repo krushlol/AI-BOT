@@ -13,6 +13,7 @@ import { Car } from "@/lib/cars/types"
 import { cars as allCarsData } from "@/lib/cars/data"
 import Link from "next/link"
 import { toggleSavedCar } from "@/lib/cars/save"
+import { parseLiveQuery } from "@/lib/cars/parse-query"
 
 
 interface HomeClientProps {
@@ -95,7 +96,13 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    if (query.trim()) router.push(`/search?q=${encodeURIComponent(query)}`)
+    if (!query.trim()) return
+    const parsed = parseLiveQuery(query)
+    if (parsed && parsed.model) {
+      router.push(`/cars/live/${encodeURIComponent(parsed.make)}/${encodeURIComponent(parsed.model)}/${parsed.year}`)
+    } else {
+      router.push(`/search?q=${encodeURIComponent(query)}`)
+    }
   }
 
   const handleCompare = (id: string) => {
@@ -118,9 +125,9 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
   }
 
   const stats = [
-    { label: "Cars in Database", value: `${allCars.length}+`, icon: TrendingUp },
+    { label: "Expert Reviews", value: `${allCars.length}+`, icon: TrendingUp },
     { label: "Brands Covered", value: `${new Set(allCars.map((c) => c.brand)).size}`, icon: Shield },
-    { label: "Data Points Per Car", value: "50+", icon: Zap },
+    { label: "Years of Live Data", value: "1990–now", icon: Zap },
   ]
 
   return (

@@ -856,7 +856,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 93300,
     maxPrice: 185000,
-    image: "https://images.unsplash.com/photo-1774740460595-a16168fdc452?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1584060622420-0673aad46076?w=800&q=80",
     tagline: "Electric performance that doesn't compromise the Porsche DNA",
     description:
       "The Porsche Taycan redefined what an electric performance car can be. With 800V charging, authentic sports car handling and feel, and a stunning interior, the Taycan proves EVs can excite, not just transport.",
@@ -1770,7 +1770,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 34500,
     maxPrice: 47900,
-    image: "https://images.unsplash.com/photo-1742021923146-039f25019c0a?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1532564979029-bbf9fcbe7b0b?w=800&q=80",
     tagline: "The gold standard of family minivans",
     description:
       "The 2021 Honda Odyssey remains the benchmark family hauler. With seating for 8, a magic sliding second-row seat that creates a conversation zone between rows, built-in vacuum cleaner, and a refined 3.5L V6, it's the smartest van on the market.",

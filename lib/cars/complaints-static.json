@@ -1,0 +1,668 @@
+{
+  "toyota-camry-2024": {
+    "total": 44,
+    "categories": [
+      {
+        "name": "Structure",
+        "count": 4
+      },
+      {
+        "name": "Tires",
+        "count": 4
+      },
+      {
+        "name": "Seats",
+        "count": 2
+      },
+      {
+        "name": "Seat Belts",
+        "count": 2
+      }
+    ],
+    "sample": "The vehicle has an intermittent loss of power/hesitation during acceleration. The issue has occurred multiple times since the vehicle was purchased new and is still occurring at approximately 42,000 miles while under war"
+  },
+  "tesla-model-3-2024": {
+    "total": 197,
+    "categories": [
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 16
+      },
+      {
+        "name": "Exterior Lighting",
+        "count": 16
+      },
+      {
+        "name": "Electrical System",
+        "count": 15
+      },
+      {
+        "name": "Steering",
+        "count": 13
+      }
+    ],
+    "sample": "I am reporting a recurring safety defect regarding the exterior door handle assembly on my 2024 Tesla Model 3. On 6/15/26, the exterior door handle of caused a finger entrapment incident, resulting in an avulsion of a ge"
+  },
+  "ford-f150-2023": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  },
+  "honda-crv-2024": {
+    "total": 362,
+    "categories": [
+      {
+        "name": "Steering",
+        "count": 86
+      },
+      {
+        "name": "Visibility/Wiper",
+        "count": 35
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 18
+      },
+      {
+        "name": "Structure",
+        "count": 13
+      }
+    ],
+    "sample": "Car was idling rough, then a couple weeks later all dash light warnings came on. Took to dealership, said fuel injectors 2 and 4 were bad"
+  },
+  "bmw-3series-2025": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  },
+  "rivian-r1t-2023": {
+    "total": 37,
+    "categories": [
+      {
+        "name": "Air Bags",
+        "count": 10
+      },
+      {
+        "name": "Power Train",
+        "count": 2
+      },
+      {
+        "name": "Air Bags,Seats",
+        "count": 2
+      },
+      {
+        "name": "Wheels",
+        "count": 1
+      }
+    ],
+    "sample": "I was driving to a restaurant and out of nowhere started hearing this metal-on-metal sound 1/4 mile before I got there. I pulled into the parking lot and it kept getting worse, so I called Rivian to tow the car. They con"
+  },
+  "hyundai-ioniq5-2024": {
+    "total": 214,
+    "categories": [
+      {
+        "name": "Electrical System",
+        "count": 99
+      },
+      {
+        "name": "Electrical System,Fuel/Propulsion System",
+        "count": 22
+      },
+      {
+        "name": "Power Train,Electrical System,Fuel/Propulsion System",
+        "count": 12
+      },
+      {
+        "name": "Power Train,Electrical System",
+        "count": 9
+      }
+    ],
+    "sample": "During routine driving, the vehicle suddenly displayed an electrical system. Error code followed several minutes later by a 12-volt battery error. The vehicle was stopped and turned off. When turned back on all warnings "
+  },
+  "chevrolet-corvette-2022": {
+    "total": 20,
+    "categories": [
+      {
+        "name": "Power Train",
+        "count": 5
+      },
+      {
+        "name": "Electrical System",
+        "count": 4
+      },
+      {
+        "name": "Electrical System,Unknown Or Other",
+        "count": 2
+      },
+      {
+        "name": "Structure",
+        "count": 2
+      }
+    ],
+    "sample": "I have a 2022 Chevrolet Corvette HTC....(Convertible)....brought in December of 2024.....on and around May of 2025, the Cable retractable Top Fail on the Driver Side, it Pop, came loose, broke,....if you are driving  wit"
+  },
+  "subaru-outback-2023": {
+    "total": 84,
+    "categories": [
+      {
+        "name": "Visibility/Wiper",
+        "count": 15
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 10
+      },
+      {
+        "name": "Electrical System",
+        "count": 9
+      },
+      {
+        "name": "Exterior Lighting",
+        "count": 6
+      }
+    ],
+    "sample": "Recently, in my 2023 Subaru Outback, I have been having pop-up ads for SirusXM take over my infotainment screen.  The ad appears in the center, does not allow the user to interact with the screen - including air conditio"
+  },
+  "porsche-taycan-2025": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  },
+  "jeep-wrangler-2021": {
+    "total": 876,
+    "categories": [
+      {
+        "name": "Electrical System",
+        "count": 122
+      },
+      {
+        "name": "Steering",
+        "count": 86
+      },
+      {
+        "name": "Steering,Suspension",
+        "count": 71
+      },
+      {
+        "name": "Power Train",
+        "count": 57
+      }
+    ],
+    "sample": "1. The vehicle caught fire during normal operation. It is a 2021 Jeep Wrangler (VIN [XXX]) subject to FCA US Recall 21D / NHTSA Campaign 26V363000, which identifies the electric hydraulic power steering (EHPS) pump and i"
+  },
+  "kia-ev6-2025": {
+    "total": 50,
+    "categories": [
+      {
+        "name": "Electrical System",
+        "count": 18
+      },
+      {
+        "name": "Power Train,Electrical System",
+        "count": 5
+      },
+      {
+        "name": "Fuel/Propulsion System",
+        "count": 4
+      },
+      {
+        "name": "Electrical System,Fuel/Propulsion System",
+        "count": 3
+      }
+    ],
+    "sample": "Driving on three lane highway at 60 mph the car abruptly lost power. Was able to get off the highway. Called Kia roadside assistance. Tow truck picked up car and delivered it to Kia dealership. Service dept diagnosed and"
+  },
+  "mercedes-gle-2024": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  },
+  "toyota-rav4prime-2024": {
+    "total": 28,
+    "categories": [
+      {
+        "name": "Electrical System",
+        "count": 6
+      },
+      {
+        "name": "Visibility/Wiper",
+        "count": 3
+      },
+      {
+        "name": "Seats",
+        "count": 2
+      },
+      {
+        "name": "Service Brakes",
+        "count": 2
+      }
+    ],
+    "sample": "un-commanded drivers seat movement"
+  },
+  "lucid-air-2025": {
+    "total": 14,
+    "categories": [
+      {
+        "name": "Power Train",
+        "count": 2
+      },
+      {
+        "name": "Structure",
+        "count": 1
+      },
+      {
+        "name": "Power Train,Electrical System,Vehicle Speed Control",
+        "count": 1
+      },
+      {
+        "name": "Power Train,Service Brakes",
+        "count": 1
+      }
+    ],
+    "sample": "The car's phone connectivity is always an issue. The car locks when the phone is right next to it, for example, if you put kids or groceries in the back seat then it locks before you get to the front door. This is very a"
+  },
+  "honda-civic-2022": {
+    "total": 876,
+    "categories": [
+      {
+        "name": "Steering",
+        "count": 616
+      },
+      {
+        "name": "Steering,Lane Departure",
+        "count": 37
+      },
+      {
+        "name": "Vehicle Speed Control,Forward Collision Avoidance",
+        "count": 16
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 15
+      }
+    ],
+    "sample": "Hello I have a complaint about my clear coat coming off in certain areas. The hood of my car has water spots that will not come off and the passenger side has what looks like rock damage all up and down the side which is"
+  },
+  "tesla-model-y-2023": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  },
+  "ford-mustang-2025": {
+    "total": 11,
+    "categories": [
+      {
+        "name": "Exterior Lighting",
+        "count": 2
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 1
+      },
+      {
+        "name": "Steering,Electrical System",
+        "count": 1
+      },
+      {
+        "name": "Electrical System,Unknown Or Other,Visibility/Wiper",
+        "count": 1
+      }
+    ],
+    "sample": "Ford describes their pre-collision system: The system warns the driver of potential hazards by providing three levels of assistance. Alert: When active, a flashing visual warning appears and an audible warning tone sound"
+  },
+  "toyota-tundra-2022": {
+    "total": 413,
+    "categories": [
+      {
+        "name": "Engine",
+        "count": 75
+      },
+      {
+        "name": "Power Train",
+        "count": 37
+      },
+      {
+        "name": "Fuel/Propulsion System",
+        "count": 27
+      },
+      {
+        "name": "Power Train,Engine,Fuel/Propulsion System",
+        "count": 24
+      }
+    ],
+    "sample": "The regain from brake for the hybrid system jerking when go to full stop"
+  },
+  "honda-odyssey-2021": {
+    "total": 118,
+    "categories": [
+      {
+        "name": "Electrical System",
+        "count": 16
+      },
+      {
+        "name": "Air Bags",
+        "count": 15
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 9
+      },
+      {
+        "name": "Structure",
+        "count": 4
+      }
+    ],
+    "sample": "Vehicle shuts off completely when stopping at a light or sign.  It does restart but you don't know it until you need to go.  It is a safety concern!"
+  },
+  "chevrolet-equinox-ev-2024": {
+    "total": 106,
+    "categories": [
+      {
+        "name": "Visibility/Wiper",
+        "count": 52
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 8
+      },
+      {
+        "name": "Service Brakes,Forward Collision Avoidance",
+        "count": 5
+      },
+      {
+        "name": "Electrical System",
+        "count": 3
+      }
+    ],
+    "sample": "We have occasional issues with the car coming to a very abrupt stop for no apparent reason. Typically this will happen when going through an intersection or pulling into our garage. Auto braking has been disabled in the "
+  },
+  "ram-1500-2021": {
+    "total": 651,
+    "categories": [
+      {
+        "name": "Engine",
+        "count": 82
+      },
+      {
+        "name": "Electrical System",
+        "count": 44
+      },
+      {
+        "name": "Power Train",
+        "count": 41
+      },
+      {
+        "name": "Electrical System,Engine",
+        "count": 36
+      }
+    ],
+    "sample": "The leather-wrapped dashboard on my 2021 Ram 1500 is bubbling and delaminating on both the driver and passenger sides. The material is lifting and separating from the base, creating glare and reflections that impair forw"
+  },
+  "volkswagen-id4-2023": {
+    "total": 439,
+    "categories": [
+      {
+        "name": "Electrical System",
+        "count": 68
+      },
+      {
+        "name": "Structure",
+        "count": 28
+      },
+      {
+        "name": "Electrical System,Unknown Or Other",
+        "count": 20
+      },
+      {
+        "name": "Electrical System,Equipment,Back Over Prevention",
+        "count": 16
+      }
+    ],
+    "sample": "Backup camera does not work. Pulling the fuse will fix it for 1-2 trips and then will stop working again. Error pops up on dashboard: backup camera error.  Affects safety while reversing. Possible safety risk to children"
+  },
+  "mazda-cx5-2024": {
+    "total": 40,
+    "categories": [
+      {
+        "name": "Exterior Lighting",
+        "count": 4
+      },
+      {
+        "name": "Engine",
+        "count": 3
+      },
+      {
+        "name": "Seats",
+        "count": 2
+      },
+      {
+        "name": "Power Train,Engine",
+        "count": 2
+      }
+    ],
+    "sample": "Driver side seat rocks back and forth when braking and cornering. Feels loose"
+  },
+  "genesis-gv80-2024": {
+    "total": 17,
+    "categories": [
+      {
+        "name": "Electrical System",
+        "count": 3
+      },
+      {
+        "name": "Service Brakes,Forward Collision Avoidance",
+        "count": 3
+      },
+      {
+        "name": "Engine",
+        "count": 2
+      },
+      {
+        "name": "Fuel System, Gasoline",
+        "count": 1
+      }
+    ],
+    "sample": "Windshield cracks- I got two windshield cracks from a very small rocks, going at very low speeds. The glass does NOT seem thick/resistant enough. the two crack occurred on the SEPARATE occasions. There are multiple compl"
+  },
+  "ford-bronco-2022": {
+    "total": 340,
+    "categories": [
+      {
+        "name": "Visibility/Wiper",
+        "count": 62
+      },
+      {
+        "name": "Service Brakes",
+        "count": 24
+      },
+      {
+        "name": "Engine",
+        "count": 19
+      },
+      {
+        "name": "Suspension",
+        "count": 18
+      }
+    ],
+    "sample": "While operating the vehicle under load, the vehicle suffered a sudden and severe loss of engine performance, followed immediately by loud metallic banging from the engine bay. The vehicle lost all power and was immediate"
+  },
+  "hyundai-tucson-phev-2022": {
+    "total": 360,
+    "categories": [
+      {
+        "name": "Fuel/Propulsion System",
+        "count": 79
+      },
+      {
+        "name": "Engine",
+        "count": 30
+      },
+      {
+        "name": "Power Train",
+        "count": 22
+      },
+      {
+        "name": "Engine,Fuel/Propulsion System",
+        "count": 21
+      }
+    ],
+    "sample": "My 2022 Hyundai Tuscon came to a complete stop on the highway in Colorado twice in the last 2 months for no apparent reason. There weren't any obstacles or cars in front of me that would have caused the car to brake sudd"
+  },
+  "nissan-ariya-2023": {
+    "total": 39,
+    "categories": [
+      {
+        "name": "Electrical System",
+        "count": 8
+      },
+      {
+        "name": "Power Train",
+        "count": 3
+      },
+      {
+        "name": "Electrical System,Engine",
+        "count": 3
+      },
+      {
+        "name": "Service Brakes",
+        "count": 2
+      }
+    ],
+    "sample": "I am filing a safety complaint regarding my 2023 Nissan Ariya involving an apparent failure of the 12-volt battery and/or electrical system. While parked overnight in my driveway, powered off, and not plugged in nor char"
+  },
+  "audi-q5-2023": {
+    "total": 29,
+    "categories": [
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 4
+      },
+      {
+        "name": "Electrical System",
+        "count": 3
+      },
+      {
+        "name": "Tires",
+        "count": 2
+      },
+      {
+        "name": "Engine",
+        "count": 2
+      }
+    ],
+    "sample": "Automatic Emergency Braking system engaged when the vehicle was parked on an incline.  Unable to release automatic emergency brake when vehicle was started with key.  Ignition light warning — RED — symbol — brake failure"
+  },
+  "mercedes-glc-2024": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  },
+  "volvo-xc60-2024": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  },
+  "jeep-wrangler-2024": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  },
+  "lexus-rx-2024": {
+    "total": 52,
+    "categories": [
+      {
+        "name": "Electrical System",
+        "count": 13
+      },
+      {
+        "name": "Engine",
+        "count": 3
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 2
+      },
+      {
+        "name": "Visibility/Wiper",
+        "count": 2
+      }
+    ],
+    "sample": "When in cruise, the car will merge itself into the next lane if you hold the turn signal partially. If you keep holding it or fully engage the turn signal (maybe you forgot to turn off you signal, or held it too long), t"
+  },
+  "chevrolet-bolt-euv-2023": {
+    "total": 104,
+    "categories": [
+      {
+        "name": "Steering",
+        "count": 14
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 12
+      },
+      {
+        "name": "Electrical System",
+        "count": 9
+      },
+      {
+        "name": "Exterior Lighting",
+        "count": 7
+      }
+    ],
+    "sample": "I have a 2023 Chevy Bolt EUV, and I'm experiencing a steering issue. When making left or right turn, the steering wheel does not return to center automatically. This problem has been present since the beginning, and it h"
+  },
+  "ford-explorer-2024": {
+    "total": 19,
+    "categories": [
+      {
+        "name": "Visibility/Wiper",
+        "count": 3
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 2
+      },
+      {
+        "name": "Steering,Suspension",
+        "count": 2
+      },
+      {
+        "name": "Electrical System",
+        "count": 1
+      }
+    ],
+    "sample": "The center display went blank and a/c controls under it would not work. Stopped vehicle and pushed ignition button to off and waited 1 minute and pushed ignition back to on on and display was still blank. Got to destinat"
+  },
+  "nissan-altima-2024": {
+    "total": 39,
+    "categories": [
+      {
+        "name": "Back Over Prevention",
+        "count": 3
+      },
+      {
+        "name": "Seats",
+        "count": 2
+      },
+      {
+        "name": "Forward Collision Avoidance",
+        "count": 2
+      },
+      {
+        "name": "Tires",
+        "count": 2
+      }
+    ],
+    "sample": "Component/System Failure: Front driver's seatback cover assembly (Nissan Part Number: 87650-9HB2B). The factory structural stitching on the center backrest panel is actively unraveling and separating. The component is av"
+  },
+  "honda-accord-2024": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  },
+  "toyota-sienna-2024": {
+    "total": 0,
+    "categories": [],
+    "sample": null
+  }
+}

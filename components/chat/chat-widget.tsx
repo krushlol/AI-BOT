@@ -9,7 +9,7 @@ interface Message {
   content: string
 }
 
-const GREETING = "Hi! I'm your CarAdvisor AI 👋 Tell me about your situation — budget, family size, how you drive — and I'll find your perfect car."
+const GREETING = "Hi! How can I help you?"
 
 function renderContent(text: string) {
   const result: React.ReactNode[] = []

@@ -15,10 +15,10 @@ function explainHorsepower(hp: number): string {
 }
 
 function explainTorque(torque: number): string {
-  if (torque < 150) return "Light pulling power — fine for everyday errands"
+  if (torque < 150) return "Low torque — fine for everyday city errands"
   if (torque < 250) return "Good for daily driving; handles light hills without strain"
-  if (torque < 400) return "Strong pulling power — useful for hauling cargo or towing"
-  return "Heavy-duty torque — built for serious towing and loads"
+  if (torque < 400) return "Generous torque — confident acceleration when you need it"
+  return "High torque — immediate muscle for passing, loading, or demanding conditions"
 }
 
 function explainZeroToSixty(sec: number): string {

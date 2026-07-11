@@ -25,7 +25,7 @@ export async function fetchCarSpecs(
 
   try {
     const res = await fetch(
-      `https://api.api-ninjas.com/v1/cars?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}&year=${year}&limit=1`,
+      `https://api.api-ninjas.com/v1/cars?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}&year=${year}`,
       { headers: { "X-Api-Key": key }, next: { revalidate: 604800 } }
     )
     if (!res.ok) return null
@@ -53,18 +53,26 @@ export async function fetchCarSpecs(
 function parseNinjasData(data: any[]): LiveCarSpecs | null {
   const r = data[0]
   if (!r) return null
+  // Free-tier fields return "this field is for premium subscribers only" instead of a number
+  const num = (v: any) => (typeof v === "number" ? v : undefined)
+  const str = (v: any) => (typeof v === "string" && !v.includes("premium") ? v : undefined)
   return {
-    horsepower: r.horsepower ?? undefined,
-    torque: r.torque ?? undefined,
-    cylinders: r.cylinders ?? undefined,
-    displacement: r.displacement ?? undefined,
-    transmission: r.transmission ?? undefined,
-    driveType: r.drive ?? undefined,
-    mpgCity: r.city_mpg ?? undefined,
-    mpgHighway: r.highway_mpg ?? undefined,
-    mpgCombined: r.combination_mpg ?? undefined,
-    fuelType: r.fuel_type ?? undefined,
-    bodyClass: r.class ?? undefined,
-    seating: r.seats ?? undefined,
+    horsepower: num(r.horsepower),
+    torque: num(r.torque),
+    cylinders: num(r.cylinders),
+    displacement: num(r.displacement),
+    transmission: (() => {
+      const t = str(r.transmission)
+      if (!t) return undefined
+      const map: Record<string, string> = { a: "Automatic", m: "Manual", cvt: "CVT" }
+      return map[t.toLowerCase()] ?? t
+    })(),
+    driveType: str(r.drive),
+    mpgCity: num(r.city_mpg),
+    mpgHighway: num(r.highway_mpg),
+    mpgCombined: num(r.combination_mpg),
+    fuelType: str(r.fuel_type),
+    bodyClass: str(r.class),
+    seating: num(r.seats),
   }
 }
