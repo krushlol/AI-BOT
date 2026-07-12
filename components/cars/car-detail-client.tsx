@@ -3,7 +3,6 @@ import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useEffect } from "react"
 
-const detailWikiCache = new Map<string, string>()
 import { useRouter } from "next/navigation"
 import { Heart, GitCompare, Star, CheckCircle, XCircle, Sparkles, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -24,6 +23,7 @@ import { carGalleries } from "@/lib/cars/gallery"
 import { toggleSavedCar } from "@/lib/cars/save"
 import { getSpecExplanations } from "@/lib/cars/spec-explanations"
 import KnownIssues from "@/components/cars/known-issues"
+import LoanCalculator from "@/components/cars/loan-calculator"
 
 interface CarDetailClientProps {
   car: Car
@@ -48,14 +48,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
   const bestForTags = getBestForTags(car)
   const router = useRouter()
 
-  useEffect(() => {
-    const key = `${car.brand}|${car.model}|${car.year}`
-    if (detailWikiCache.has(key)) { setHeroImage(detailWikiCache.get(key)!); return }
-    fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}`)
-      .then(r => r.json())
-      .then(d => { if (d.imageUrl) { detailWikiCache.set(key, d.imageUrl); setHeroImage(d.imageUrl) } })
-      .catch(() => {})
-  }, [car.brand, car.model, car.year])
+  // Curated cars have verified Unsplash images — no wiki override needed here
 
   const handleSave = async () => {
     if (!user) { router.push("/sign-in"); return }
@@ -160,6 +153,9 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
             </div>
           ))}
         </div>
+
+        {/* Loan Calculator */}
+        <LoanCalculator basePrice={car.basePrice} maxPrice={car.maxPrice} />
 
         {/* Tabs */}
         <Tabs defaultValue="specs" className="mb-6">
