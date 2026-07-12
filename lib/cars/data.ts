@@ -1770,7 +1770,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 34500,
     maxPrice: 47900,
-    image: "https://images.unsplash.com/photo-1532564979029-bbf9fcbe7b0b?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1623371857133-6d5552bbdc13?w=800&q=80",
     tagline: "The gold standard of family minivans",
     description:
       "The 2021 Honda Odyssey remains the benchmark family hauler. With seating for 8, a magic sliding second-row seat that creates a conversation zone between rows, built-in vacuum cleaner, and a refined 3.5L V6, it's the smartest van on the market.",
@@ -1859,7 +1859,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 34995,
     maxPrice: 48995,
-    image: "https://images.unsplash.com/photo-1697989716693-092a7ed5a21a?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1646844371347-e7eab6275747?w=800&q=80",
     tagline: "The most affordable electric SUV in America",
     description:
       "The 2024 Chevrolet Equinox EV shakes up the market by bringing an electric SUV to the $35k price point. With up to 319 miles of range, a well-equipped cabin, and Google built-in, it democratizes EV ownership for mainstream buyers.",
@@ -2569,7 +2569,7 @@ export const cars: Car[] = [
     fuelType: "plug-in hybrid",
     basePrice: 45500,
     maxPrice: 58200,
-    image: "https://images.unsplash.com/photo-1622701579527-dcd1bb5fbb9b?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1572109085696-0040f375c37e?w=800&q=80",
     tagline: "German luxury SUV with plug-in efficiency",
     description:
       "The 2023 Audi Q5 TFSI e combines a turbocharged 2.0L engine with an electric motor for 362 combined horsepower and 38 miles of EV range. It wraps this efficient powertrain in Audi's signature quattro AWD and a cabin full of premium materials and cutting-edge technology.",
@@ -2773,7 +2773,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 32495,
     maxPrice: 62000,
-    image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1619226796274-9f0adda6d5aa?w=800&q=80",
     tagline: "Born for the trail, built for legend",
     description:
       "The Jeep Wrangler is the ultimate off-road icon. With solid front and rear axles, removable doors and roof, and legendary 4×4 systems, the 2024 Wrangler continues to dominate trail-rated adventures while adding modern tech creature comforts.",
@@ -2934,7 +2934,7 @@ export const cars: Car[] = [
     fuelType: "gasoline",
     basePrice: 37495,
     maxPrice: 57000,
-    image: "https://images.unsplash.com/photo-1670069247956-1a6dfee5338e?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1697235740828-12420a20cbb7?w=800&q=80",
     tagline: "America's iconic family SUV, reimagined",
     description:
       "The 2024 Ford Explorer continues to be one of the best-selling SUVs in America. With three-row seating, a choice of EcoBoost engines, and the ST performance model, it blends family practicality with real driving engagement.",
