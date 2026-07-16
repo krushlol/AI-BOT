@@ -25,6 +25,7 @@ import { getSpecExplanations } from "@/lib/cars/spec-explanations"
 import KnownIssues from "@/components/cars/known-issues"
 import LoanCalculator from "@/components/cars/loan-calculator"
 import RedditOpinions from "@/components/cars/reddit-opinions"
+import { computeCarAdvisorScore } from "@/lib/cars/score"
 
 interface CarDetailClientProps {
   car: Car
@@ -47,6 +48,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
   const { answers } = useQuizAnswers()
   const matchScore = answers ? scoreCarForAnswers(car, answers) : null
   const bestForTags = getBestForTags(car)
+  const advisorScore = computeCarAdvisorScore(car)
   const router = useRouter()
 
   // Curated cars have verified Unsplash images — no wiki override needed here
@@ -139,6 +141,23 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* CarAdvisor Verdict */}
+        <div className={`${advisorScore.bgColor} ${advisorScore.borderColor} border rounded-xl p-4 mb-6 flex items-center gap-4`}>
+          <div className={`text-3xl font-black ${advisorScore.color} leading-none`}>
+            {advisorScore.score.toFixed(1)}
+          </div>
+          <div className="w-px h-10 bg-gray-200" />
+          <div className="flex-1 min-w-0">
+            <div className={`font-bold text-base ${advisorScore.color}`}>
+              {advisorScore.emoji} {advisorScore.label}
+            </div>
+            <p className="text-sm text-gray-600 mt-0.5">{advisorScore.reason}</p>
+          </div>
+          <div className="text-xs text-gray-400 text-right shrink-0 hidden sm:block">
+            CarAdvisor<br />Score
           </div>
         </div>
 

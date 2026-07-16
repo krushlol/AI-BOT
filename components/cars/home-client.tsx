@@ -14,6 +14,7 @@ import { cars as allCarsData } from "@/lib/cars/data"
 import Link from "next/link"
 import { toggleSavedCar } from "@/lib/cars/save"
 import { parseLiveQuery } from "@/lib/cars/parse-query"
+import { computeCarAdvisorScore } from "@/lib/cars/score"
 
 
 interface HomeClientProps {
@@ -93,6 +94,27 @@ const brandCards = (() => {
   return out
 })()
 
+// Compute top picks once at module level (pure, no side effects)
+const topPickOverall = allCarsData.reduce((best, car) => {
+  const s = computeCarAdvisorScore(car).score
+  return s > computeCarAdvisorScore(best).score ? car : best
+}, allCarsData[0])
+
+const topPickEV = allCarsData
+  .filter(c => c.fuelType === "electric")
+  .reduce((best, car) => computeCarAdvisorScore(car).score > computeCarAdvisorScore(best).score ? car : best)
+
+const topPickHybrid = allCarsData
+  .filter(c => c.fuelType === "hybrid" || c.fuelType === "plug-in hybrid")
+  .reduce((best, car) => computeCarAdvisorScore(car).score > computeCarAdvisorScore(best).score ? car : best)
+
+const topPickValue = allCarsData
+  .filter(c => c.basePrice <= 40000)
+  .reduce((best, car) => computeCarAdvisorScore(car).score > computeCarAdvisorScore(best).score ? car : best)
+
+const topPickScore = computeCarAdvisorScore(topPickOverall)
+const currentMonth = new Date().toLocaleString("en-US", { month: "long", year: "numeric" })
+
 export default function HomeClient({ user, featuredCars, allCars, initialSavedIds = [] }: HomeClientProps) {
   const [query, setQuery] = useState("")
   const [compareIds, setCompareIds] = useState<string[]>([])
@@ -134,63 +156,98 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
     <div className="min-h-screen bg-gray-50">
       <Navbar user={user} />
 
-      {/* Hero */}
+      {/* Hero — Editorial Top Pick */}
       <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute top-10 left-10 w-64 h-64 rounded-full bg-white blur-3xl" />
           <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-orange-300 blur-3xl" />
         </div>
-        {/* Decorative car photo — right side desktop only */}
-        <div className="absolute inset-y-0 right-0 w-1/2 hidden lg:block pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-800 via-slate-700/50 to-transparent z-10" />
-          <img
-            src="https://images.unsplash.com/photo-1584060622420-0673aad46076?w=900&q=80"
-            alt=""
-            className="w-full h-full object-cover object-center opacity-50"
-          />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight">
-              Find Your Perfect Car
-            </h1>
-            <p className="text-orange-100 text-lg mb-8 max-w-xl">
-              Compare specs, prices, features, and reviews for every make and model — all in one place.
-            </p>
-            <Link href="/quiz">
-              <Button size="lg" className="bg-white text-slate-800 hover:bg-orange-50 font-bold px-6 gap-2 mb-6 shadow-lg">
-                <Sparkles className="w-5 h-5" /> Find My Perfect Car →
-              </Button>
-            </Link>
-            <p className="text-orange-200 text-sm mb-4 -mt-4">Answer 6 quick questions · We match you instantly</p>
-            <form onSubmit={handleSearch} className="flex gap-3 max-w-lg">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search by brand, model, or feature..."
-                  className="pl-10 h-12 bg-white text-gray-900 border-0 text-base"
-                />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            {/* Left — editorial content */}
+            <div>
+              <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
+                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+                CarAdvisor&apos;s Top Pick · {currentMonth}
               </div>
-              <Button type="submit" size="lg" className="bg-white text-slate-800 hover:bg-orange-50 font-semibold px-6">
-                Search
-              </Button>
-            </form>
-            <div className="flex flex-wrap gap-2 mt-6">
-              {[
-                { label: "⚡ Electric", href: "/search?fuelType=electric" },
-                { label: "🌿 Hybrid", href: "/search?fuelType=hybrid" },
-                { label: "🚙 SUV", href: "/search?bodyStyle=suv" },
-                { label: "💰 Under $40k", href: "/search?maxPrice=40000" },
-                { label: "👨‍👩‍👧 Family Cars", href: "/search?seating=5" },
-                { label: "🏎 Sports Cars", href: "/search?bodyStyle=coupe" },
-              ].map(({ label, href }) => (
-                <Link key={label} href={href} className="bg-orange-600/60 hover:bg-orange-500/80 text-white text-xs px-3 py-1.5 rounded-full transition-colors">
-                  {label}
+              <h1 className="text-4xl sm:text-5xl font-extrabold mb-3 leading-tight">
+                {topPickOverall.brand}<br />
+                <span className="text-orange-400">{topPickOverall.model}</span>
+              </h1>
+              <p className="text-orange-100 text-base mb-4 max-w-md">{topPickOverall.tagline}</p>
+
+              {/* Score pill */}
+              <div className="inline-flex items-center gap-3 bg-white/10 border border-white/20 rounded-xl px-4 py-2 mb-6">
+                <span className="text-2xl font-black text-orange-400">{topPickScore.score.toFixed(1)}</span>
+                <div className="w-px h-8 bg-white/20" />
+                <div>
+                  <div className="text-sm font-bold">{topPickScore.emoji} {topPickScore.label}</div>
+                  <div className="text-xs text-orange-200">{topPickScore.reason}</div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3 mb-8">
+                <Link href={`/cars/${topPickOverall.id}`}>
+                  <Button size="lg" className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-6 shadow-lg">
+                    See Full Review →
+                  </Button>
                 </Link>
-              ))}
+                <Link href="/quiz">
+                  <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 font-semibold px-6 gap-2">
+                    <Sparkles className="w-4 h-4" /> Find MY Car
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Search bar */}
+              <form onSubmit={handleSearch} className="flex gap-3 max-w-md">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search any car..."
+                    className="pl-9 h-11 bg-white text-gray-900 border-0 text-sm"
+                  />
+                </div>
+                <Button type="submit" className="bg-white text-slate-800 hover:bg-orange-50 font-semibold px-5 h-11">
+                  Search
+                </Button>
+              </form>
             </div>
+
+            {/* Right — car image */}
+            <div className="hidden lg:block relative">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                <img
+                  src={topPickOverall.image}
+                  alt={`${topPickOverall.year} ${topPickOverall.brand} ${topPickOverall.model}`}
+                  className="w-full h-72 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
+                <div className="absolute bottom-4 left-4 text-white">
+                  <p className="text-xs text-orange-300 font-semibold uppercase tracking-wider">Starting at</p>
+                  <p className="text-2xl font-black">${topPickOverall.basePrice.toLocaleString()}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick category pills */}
+          <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-white/10">
+            {[
+              { label: "⚡ Electric", href: "/search?fuelType=electric" },
+              { label: "🌿 Hybrid", href: "/search?fuelType=hybrid" },
+              { label: "🚙 SUV", href: "/search?bodyStyle=suv" },
+              { label: "💰 Under $40k", href: "/search?maxPrice=40000" },
+              { label: "👨‍👩‍👧 Family", href: "/search?seating=7" },
+              { label: "🏎 Sports", href: "/search?bodyStyle=coupe" },
+            ].map(({ label, href }) => (
+              <Link key={label} href={href} className="bg-white/10 hover:bg-white/20 text-white text-xs px-3 py-1.5 rounded-full transition-colors border border-white/10">
+                {label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
@@ -296,14 +353,47 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
         </div>
       </div>
 
-      {/* Featured cars */}
+      {/* Top Picks by Category */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Featured Cars</h2>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Top Picks by Category</h2>
+            <p className="text-sm text-gray-500 mt-1">Scored on safety, efficiency, value, and freshness</p>
+          </div>
           <Link href="/search" className="flex items-center gap-1 text-sm text-orange-500 hover:text-slate-800 font-medium">
             View all <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
+
+        {/* Category labels */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          {[
+            { label: "⚡ Best Electric", car: topPickEV, note: "Longest range · Best tech · Top rated" },
+            { label: "🌿 Best Hybrid", car: topPickHybrid, note: "Most efficient · Lowest fuel costs" },
+            { label: "💰 Best Under $40k", car: topPickValue, note: "Best value · No compromises" },
+          ].map(({ label, car, note }) => {
+            const sc = computeCarAdvisorScore(car)
+            return (
+              <Link key={label} href={`/cars/${car.id}`} className="group bg-white rounded-xl border border-gray-200 hover:border-orange-300 hover:shadow-md transition-all overflow-hidden">
+                <div className="relative h-36 bg-gray-100">
+                  <img src={car.image} alt={car.model} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute top-2 left-2 bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{label}</div>
+                  <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded-lg">
+                    {sc.emoji} {sc.score.toFixed(1)}
+                  </div>
+                </div>
+                <div className="p-3">
+                  <p className="text-xs text-orange-500 font-semibold uppercase tracking-wide">{car.brand}</p>
+                  <p className="font-bold text-gray-900">{car.year} {car.model}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{note}</p>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
+
+        {/* Rest of the featured cars */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredCars.map((car) => (
             <CarCard
@@ -320,24 +410,44 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
         </div>
       </div>
 
-      {/* Feature highlights */}
-      <div className="bg-gradient-to-br from-slate-900 to-blue-800 text-white">
+      {/* Why CarAdvisor is Different */}
+      <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-2">Everything you need to buy smarter</h2>
-            <p className="text-orange-200">All the tools, completely free</p>
+            <h2 className="text-3xl font-bold mb-2">Not just another car site</h2>
+            <p className="text-gray-400 max-w-xl mx-auto">We built what we wished existed — honest scores, real owner opinions, and an AI that actually listens.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { emoji: "🔍", title: "Deep Specs", desc: "50+ data points per car — from 0–60 times to cargo space and towing capacity." },
-              { emoji: "⚖️", title: "Side-by-Side Compare", desc: "Stack up to 4 cars and instantly see which wins on every spec." },
-              { emoji: "🎯", title: "Personalized Quiz", desc: "Answer 6 questions and we match you to cars that actually fit your life." },
-              { emoji: "💳", title: "Loan Calculator", desc: "See real monthly payments before you ever step inside a dealership." },
-            ].map(({ emoji, title, desc }) => (
-              <div key={title} className="bg-white/10 rounded-2xl p-5 text-center hover:bg-white/15 transition-colors">
-                <div className="text-4xl mb-3">{emoji}</div>
-                <h3 className="font-bold text-lg mb-2">{title}</h3>
-                <p className="text-orange-200 text-sm leading-relaxed">{desc}</p>
+              {
+                emoji: "📊",
+                title: "Honest Scores",
+                desc: "Every car gets a score out of 10 based on safety, efficiency, value, and freshness. No ads. No sponsored rankings. Just data.",
+                cta: "Browse scored cars →",
+                href: "/search",
+              },
+              {
+                emoji: "💬",
+                title: "Real Reddit Opinions",
+                desc: "We surface actual discussions from r/cars, r/whatcarshouldIbuy, and r/askcarsales — not press releases or manufacturer copy.",
+                cta: "See an example →",
+                href: `/cars/${topPickOverall.id}`,
+              },
+              {
+                emoji: "🤖",
+                title: "AI Car Advisor",
+                desc: "Tell our AI about your life — budget, family, commute — and it recommends the right car in seconds. Try it now.",
+                cta: "Chat with AI →",
+                href: "/quiz",
+              },
+            ].map(({ emoji, title, desc, cta, href }) => (
+              <div key={title} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors">
+                <div className="text-4xl mb-4">{emoji}</div>
+                <h3 className="font-bold text-xl mb-2">{title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed mb-4">{desc}</p>
+                <Link href={href} className="text-orange-400 hover:text-orange-300 text-sm font-semibold transition-colors">
+                  {cta}
+                </Link>
               </div>
             ))}
           </div>
