@@ -308,34 +308,33 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
           </TabsContent>
         </Tabs>
 
-        {/* Reviews: Experts + Real Owner Complaints side by side */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-6">
+        {/* Reviews: Experts + Real Owner Complaints + Reddit */}
+        <div className="space-y-6 mb-6">
+          <div className="grid lg:grid-cols-2 gap-6">
 
-          {magazineReviews[car.id] && (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                📰 What the Experts Say
-              </h2>
-              <div className="space-y-3">
-                {magazineReviews[car.id].map((rev) => (
-                  <div key={rev.magazine} className="bg-gray-50 rounded-xl border border-gray-100 p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-bold text-sm text-gray-800">{rev.magazine}</span>
-                      <span className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">⭐ {rev.rating}</span>
+            {magazineReviews[car.id] && (
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  📰 What the Experts Say
+                </h2>
+                <div className="space-y-3">
+                  {magazineReviews[car.id].map((rev) => (
+                    <div key={rev.magazine} className="bg-gray-50 rounded-xl border border-gray-100 p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-bold text-sm text-gray-800">{rev.magazine}</span>
+                        <span className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">⭐ {rev.rating}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 leading-relaxed italic">"{rev.quote}"</p>
                     </div>
-                    <p className="text-sm text-gray-600 leading-relaxed italic">"{rev.quote}"</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <KnownIssues brand={car.brand} model={car.model} year={car.year} carId={car.id} />
+            <KnownIssues brand={car.brand} model={car.model} year={car.year} carId={car.id} />
 
-        </div>
+          </div>
 
-        {/* Reddit opinions */}
-        <div className="mb-6">
           <RedditOpinions brand={car.brand} model={car.model} />
         </div>
 
