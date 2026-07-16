@@ -22,7 +22,7 @@ const SUBREDDITS = ["cars", "whatcarshouldIbuy", "askcarsales"]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function fetchSubreddit(query: string, subreddit: string): Promise<any[]> {
-  const url = `https://api.pullpush.io/reddit/search/submission/?q=${encodeURIComponent(query)}&subreddit=${subreddit}&size=25`
+  const url = `https://api.pullpush.io/reddit/search/submission/?q=${encodeURIComponent(query)}&subreddit=${subreddit}&size=25&after=1577836800`
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
     if (!res.ok) return []
