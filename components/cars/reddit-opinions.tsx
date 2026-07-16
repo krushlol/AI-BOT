@@ -13,7 +13,6 @@ export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
   const [posts, setPosts] = useState<RedditPost[]>([])
   const [loading, setLoading] = useState(true)
   const [failed, setFailed] = useState(false)
-  const [configured, setConfigured] = useState(true)
 
   useEffect(() => {
     let cancelled = false
@@ -29,7 +28,7 @@ export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
       })
       .then((d) => {
         clearTimeout(timeout)
-        if (!cancelled) { setPosts(d.posts ?? []); setConfigured(d.configured ?? true); setLoading(false) }
+        if (!cancelled) { setPosts(d.posts ?? []); setLoading(false) }
       })
       .catch(() => {
         clearTimeout(timeout)
@@ -54,8 +53,6 @@ export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
       </div>
     )
   }
-
-  if (!configured) return null
 
   if (failed || posts.length === 0) {
     return (

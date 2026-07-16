@@ -130,9 +130,16 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
     let result = allCars.filter((car) => {
       if (query) {
         const q = query.toLowerCase()
-        if (
-          !car.brand.toLowerCase().includes(q) &&
-          !car.model.toLowerCase().includes(q) &&
+        const brandMatch = car.brand.toLowerCase().includes(q)
+        const modelMatch = car.model.toLowerCase().includes(q)
+        // If the query matches a known brand, only match on brand — prevents
+        // competitor mentions in descriptions (e.g. "rivals Lexus") from surfacing wrong cars
+        const isBrandQuery = brands.some(b => b.toLowerCase().includes(q))
+        if (isBrandQuery) {
+          if (!brandMatch) return false
+        } else if (
+          !brandMatch &&
+          !modelMatch &&
           !car.description.toLowerCase().includes(q) &&
           !car.bodyStyle.toLowerCase().includes(q) &&
           !car.fuelType.toLowerCase().includes(q) &&
