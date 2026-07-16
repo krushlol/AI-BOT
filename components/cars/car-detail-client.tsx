@@ -24,6 +24,7 @@ import { toggleSavedCar } from "@/lib/cars/save"
 import { getSpecExplanations } from "@/lib/cars/spec-explanations"
 import KnownIssues from "@/components/cars/known-issues"
 import LoanCalculator from "@/components/cars/loan-calculator"
+import RedditOpinions from "@/components/cars/reddit-opinions"
 
 interface CarDetailClientProps {
   car: Car
@@ -331,6 +332,11 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
           <KnownIssues brand={car.brand} model={car.model} year={car.year} carId={car.id} />
 
+        </div>
+
+        {/* Reddit opinions */}
+        <div className="mb-6">
+          <RedditOpinions brand={car.brand} model={car.model} />
         </div>
 
         {/* Available colors */}
