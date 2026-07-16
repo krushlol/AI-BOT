@@ -49,9 +49,9 @@ export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
         for (const batch of batches) {
           for (const p of batch) {
             if (!p.title || p.over_18 || seen.has(p.id)) continue
-            // Require the title to mention the brand or model — blocks generic threads
+            // Require the title to mention BOTH brand and model — blocks generic brand threads
             const titleLower = p.title.toLowerCase()
-            if (!titleLower.includes(brandLower) && !titleLower.includes(modelLower)) continue
+            if (!titleLower.includes(brandLower) || !titleLower.includes(modelLower)) continue
             seen.add(p.id)
             all.push(p)
           }
