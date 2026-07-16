@@ -45,13 +45,14 @@ export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
         const all: any[] = []
         for (const batch of batches) {
           for (const p of batch) {
-            if (!seen.has(p.id) && !p.over_18 && p.score > 2) {
+            if (!seen.has(p.id) && !p.over_18 && p.title) {
               seen.add(p.id)
               all.push(p)
             }
           }
         }
-        all.sort((a, b) => b.score - a.score)
+        // Sort by comment count — Pullpush archives posts early so scores are always 1
+        all.sort((a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0))
         const mapped: RedditPost[] = all.slice(0, 5).map((p) => ({
           title: p.title,
           score: p.score,
