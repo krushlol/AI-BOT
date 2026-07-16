@@ -3939,7 +3939,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 74990,
     maxPrice: 89990,
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/2024_Tesla_Model_S_%2899028%29.jpg/960px-2024_Tesla_Model_S_%2899028%29.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/2021_Tesla_Model_S_P2_Long_Range_front_right_view.jpg/960px-2021_Tesla_Model_S_P2_Long_Range_front_right_view.jpg",
     tagline: "The sedan that redefined what a car can be",
     description:
       "The 2024 Tesla Model S remains the benchmark for electric performance and range. With up to 405 miles of range, a 0–60 time of 3.1 seconds (or 1.99 seconds in Plaid), and an interior anchored by a 17-inch cinema screen, it makes luxury sedans from BMW and Mercedes feel like the past.",
