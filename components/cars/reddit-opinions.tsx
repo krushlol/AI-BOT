@@ -2,11 +2,30 @@
 
 import { useEffect, useState } from "react"
 import { ExternalLink, ArrowUp, MessageSquare } from "lucide-react"
-import type { RedditPost } from "@/app/api/reddit-opinions/route"
+
+interface RedditPost {
+  title: string
+  score: number
+  numComments: number
+  subreddit: string
+  url: string
+  snippet: string | null
+}
 
 interface RedditOpinionsProps {
   brand: string
   model: string
+}
+
+const SUBREDDITS = ["cars", "whatcarshouldIbuy", "askcarsales"]
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function fetchSubreddit(query: string, subreddit: string): Promise<any[]> {
+  const url = `https://api.pullpush.io/reddit/search/submission/?q=${encodeURIComponent(query)}&subreddit=${subreddit}&size=25`
+  const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
+  if (!res.ok) return []
+  const data = await res.json()
+  return data?.data ?? []
 }
 
 export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
@@ -16,26 +35,39 @@ export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
 
   useEffect(() => {
     let cancelled = false
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 10000)
+    const query = `${brand} ${model}`
 
-    fetch(`/api/reddit-opinions?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`, {
-      signal: controller.signal,
-    })
-      .then((r) => {
-        if (!r.ok) throw new Error("non-200")
-        return r.json()
-      })
-      .then((d) => {
-        clearTimeout(timeout)
-        if (!cancelled) { setPosts(d.posts ?? []); setLoading(false) }
+    Promise.all(SUBREDDITS.map((sub) => fetchSubreddit(query, sub)))
+      .then((batches) => {
+        if (cancelled) return
+        const seen = new Set<string>()
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const all: any[] = []
+        for (const batch of batches) {
+          for (const p of batch) {
+            if (!seen.has(p.id) && !p.over_18 && p.score > 2) {
+              seen.add(p.id)
+              all.push(p)
+            }
+          }
+        }
+        all.sort((a, b) => b.score - a.score)
+        const mapped: RedditPost[] = all.slice(0, 5).map((p) => ({
+          title: p.title,
+          score: p.score,
+          numComments: p.num_comments ?? 0,
+          subreddit: p.subreddit,
+          url: `https://reddit.com${p.permalink}`,
+          snippet: p.selftext ? p.selftext.replace(/\n+/g, " ").trim().slice(0, 220) : null,
+        }))
+        setPosts(mapped)
+        setLoading(false)
       })
       .catch(() => {
-        clearTimeout(timeout)
         if (!cancelled) { setFailed(true); setLoading(false) }
       })
 
-    return () => { cancelled = true; controller.abort() }
+    return () => { cancelled = true }
   }, [brand, model])
 
   if (loading) {
@@ -60,9 +92,7 @@ export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
         <h2 className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
           <RedditIcon /> What Reddit Says
         </h2>
-        <p className="text-sm text-gray-500">
-          No Reddit discussions found for this car right now.
-        </p>
+        <p className="text-sm text-gray-500">No Reddit discussions found for this car right now.</p>
       </div>
     )
   }
