@@ -109,7 +109,7 @@ const topPickHybrid = allCarsData
   .reduce((best, car) => computeCarAdvisorScore(car).score > computeCarAdvisorScore(best).score ? car : best)
 
 const topPickValue = allCarsData
-  .filter(c => c.basePrice <= 40000)
+  .filter(c => c.basePrice <= 40000 && c.id !== topPickEV.id && c.id !== topPickHybrid.id)
   .reduce((best, car) => computeCarAdvisorScore(car).score > computeCarAdvisorScore(best).score ? car : best)
 
 const topPickScore = computeCarAdvisorScore(topPickOverall)
@@ -137,7 +137,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
       setTimeout(() => {
         setHeroIndex(i => (i + 1) % heroCarousel.length)
         setHeroFading(false)
-      }, 400)
+      }, 350)
     }, 4000)
     return () => clearInterval(timer)
   }, [])
@@ -185,7 +185,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-          <div className={`grid lg:grid-cols-2 gap-10 items-center transition-opacity duration-400 ${heroFading ? "opacity-0" : "opacity-100"}`}>
+          <div className="grid lg:grid-cols-2 gap-10 items-center" style={{ opacity: heroFading ? 0 : 1, transition: "opacity 350ms ease-in-out" }}>
             {/* Left — editorial content */}
             <div>
               <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
@@ -226,7 +226,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                 {heroCarousel.map((_, i) => (
                   <button
                     key={i}
-                    onClick={() => { setHeroFading(true); setTimeout(() => { setHeroIndex(i); setHeroFading(false) }, 400) }}
+                    onClick={() => { setHeroFading(true); setTimeout(() => { setHeroIndex(i); setHeroFading(false) }, 350) }}
                     className={`w-2 h-2 rounded-full transition-all ${i === heroIndex ? "bg-orange-400 w-6" : "bg-white/30 hover:bg-white/50"}`}
                   />
                 ))}
