@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ExternalLink, ArrowUp, MessageSquare } from "lucide-react"
 
 interface RedditPost {
@@ -22,7 +22,7 @@ const SUBREDDITS = ["cars", "whatcarshouldIbuy", "askcarsales"]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function fetchSubreddit(query: string, subreddit: string): Promise<any[]> {
-  const url = `https://api.pullpush.io/reddit/search/submission/?q=${encodeURIComponent(query)}&subreddit=${subreddit}&size=50`
+  const url = `https://api.pullpush.io/reddit/search/submission/?q=${encodeURIComponent(query)}&subreddit=${subreddit}&size=25`
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
     if (!res.ok) return []
@@ -34,71 +34,87 @@ async function fetchSubreddit(query: string, subreddit: string): Promise<any[]> 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function filterAndRank(batches: any[][], brandLower: string, modelLower: string): any[] {
+function pickBest(allPosts: any[], brandLower: string, modelLower: string): RedditPost[] {
   const seen = new Set<string>()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const all: any[] = []
-  for (const batch of batches) {
-    for (const p of batch) {
-      if (!p.title || p.over_18 || seen.has(p.id)) continue
-      const titleLower = p.title.toLowerCase()
-      // Must mention both brand and model in the title
-      if (!titleLower.includes(brandLower) || !titleLower.includes(modelLower)) continue
-      seen.add(p.id)
-      all.push(p)
-    }
+  const filtered: any[] = []
+  for (const p of allPosts) {
+    if (!p.title || p.over_18 || seen.has(p.id)) continue
+    const t = p.title.toLowerCase()
+    if (!t.includes(brandLower) || !t.includes(modelLower)) continue
+    seen.add(p.id)
+    filtered.push(p)
   }
-  all.sort((a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0))
-  return all
+  filtered.sort((a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0))
+  return filtered.slice(0, 5).map((p) => ({
+    title: p.title,
+    score: p.score,
+    numComments: p.num_comments ?? 0,
+    subreddit: p.subreddit,
+    url: `https://reddit.com${p.permalink}`,
+    snippet: p.selftext ? p.selftext.replace(/\n+/g, " ").trim().slice(0, 220) : null,
+  }))
 }
 
 export default function RedditOpinions({ brand, model, year }: RedditOpinionsProps) {
   const [posts, setPosts] = useState<RedditPost[]>([])
   const [loading, setLoading] = useState(true)
   const [failed, setFailed] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     let cancelled = false
+    const cacheKey = `reddit:${brand}:${model}:${year}`
     const brandLower = brand.toLowerCase()
     const modelLower = model.toLowerCase()
 
-    async function load() {
-      // First try with year for model-year-specific posts
-      const withYear = `${brand} ${model} ${year}`
-      let batches = await Promise.all(SUBREDDITS.map(sub => fetchSubreddit(withYear, sub)))
-      let ranked = filterAndRank(batches, brandLower, modelLower)
+    function doFetch() {
+      // Serve from cache instantly if available
+      try {
+        const cached = sessionStorage.getItem(cacheKey)
+        if (cached) {
+          setPosts(JSON.parse(cached))
+          setLoading(false)
+          return
+        }
+      } catch { /* ignore */ }
 
-      // Fall back to brand+model only if too few results
-      if (ranked.length < 3) {
-        const withoutYear = `${brand} ${model}`
-        batches = await Promise.all(SUBREDDITS.map(sub => fetchSubreddit(withoutYear, sub)))
-        ranked = filterAndRank(batches, brandLower, modelLower)
-      }
+      // Fire all 6 queries in parallel: year-specific + general, all 3 subreddits
+      const yearQuery = `${brand} ${model} ${year}`
+      const baseQuery = `${brand} ${model}`
+      const queries = [
+        ...SUBREDDITS.map(sub => fetchSubreddit(yearQuery, sub)),
+        ...SUBREDDITS.map(sub => fetchSubreddit(baseQuery, sub)),
+      ]
 
-      if (cancelled) return
-
-      const mapped: RedditPost[] = ranked.slice(0, 5).map((p) => ({
-        title: p.title,
-        score: p.score,
-        numComments: p.num_comments ?? 0,
-        subreddit: p.subreddit,
-        url: `https://reddit.com${p.permalink}`,
-        snippet: p.selftext ? p.selftext.replace(/\n+/g, " ").trim().slice(0, 220) : null,
-      }))
-      setPosts(mapped)
-      setLoading(false)
+      Promise.all(queries)
+        .then((batches) => {
+          if (cancelled) return
+          const allPosts = batches.flat()
+          const result = pickBest(allPosts, brandLower, modelLower)
+          try { sessionStorage.setItem(cacheKey, JSON.stringify(result)) } catch { /* ignore */ }
+          setPosts(result)
+          setLoading(false)
+        })
+        .catch(() => {
+          if (!cancelled) { setFailed(true); setLoading(false) }
+        })
     }
 
-    load().catch(() => {
-      if (!cancelled) { setFailed(true); setLoading(false) }
-    })
+    // Only start fetching when the section scrolls into view
+    const el = containerRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { observer.disconnect(); doFetch() }
+    }, { rootMargin: "200px" })
+    observer.observe(el)
 
-    return () => { cancelled = true }
+    return () => { cancelled = true; observer.disconnect() }
   }, [brand, model, year])
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div ref={containerRef} className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="h-5 bg-gray-200 rounded w-48 mb-4 animate-pulse" />
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
