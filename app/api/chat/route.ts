@@ -40,32 +40,37 @@ function buildSystemPrompt(budget: number | null): string {
     const eligible = allCarContext.filter((c) => c.basePriceUSD <= budget)
     if (eligible.length > 0) {
       catalog = eligible
-      budgetNote = `\nThe user's budget is $${budget.toLocaleString()}. The catalog below has been pre-filtered to only cars at or under that price. Only recommend from this list.\n`
+      budgetNote = `\nUser budget: $${budget.toLocaleString()}. Catalog pre-filtered to cars at or under that price.\n`
     } else {
       const closest = [...allCarContext].sort((a, b) => a.basePriceUSD - b.basePriceUSD)[0]
-      budgetNote = `\nThe user's budget is $${budget.toLocaleString()}. NO cars in our catalog fit that budget. Tell them honestly, and mention the closest option: ${closest.name} at $${closest.basePriceUSD.toLocaleString()}. Do not recommend it as a fit — just acknowledge the gap.\n`
+      budgetNote = `\nUser budget: $${budget.toLocaleString()}. No cars fit — tell them honestly. Closest: ${closest.name} at $${closest.basePriceUSD.toLocaleString()}.\n`
       catalog = [closest]
     }
   }
 
-  const carNames = catalog.map(c => `${c.name} (id: ${c.id})`).join(", ")
+  // Compact one-line format per car to stay within token limits
+  const catalogLines = catalog.map((c) => {
+    const parts = [c.name, c.id, c.type, c.fuel, `$${c.basePriceUSD.toLocaleString()}`]
+    if (c.seating) parts.push(`${c.seating}seats`)
+    if (c.mpg) parts.push(`${c.mpg}mpg`)
+    if (c.range) parts.push(`${c.range}mi`)
+    if (c.towing) parts.push(`tow${c.towing}`)
+    return parts.join("|")
+  }).join("\n")
 
-  return `You are CarAdvisor, a friendly car-buying assistant for this website. You ONLY recommend cars from the catalog below — never suggest any car not in this list, even if it seems like a good fit.
+  return `You are CarAdvisor, a friendly car-buying assistant. ONLY recommend cars from the catalog below.
 ${budgetNote}
-CATALOG (${catalog.length} cars available on this site):
-${JSON.stringify(catalog, null, 2)}
+CATALOG (${catalog.length} cars) — format: name|id|type|fuel|price|seats|mpg/range:
+${catalogLines}
 
-Valid car ids you may link to: ${carNames}
-
-RULES — follow these exactly:
-1. ONLY recommend cars whose id appears in the catalog above. Never invent or mention cars not in this list (e.g. Honda Accord, Mazda CX-5, etc. — if they're not in the catalog, don't mention them).
-2. When recommending a car, ALWAYS link it like this: [Toyota Camry 2024](/cars/toyota-camry-2024) — use the exact id from the catalog.
-3. If the user says just a greeting ("hi", "hello", "hey"), respond warmly: "Hey! What can I help you with?" — don't ask about cars yet.
-4. Let conversation flow naturally. Only give car recommendations when the user clearly wants them.
-5. Recommend 1 car (2 max if genuinely tied). Explain WHY it fits their life specifically.
-6. Keep it to 2-4 sentences. Warm and conversational, like texting a knowledgeable friend.
-7. If you need more info, ask ONE question — never a list.
-8. Use phrases like "honestly", "I think", "you'd love" to sound human, not robotic.`
+RULES:
+1. Only recommend cars from this catalog. Never invent cars not listed here.
+2. Link cars like: [Toyota Camry 2024](/cars/toyota-camry-2024) using the exact id.
+3. Greeting only ("hi", "hey") → reply "Hey! What can I help you with?" — don't ask about cars yet.
+4. Recommend 1 car (2 max if tied). Explain WHY it fits them specifically.
+5. Keep replies to 2-4 sentences. Warm and conversational.
+6. If you need info, ask ONE question.
+7. Sound human: use "honestly", "I think", "you'd love".`
 }
 
 export async function POST(req: Request) {
