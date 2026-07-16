@@ -3,7 +3,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Search, Zap, Shield, TrendingUp, ChevronRight, Car as CarIcon, Mail, Sparkles } from "lucide-react"
+import { Search, ChevronRight, Car as CarIcon, Mail, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Navbar from "./navbar"
@@ -124,11 +124,6 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
     }
   }
 
-  const stats = [
-    { label: "Expert Reviews", value: `${allCars.length}+`, icon: TrendingUp },
-    { label: "Brands Covered", value: `${new Set(allCars.map((c) => c.brand)).size}`, icon: Shield },
-    { label: "Years of Live Data", value: "1990–now", icon: Zap },
-  ]
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -191,21 +186,6 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                 </Link>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto">
-            {stats.map(({ label, value, icon: Icon }) => (
-              <div key={label} className="text-center">
-                <Icon className="w-6 h-6 mx-auto mb-1 text-orange-500" />
-                <p className="text-2xl font-bold text-gray-900">{value}</p>
-                <p className="text-xs text-gray-500">{label}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>
