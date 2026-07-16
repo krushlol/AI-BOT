@@ -1,7 +1,7 @@
 "use client"
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Search, ChevronRight, Car as CarIcon, Mail, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -115,11 +115,32 @@ const topPickValue = allCarsData
 const topPickScore = computeCarAdvisorScore(topPickOverall)
 const currentMonth = new Date().toLocaleString("en-US", { month: "long", year: "numeric" })
 
+// Top 6 cars by score for rotating hero — deduplicated by id
+const heroCarousel = allCarsData
+  .map(c => ({ car: c, score: computeCarAdvisorScore(c) }))
+  .sort((a, b) => b.score.score - a.score.score)
+  .slice(0, 6)
+
 export default function HomeClient({ user, featuredCars, allCars, initialSavedIds = [] }: HomeClientProps) {
   const [query, setQuery] = useState("")
   const [compareIds, setCompareIds] = useState<string[]>([])
   const [savedIds, setSavedIds] = useState<string[]>(initialSavedIds)
+  const [heroIndex, setHeroIndex] = useState(0)
+  const [heroFading, setHeroFading] = useState(false)
   const router = useRouter()
+
+  const currentHero = heroCarousel[heroIndex]
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroFading(true)
+      setTimeout(() => {
+        setHeroIndex(i => (i + 1) % heroCarousel.length)
+        setHeroFading(false)
+      }, 400)
+    }, 20000)
+    return () => clearInterval(timer)
+  }, [])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -164,7 +185,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className={`grid lg:grid-cols-2 gap-10 items-center transition-opacity duration-400 ${heroFading ? "opacity-0" : "opacity-100"}`}>
             {/* Left — editorial content */}
             <div>
               <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
@@ -172,32 +193,43 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                 CarAdvisor&apos;s Top Pick · {currentMonth}
               </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold mb-3 leading-tight">
-                {topPickOverall.brand}<br />
-                <span className="text-orange-400">{topPickOverall.model}</span>
+                {currentHero.car.brand}<br />
+                <span className="text-orange-400">{currentHero.car.model}</span>
               </h1>
-              <p className="text-orange-100 text-base mb-4 max-w-md">{topPickOverall.tagline}</p>
+              <p className="text-orange-100 text-base mb-4 max-w-md">{currentHero.car.tagline}</p>
 
               {/* Score pill */}
               <div className="inline-flex items-center gap-3 bg-white/10 border border-white/20 rounded-xl px-4 py-2 mb-6">
-                <span className="text-2xl font-black text-orange-400">{topPickScore.score.toFixed(1)}</span>
+                <span className="text-2xl font-black text-orange-400">{currentHero.score.score.toFixed(1)}</span>
                 <div className="w-px h-8 bg-white/20" />
                 <div>
-                  <div className="text-sm font-bold">{topPickScore.emoji} {topPickScore.label}</div>
-                  <div className="text-xs text-orange-200">{topPickScore.reason}</div>
+                  <div className="text-sm font-bold">{currentHero.score.emoji} {currentHero.score.label}</div>
+                  <div className="text-xs text-orange-200">{currentHero.score.reason}</div>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-3 mb-8">
-                <Link href={`/cars/${topPickOverall.id}`}>
+                <Link href={`/cars/${currentHero.car.id}`}>
                   <Button size="lg" className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-6 shadow-lg">
                     See Full Review →
                   </Button>
                 </Link>
                 <Link href="/quiz">
-                  <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 font-semibold px-6 gap-2">
+                  <Button size="lg" className="bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold px-6 gap-2">
                     <Sparkles className="w-4 h-4" /> Find MY Car
                   </Button>
                 </Link>
+              </div>
+
+              {/* Carousel dots */}
+              <div className="flex gap-2 mb-8">
+                {heroCarousel.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => { setHeroFading(true); setTimeout(() => { setHeroIndex(i); setHeroFading(false) }, 400) }}
+                    className={`w-2 h-2 rounded-full transition-all ${i === heroIndex ? "bg-orange-400 w-6" : "bg-white/30 hover:bg-white/50"}`}
+                  />
+                ))}
               </div>
 
               {/* Search bar */}
@@ -221,14 +253,14 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
             <div className="hidden lg:block relative">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
                 <img
-                  src={topPickOverall.image}
-                  alt={`${topPickOverall.year} ${topPickOverall.brand} ${topPickOverall.model}`}
+                  src={currentHero.car.image}
+                  alt={`${currentHero.car.year} ${currentHero.car.brand} ${currentHero.car.model}`}
                   className="w-full h-72 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
                 <div className="absolute bottom-4 left-4 text-white">
                   <p className="text-xs text-orange-300 font-semibold uppercase tracking-wider">Starting at</p>
-                  <p className="text-2xl font-black">${topPickOverall.basePrice.toLocaleString()}</p>
+                  <p className="text-2xl font-black">${currentHero.car.basePrice.toLocaleString()}</p>
                 </div>
               </div>
             </div>
@@ -431,7 +463,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                 title: "Real Reddit Opinions",
                 desc: "We surface actual discussions from r/cars, r/whatcarshouldIbuy, and r/askcarsales — not press releases or manufacturer copy.",
                 cta: "See an example →",
-                href: `/cars/${topPickOverall.id}`,
+                href: `/cars/${heroCarousel[0].car.id}`,
               },
               {
                 emoji: "🤖",
