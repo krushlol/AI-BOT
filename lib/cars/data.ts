@@ -6670,7 +6670,7 @@ export const cars: Car[] = [
     fuelType: "electric",
     basePrice: 79990,
     maxPrice: 99990,
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Tesla-X-Plaid-front.jpg/960px-Tesla-X-Plaid-front.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/2023_Tesla_Model_X_Plaid.jpg/960px-2023_Tesla_Model_X_Plaid.jpg",
     tagline: "Falcon Wing doors, 1,020 hp, and room for 7 — the Model X Plaid is in a class of one",
     description:
       "The 2024 Tesla Model X is the only all-electric 7-seat SUV that hits 0–60 mph in 2.5 seconds. The Plaid's tri-motor 1,020-hp powertrain combines the fastest acceleration of any production SUV with Falcon Wing rear doors that open in tight parking spaces and a 17-inch touchscreen that controls everything.",

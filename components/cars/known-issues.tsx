@@ -24,7 +24,8 @@ export default function KnownIssues({ brand, model, year, carId }: KnownIssuesPr
   const [loading, setLoading] = useState(!preloaded)
   const [failed, setFailed] = useState(false)
 
-  const nhtsaUrl = `https://www.google.com/search?q=${encodeURIComponent(`${year} ${brand} ${model} NHTSA complaints site:nhtsa.gov`)}`
+  const nhtsaUrl = `https://www.nhtsa.gov/complaints-by-vehicle?make=${encodeURIComponent(brand.toUpperCase())}&model=${encodeURIComponent(model.toUpperCase())}&modelYear=${year}`
+  const nhtsaFallbackUrl = `https://www.google.com/search?q=${encodeURIComponent(`${year} ${brand} ${model} NHTSA complaints site:nhtsa.gov`)}`
 
   useEffect(() => {
     if (preloaded) return // already have static data, skip fetch
@@ -75,7 +76,7 @@ export default function KnownIssues({ brand, model, year, carId }: KnownIssuesPr
             Owner complaint data couldn&apos;t be loaded right now.
           </p>
           <a
-            href={nhtsaUrl}
+            href={nhtsaFallbackUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-xs text-amber-600 hover:text-amber-800 font-medium"
