@@ -138,7 +138,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
         setHeroIndex(i => (i + 1) % heroCarousel.length)
         setHeroFading(false)
       }, 400)
-    }, 20000)
+    }, 4000)
     return () => clearInterval(timer)
   }, [])
 
