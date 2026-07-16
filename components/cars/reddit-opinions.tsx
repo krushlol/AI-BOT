@@ -37,6 +37,9 @@ export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
     let cancelled = false
     const query = `${brand} ${model}`
 
+    const brandLower = brand.toLowerCase()
+    const modelLower = model.toLowerCase()
+
     Promise.all(SUBREDDITS.map((sub) => fetchSubreddit(query, sub)))
       .then((batches) => {
         if (cancelled) return
@@ -45,10 +48,12 @@ export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
         const all: any[] = []
         for (const batch of batches) {
           for (const p of batch) {
-            if (!seen.has(p.id) && !p.over_18 && p.title) {
-              seen.add(p.id)
-              all.push(p)
-            }
+            if (!p.title || p.over_18 || seen.has(p.id)) continue
+            // Require the title to mention the brand or model — blocks generic threads
+            const titleLower = p.title.toLowerCase()
+            if (!titleLower.includes(brandLower) && !titleLower.includes(modelLower)) continue
+            seen.add(p.id)
+            all.push(p)
           }
         }
         // Sort by comment count — Pullpush archives posts early so scores are always 1
