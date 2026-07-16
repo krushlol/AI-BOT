@@ -335,7 +335,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
           </div>
 
-          <RedditOpinions brand={car.brand} model={car.model} />
+          <RedditOpinions brand={car.brand} model={car.model} year={car.year} />
         </div>
 
         {/* Available colors */}

@@ -15,66 +15,86 @@ interface RedditPost {
 interface RedditOpinionsProps {
   brand: string
   model: string
+  year: number
 }
 
 const SUBREDDITS = ["cars", "whatcarshouldIbuy", "askcarsales"]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function fetchSubreddit(query: string, subreddit: string): Promise<any[]> {
-  const url = `https://api.pullpush.io/reddit/search/submission/?q=${encodeURIComponent(query)}&subreddit=${subreddit}&size=25`
-  const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
-  if (!res.ok) return []
-  const data = await res.json()
-  return data?.data ?? []
+  const url = `https://api.pullpush.io/reddit/search/submission/?q=${encodeURIComponent(query)}&subreddit=${subreddit}&size=50`
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
+    if (!res.ok) return []
+    const data = await res.json()
+    return data?.data ?? []
+  } catch {
+    return []
+  }
 }
 
-export default function RedditOpinions({ brand, model }: RedditOpinionsProps) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function filterAndRank(batches: any[][], brandLower: string, modelLower: string): any[] {
+  const seen = new Set<string>()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const all: any[] = []
+  for (const batch of batches) {
+    for (const p of batch) {
+      if (!p.title || p.over_18 || seen.has(p.id)) continue
+      const titleLower = p.title.toLowerCase()
+      // Must mention both brand and model in the title
+      if (!titleLower.includes(brandLower) || !titleLower.includes(modelLower)) continue
+      seen.add(p.id)
+      all.push(p)
+    }
+  }
+  all.sort((a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0))
+  return all
+}
+
+export default function RedditOpinions({ brand, model, year }: RedditOpinionsProps) {
   const [posts, setPosts] = useState<RedditPost[]>([])
   const [loading, setLoading] = useState(true)
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     let cancelled = false
-    const query = `${brand} ${model}`
-
     const brandLower = brand.toLowerCase()
     const modelLower = model.toLowerCase()
 
-    Promise.all(SUBREDDITS.map((sub) => fetchSubreddit(query, sub)))
-      .then((batches) => {
-        if (cancelled) return
-        const seen = new Set<string>()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const all: any[] = []
-        for (const batch of batches) {
-          for (const p of batch) {
-            if (!p.title || p.over_18 || seen.has(p.id)) continue
-            // Require the title to mention BOTH brand and model — blocks generic brand threads
-            const titleLower = p.title.toLowerCase()
-            if (!titleLower.includes(brandLower) || !titleLower.includes(modelLower)) continue
-            seen.add(p.id)
-            all.push(p)
-          }
-        }
-        // Sort by comment count — Pullpush archives posts early so scores are always 1
-        all.sort((a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0))
-        const mapped: RedditPost[] = all.slice(0, 5).map((p) => ({
-          title: p.title,
-          score: p.score,
-          numComments: p.num_comments ?? 0,
-          subreddit: p.subreddit,
-          url: `https://reddit.com${p.permalink}`,
-          snippet: p.selftext ? p.selftext.replace(/\n+/g, " ").trim().slice(0, 220) : null,
-        }))
-        setPosts(mapped)
-        setLoading(false)
-      })
-      .catch(() => {
-        if (!cancelled) { setFailed(true); setLoading(false) }
-      })
+    async function load() {
+      // First try with year for model-year-specific posts
+      const withYear = `${brand} ${model} ${year}`
+      let batches = await Promise.all(SUBREDDITS.map(sub => fetchSubreddit(withYear, sub)))
+      let ranked = filterAndRank(batches, brandLower, modelLower)
+
+      // Fall back to brand+model only if too few results
+      if (ranked.length < 3) {
+        const withoutYear = `${brand} ${model}`
+        batches = await Promise.all(SUBREDDITS.map(sub => fetchSubreddit(withoutYear, sub)))
+        ranked = filterAndRank(batches, brandLower, modelLower)
+      }
+
+      if (cancelled) return
+
+      const mapped: RedditPost[] = ranked.slice(0, 5).map((p) => ({
+        title: p.title,
+        score: p.score,
+        numComments: p.num_comments ?? 0,
+        subreddit: p.subreddit,
+        url: `https://reddit.com${p.permalink}`,
+        snippet: p.selftext ? p.selftext.replace(/\n+/g, " ").trim().slice(0, 220) : null,
+      }))
+      setPosts(mapped)
+      setLoading(false)
+    }
+
+    load().catch(() => {
+      if (!cancelled) { setFailed(true); setLoading(false) }
+    })
 
     return () => { cancelled = true }
-  }, [brand, model])
+  }, [brand, model, year])
 
   if (loading) {
     return (
