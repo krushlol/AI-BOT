@@ -137,8 +137,8 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
       setTimeout(() => {
         setHeroIndex(i => (i + 1) % heroCarousel.length)
         setHeroFading(false)
-      }, 350)
-    }, 4000)
+      }, 700)
+    }, 7000)
     return () => clearInterval(timer)
   }, [])
 
@@ -185,7 +185,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-          <div className="grid lg:grid-cols-2 gap-10 items-center" style={{ opacity: heroFading ? 0 : 1, transition: "opacity 350ms ease-in-out" }}>
+          <div className="grid lg:grid-cols-2 gap-10 items-center" style={{ opacity: heroFading ? 0 : 1, transition: "opacity 700ms ease-in-out" }}>
             {/* Left — editorial content */}
             <div>
               <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
