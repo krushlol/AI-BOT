@@ -24,6 +24,7 @@ import { toggleSavedCar } from "@/lib/cars/save"
 import { getSpecExplanations } from "@/lib/cars/spec-explanations"
 import KnownIssues from "@/components/cars/known-issues"
 import LoanCalculator from "@/components/cars/loan-calculator"
+import DepreciationCard from "@/components/cars/depreciation-card"
 import RedditOpinions from "@/components/cars/reddit-opinions"
 import { computeCarAdvisorScore } from "@/lib/cars/score"
 
@@ -176,6 +177,9 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
         {/* Loan Calculator */}
         <LoanCalculator basePrice={car.basePrice} maxPrice={car.maxPrice} />
+
+        {/* Depreciation Clock + Resale Prophet */}
+        <DepreciationCard car={car} />
 
         {/* Tabs */}
         <Tabs defaultValue="specs" className="mb-6">
