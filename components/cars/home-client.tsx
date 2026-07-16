@@ -32,8 +32,13 @@ const BODY_STYLES = [
   { label: "Van", value: "van", emoji: "🚌" },
 ]
 
+const STYLE_IMAGE_OVERRIDES: Record<string, string> = {
+  wagon: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/2016_Volvo_V60_Polestar_in_Ice_White%2C_Front_Left%2C_08-15-2022.jpg/960px-2016_Volvo_V60_Polestar_in_Ice_White%2C_Front_Left%2C_08-15-2022.jpg",
+}
+
 const styleImages: Record<string, string> = Object.fromEntries(
   BODY_STYLES.map(({ value }) => {
+    if (STYLE_IMAGE_OVERRIDES[value]) return [value, STYLE_IMAGE_OVERRIDES[value]]
     const car = allCarsData.find((c) => c.bodyStyle === value)
     return [value, car?.image ?? ""]
   })
