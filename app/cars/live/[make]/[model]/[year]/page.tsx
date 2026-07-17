@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { fetchCarSpecs } from "@/lib/cars/api-ninjas"
 import { fetchNHTSASafetyRatings } from "@/lib/cars/nhtsa"
+import { fetchEPASpecs } from "@/lib/cars/epa-fuel-economy"
 import LiveCarDetailClient from "@/components/cars/live-car-detail-client"
 
 interface Params {
@@ -47,12 +48,23 @@ export default async function LiveCarDetailPage({ params }: { params: Params }) 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Fetch both in parallel; fall back to alias model name if primary returns nothing
+  // Fetch all in parallel; fall back to alias model name if primary returns nothing
   const aliasModel = MODEL_ALIASES[make]?.[model]
-  const [specs, safety] = await Promise.all([
+  const [specs, safety, epaSpecs] = await Promise.all([
     fetchCarSpecs(make, model, year).then(r => r ?? (aliasModel ? fetchCarSpecs(make, aliasModel, year) : null)),
     fetchNHTSASafetyRatings(make, model, year).then(r => r ?? (aliasModel ? fetchNHTSASafetyRatings(make, aliasModel, year) : null)),
+    fetchEPASpecs(make, model, year),
   ])
+
+  // EPA fills MPG gaps; API Ninjas non-null fields overlay on top
+  const mergedSpecs = (specs || epaSpecs)
+    ? {
+        ...epaSpecs,
+        ...Object.fromEntries(
+          Object.entries(specs ?? {}).filter(([, v]) => v !== undefined && v !== null)
+        ),
+      }
+    : undefined
 
   const car = {
     id: `live-${make.toLowerCase()}-${model.toLowerCase().replace(/\s+/g, "-")}-${year}`,
@@ -60,7 +72,7 @@ export default async function LiveCarDetailPage({ params }: { params: Params }) 
     model,
     year,
     isLive: true as const,
-    specs: specs ?? undefined,
+    specs: mergedSpecs ?? undefined,
     safety: safety ?? undefined,
   }
 
