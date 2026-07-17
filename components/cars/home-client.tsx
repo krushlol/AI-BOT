@@ -129,9 +129,8 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
   const [imageFading, setImageFading] = useState(false)
   const router = useRouter()
 
-  // Left side always shows the top-scored car; only the image rotates
-  const featuredHero = heroCarousel[0]
-  const currentImage = heroCarousel[heroIndex].car
+  // Both text and image track heroIndex; only the image gets the fade animation
+  const currentHero = heroCarousel[heroIndex]
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -195,23 +194,23 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                 CarAdvisor&apos;s Top Pick · {currentMonth}
               </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold mb-3 leading-tight">
-                {featuredHero.car.brand}<br />
-                <span className="text-orange-400">{featuredHero.car.model}</span>
+                {currentHero.car.brand}<br />
+                <span className="text-orange-400">{currentHero.car.model}</span>
               </h1>
-              <p className="text-orange-100 text-base mb-4 max-w-md">{featuredHero.car.tagline}</p>
+              <p className="text-orange-100 text-base mb-4 max-w-md">{currentHero.car.tagline}</p>
 
               {/* Score pill */}
               <div className="inline-flex items-center gap-3 bg-white/10 border border-white/20 rounded-xl px-4 py-2 mb-6">
-                <span className="text-2xl font-black text-orange-400">{featuredHero.score.score.toFixed(1)}</span>
+                <span className="text-2xl font-black text-orange-400">{currentHero.score.score.toFixed(1)}</span>
                 <div className="w-px h-8 bg-white/20" />
                 <div>
-                  <div className="text-sm font-bold">{featuredHero.score.emoji} {featuredHero.score.label}</div>
-                  <div className="text-xs text-orange-200">{featuredHero.score.reason}</div>
+                  <div className="text-sm font-bold">{currentHero.score.emoji} {currentHero.score.label}</div>
+                  <div className="text-xs text-orange-200">{currentHero.score.reason}</div>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-3 mb-8">
-                <Link href={`/cars/${featuredHero.car.id}`}>
+                <Link href={`/cars/${currentHero.car.id}`}>
                   <Button size="lg" className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-6 shadow-lg">
                     See Full Review →
                   </Button>
@@ -258,14 +257,14 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                 style={{ opacity: imageFading ? 0 : 1, transition: "opacity 500ms ease-in-out" }}
               >
                 <img
-                  src={currentImage.image}
-                  alt={`${currentImage.year} ${currentImage.brand} ${currentImage.model}`}
+                  src={currentHero.car.image}
+                  alt={`${currentHero.car.year} ${currentHero.car.brand} ${currentHero.car.model}`}
                   className="w-full h-72 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
                 <div className="absolute bottom-4 left-4 text-white">
                   <p className="text-xs text-orange-300 font-semibold uppercase tracking-wider">Starting at</p>
-                  <p className="text-2xl font-black">${currentImage.basePrice.toLocaleString()}</p>
+                  <p className="text-2xl font-black">${currentHero.car.basePrice.toLocaleString()}</p>
                 </div>
               </div>
             </div>
