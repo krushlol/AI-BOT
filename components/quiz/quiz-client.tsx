@@ -195,14 +195,15 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
           )}
         </div>
 
-        {/* Confirm button */}
+        {/* Sticky submit bar */}
         {answeredCount >= 2 && !confirmed && (
-          <div className="flex justify-center mb-10">
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-t border-gray-200 shadow-lg px-4 py-3 flex items-center justify-center gap-4">
+            <span className="text-sm text-gray-500 hidden sm:block">{answeredCount} of {QUESTIONS.length} questions answered</span>
             <button
               onClick={handleConfirm}
-              className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg px-10 py-4 rounded-2xl shadow-lg transition-all hover:scale-105 flex items-center gap-3"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-base px-8 py-3 rounded-2xl shadow-md transition-all hover:scale-105 flex items-center gap-2"
             >
-              <Sparkles className="w-5 h-5" />
+              <Sparkles className="w-4 h-4" />
               {isComplete ? "See My Results" : "Find My Car"}
             </button>
           </div>
