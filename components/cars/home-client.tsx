@@ -126,19 +126,21 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
   const [compareIds, setCompareIds] = useState<string[]>([])
   const [savedIds, setSavedIds] = useState<string[]>(initialSavedIds)
   const [heroIndex, setHeroIndex] = useState(0)
-  const [heroFading, setHeroFading] = useState(false)
+  const [imageFading, setImageFading] = useState(false)
   const router = useRouter()
 
-  const currentHero = heroCarousel[heroIndex]
+  // Left side always shows the top-scored car; only the image rotates
+  const featuredHero = heroCarousel[0]
+  const currentImage = heroCarousel[heroIndex].car
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setHeroFading(true)
+      setImageFading(true)
       setTimeout(() => {
         setHeroIndex(i => (i + 1) % heroCarousel.length)
-        setHeroFading(false)
-      }, 700)
-    }, 7000)
+        setImageFading(false)
+      }, 500)
+    }, 5000)
     return () => clearInterval(timer)
   }, [])
 
@@ -185,31 +187,31 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-          <div className="grid lg:grid-cols-2 gap-10 items-center" style={{ opacity: heroFading ? 0 : 1, transition: "opacity 700ms ease-in-out" }}>
-            {/* Left — editorial content */}
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            {/* Left — editorial content (always the top-scored car) */}
             <div>
               <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
                 CarAdvisor&apos;s Top Pick · {currentMonth}
               </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold mb-3 leading-tight">
-                {currentHero.car.brand}<br />
-                <span className="text-orange-400">{currentHero.car.model}</span>
+                {featuredHero.car.brand}<br />
+                <span className="text-orange-400">{featuredHero.car.model}</span>
               </h1>
-              <p className="text-orange-100 text-base mb-4 max-w-md">{currentHero.car.tagline}</p>
+              <p className="text-orange-100 text-base mb-4 max-w-md">{featuredHero.car.tagline}</p>
 
               {/* Score pill */}
               <div className="inline-flex items-center gap-3 bg-white/10 border border-white/20 rounded-xl px-4 py-2 mb-6">
-                <span className="text-2xl font-black text-orange-400">{currentHero.score.score.toFixed(1)}</span>
+                <span className="text-2xl font-black text-orange-400">{featuredHero.score.score.toFixed(1)}</span>
                 <div className="w-px h-8 bg-white/20" />
                 <div>
-                  <div className="text-sm font-bold">{currentHero.score.emoji} {currentHero.score.label}</div>
-                  <div className="text-xs text-orange-200">{currentHero.score.reason}</div>
+                  <div className="text-sm font-bold">{featuredHero.score.emoji} {featuredHero.score.label}</div>
+                  <div className="text-xs text-orange-200">{featuredHero.score.reason}</div>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-3 mb-8">
-                <Link href={`/cars/${currentHero.car.id}`}>
+                <Link href={`/cars/${featuredHero.car.id}`}>
                   <Button size="lg" className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-6 shadow-lg">
                     See Full Review →
                   </Button>
@@ -226,7 +228,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                 {heroCarousel.map((_, i) => (
                   <button
                     key={i}
-                    onClick={() => { setHeroFading(true); setTimeout(() => { setHeroIndex(i); setHeroFading(false) }, 350) }}
+                    onClick={() => { setImageFading(true); setTimeout(() => { setHeroIndex(i); setImageFading(false) }, 350) }}
                     className={`w-2 h-2 rounded-full transition-all ${i === heroIndex ? "bg-orange-400 w-6" : "bg-white/30 hover:bg-white/50"}`}
                   />
                 ))}
@@ -249,18 +251,21 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
               </form>
             </div>
 
-            {/* Right — car image */}
+            {/* Right — rotating car image only */}
             <div className="hidden lg:block relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+              <div
+                className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+                style={{ opacity: imageFading ? 0 : 1, transition: "opacity 500ms ease-in-out" }}
+              >
                 <img
-                  src={currentHero.car.image}
-                  alt={`${currentHero.car.year} ${currentHero.car.brand} ${currentHero.car.model}`}
+                  src={currentImage.image}
+                  alt={`${currentImage.year} ${currentImage.brand} ${currentImage.model}`}
                   className="w-full h-72 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
                 <div className="absolute bottom-4 left-4 text-white">
                   <p className="text-xs text-orange-300 font-semibold uppercase tracking-wider">Starting at</p>
-                  <p className="text-2xl font-black">${currentHero.car.basePrice.toLocaleString()}</p>
+                  <p className="text-2xl font-black">${currentImage.basePrice.toLocaleString()}</p>
                 </div>
               </div>
             </div>
