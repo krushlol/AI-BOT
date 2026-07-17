@@ -115,9 +115,34 @@ const topPickValue = allCarsData
 const topPickScore = computeCarAdvisorScore(topPickOverall)
 const currentMonth = new Date().toLocaleString("en-US", { month: "long", year: "numeric" })
 
-// Top 6 cars by score for rotating hero — deduplicated by id
+function getHeroBadge(car: Car): string {
+  if (car.fuelType === "electric") {
+    if (car.bodyStyle === "truck") return "Best Electric Truck"
+    if (car.bodyStyle === "suv") return "Best Electric SUV"
+    return "Best Electric Car"
+  }
+  if (car.fuelType === "plug-in hybrid") {
+    if (car.specs.seating >= 7) return "Best Family PHEV"
+    return "Best Plug-in Hybrid"
+  }
+  if (car.fuelType === "hybrid") {
+    const mpg = car.specs.mpgCombined ?? 0
+    if (mpg >= 50) return "Best Fuel Economy"
+    if (car.safety.rating === "TOP SAFETY PICK+") return "Safest Hybrid · IIHS"
+    return "Best Hybrid"
+  }
+  if (car.safety.rating === "TOP SAFETY PICK+" && car.safety.ratingSource?.includes("IIHS")) return "IIHS Top Safety Pick+"
+  if (car.specs.seating >= 7) return "Best Family Car"
+  if (car.bodyStyle === "truck") return "Best Pickup Truck"
+  if (car.bodyStyle === "coupe" || car.basePrice >= 80000) return "Best Performance Pick"
+  if (car.basePrice <= 32000) return "Best Value Under $32K"
+  if (car.bodyStyle === "suv") return "Best Family SUV"
+  return "Editor's Choice"
+}
+
+// Top 6 cars by score for rotating hero
 const heroCarousel = allCarsData
-  .map(c => ({ car: c, score: computeCarAdvisorScore(c) }))
+  .map(c => ({ car: c, score: computeCarAdvisorScore(c), badge: getHeroBadge(c) }))
   .sort((a, b) => b.score.score - a.score.score)
   .slice(0, 6)
 
@@ -191,7 +216,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
             <div>
               <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
-                CarAdvisor&apos;s Top Pick · {currentMonth}
+                {currentHero.badge} · {currentMonth}
               </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold mb-3 leading-tight">
                 {currentHero.car.brand}<br />
