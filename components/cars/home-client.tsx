@@ -186,8 +186,8 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
-            {/* Left — editorial content (always the top-scored car) */}
+          <div className="grid lg:grid-cols-2 gap-10 items-center" style={{ opacity: imageFading ? 0 : 1, transition: "opacity 400ms ease-in-out" }}>
+            {/* Left — editorial content */}
             <div>
               <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
@@ -252,10 +252,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
 
             {/* Right — rotating car image only */}
             <div className="hidden lg:block relative">
-              <div
-                className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10"
-                style={{ opacity: imageFading ? 0 : 1, transition: "opacity 500ms ease-in-out" }}
-              >
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
                 <img
                   src={currentHero.car.image}
                   alt={`${currentHero.car.year} ${currentHero.car.brand} ${currentHero.car.model}`}
