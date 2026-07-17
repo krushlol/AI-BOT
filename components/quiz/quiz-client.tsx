@@ -2,6 +2,7 @@
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useMemo } from "react"
+import { useRouter } from "next/navigation"
 import { RotateCcw, GitCompare, Car as CarIcon, Sparkles, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -90,6 +91,7 @@ const QUESTIONS: {
 ]
 
 export default function QuizClient({ user, allCars }: QuizClientProps) {
+  const router = useRouter()
   const [answers, setAnswers] = useState<Partial<QuizAnswers>>({})
   const [confirmed, setConfirmed] = useState(false)
   const [compareIds, setCompareIds] = useState<string[]>([])
@@ -106,6 +108,14 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
 
   const handleConfirm = () => {
     saveAnswers(answers as QuizAnswers)
+    const full = answers as QuizAnswers
+    const hasMatch = answeredCount >= 2 && allCars.some(car => {
+      try { return carPassesFilters(car, full) } catch { return true }
+    })
+    if (!hasMatch) {
+      router.push("/quiz/no-results")
+      return
+    }
     setConfirmed(true)
   }
 
@@ -214,17 +224,6 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
           <div className="text-center py-16 text-gray-400">
             <CarIcon className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p className="text-lg">Select your preferences above to see matches</p>
-          </div>
-        )}
-
-        {confirmed && answeredCount >= 2 && results.length === 0 && (
-          <div className="text-center py-16">
-            <div className="text-5xl mb-4">🔍</div>
-            <h2 className="text-xl font-bold text-gray-700 mb-2">No exact matches</h2>
-            <p className="text-gray-500 mb-4">Try relaxing your fuel type or style preference</p>
-            <Button variant="outline" onClick={handleReset} className="gap-2">
-              <RotateCcw className="w-4 h-4" /> Reset filters
-            </Button>
           </div>
         )}
 
