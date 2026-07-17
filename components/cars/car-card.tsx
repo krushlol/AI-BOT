@@ -11,8 +11,6 @@ import { scoreCarForAnswers } from "@/lib/cars/quiz"
 import { computeCarAdvisorScore } from "@/lib/cars/score"
 import { useQuizAnswers } from "@/hooks/useQuizAnswers"
 import MatchBadge from "@/components/quiz/match-badge"
-import { magazineReviews } from "@/lib/cars/reviews"
-import { useState } from "react"
 
 
 interface CarCardProps {
@@ -140,17 +138,6 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
           </div>
           <Badge variant="outline" className="text-xs capitalize">{car.bodyStyle}</Badge>
         </div>
-
-        {/* Top magazine review snippet */}
-        {magazineReviews[car.id]?.[0] && (
-          <div className="mb-3 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100">
-            <div className="flex items-center justify-between mb-0.5">
-              <span className="text-xs font-semibold text-gray-600">{magazineReviews[car.id][0].magazine}</span>
-              <span className="text-xs text-amber-600 font-semibold">⭐ {magazineReviews[car.id][0].rating}</span>
-            </div>
-            <p className="text-xs text-gray-500 italic line-clamp-2">"{magazineReviews[car.id][0].quote}"</p>
-          </div>
-        )}
 
         <div className="flex gap-2">
           <Link href={`/cars/${car.id}`} className="flex-1">

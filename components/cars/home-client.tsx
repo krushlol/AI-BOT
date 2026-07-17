@@ -314,7 +314,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-2xl font-bold text-gray-900">Browse by Style</h2>
-          <Link href="/search" className="text-sm text-orange-500 hover:text-slate-800 font-medium flex items-center gap-1">
+          <Link href="/search" className="text-sm text-orange-500 hover:text-orange-600 font-medium flex items-center gap-1">
             See all <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -323,7 +323,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
             <Link
               key={value}
               href={`/search?bodyStyle=${value}`}
-              className="group relative rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-400 shadow-sm hover:shadow-lg transition-all"
+              className="group relative rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-300 shadow-sm hover:shadow-md transition-all"
             >
               {styleImages[value] ? (
                 <img
@@ -354,7 +354,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
               <Link
                 key={value}
                 href={`/search?fuelType=${encodeURIComponent(value)}`}
-                className="group relative rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-400 shadow-sm hover:shadow-lg transition-all"
+                className="group relative rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-300 shadow-sm hover:shadow-md transition-all"
               >
                 {fuelImages[value] ? (
                   <img
@@ -382,7 +382,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
       </div>
 
       {/* Browse by Brand */}
-      <div className="bg-white border-y border-gray-100">
+      <div className="bg-gray-50 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-2xl font-bold text-gray-900">Browse by Brand</h2>
