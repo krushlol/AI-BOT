@@ -115,7 +115,10 @@ export default function RedditOpinions({ brand, model, year }: RedditOpinionsPro
   if (loading) {
     return (
       <div ref={containerRef} className="bg-white rounded-xl border border-gray-200 p-6">
-        <div className="h-5 bg-gray-200 rounded w-48 mb-4 animate-pulse" />
+        <div className="flex items-center gap-2 mb-4">
+          <RedditIcon />
+          <span className="text-sm font-medium text-gray-500 animate-pulse">Loading Reddit reviews…</span>
+        </div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
             <div key={i} className="border border-gray-100 rounded-xl p-4 animate-pulse">
