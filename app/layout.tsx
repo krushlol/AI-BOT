@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import Script from "next/script"
 import "./globals.css"
 import ChatWidget from "@/components/chat/chat-widget"
+import { Analytics } from '@vercel/analytics/next'
 
 const GA_ID = "G-KYFYQWTP2X"
 
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {children}
         <ChatWidget />
+        <Analytics />
       </body>
     </html>
   )
