@@ -149,7 +149,7 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
               size="sm"
               className={`px-3 ${isSaved ? "text-red-500 border-red-200 bg-red-50" : ""}`}
               onClick={() => onSave(car.id)}
-              title={isLoggedIn ? (isSaved ? "Remove from saved" : "Save car") : "Sign in to save"}
+              title={isLoggedIn ? (isSaved ? "Remove from saved" : "Save car") : "Log in to save"}
             >
               <Heart className={`w-4 h-4 ${isSaved ? "fill-current" : ""}`} />
             </Button>

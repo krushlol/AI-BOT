@@ -22,7 +22,7 @@ export default async function SignInPage() {
         </Link>
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold mb-2">CarAdvisor</h1>
-          <p className="text-gray-600">Sign in to save cars and searches</p>
+          <p className="text-gray-600">Log in to save cars and searches</p>
         </div>
         <SignInForm />
       </div>

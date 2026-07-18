@@ -166,7 +166,7 @@ export default function Navbar({ user }: NavbarProps) {
             ) : (
               <>
                 <Link href="/sign-in">
-                  <Button variant="outline" size="sm">Sign In</Button>
+                  <Button variant="outline" size="sm">Log In</Button>
                 </Link>
                 <Link href="/sign-up">
                   <Button size="sm">Sign Up</Button>
@@ -216,7 +216,7 @@ export default function Navbar({ user }: NavbarProps) {
             ) : (
               <div className="flex gap-2">
                 <Link href="/sign-in" className="flex-1">
-                  <Button variant="outline" size="sm" className="w-full">Sign In</Button>
+                  <Button variant="outline" size="sm" className="w-full">Log In</Button>
                 </Link>
                 <Link href="/sign-up" className="flex-1">
                   <Button size="sm" className="w-full">Sign Up</Button>
