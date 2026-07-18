@@ -21,7 +21,7 @@ export default function SignInForm() {
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) setError(error.message)
-      else { router.push("/"); router.refresh() }
+      else window.location.href = "/"
     } catch {
       setError("An unexpected error occurred")
     } finally {
