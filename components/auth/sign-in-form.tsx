@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { signInAction } from "@/app/(auth)/sign-in/actions"
 
 export default function SignInForm() {
   const [email, setEmail] = useState("")
@@ -11,22 +11,18 @@ export default function SignInForm() {
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
   const supabase = createClient()
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) setError(error.message)
-      else window.location.href = "/"
-    } catch {
-      setError("An unexpected error occurred")
-    } finally {
+    const result = await signInAction(email, password)
+    if (result?.error) {
+      setError(result.error)
       setLoading(false)
     }
+    // On success the server action calls redirect("/") — page navigates away
   }
 
   const handleGoogleSignIn = async () => {
