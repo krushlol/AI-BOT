@@ -9,6 +9,7 @@ import Navbar from "./navbar"
 import CarCard from "./car-card"
 import { Car } from "@/lib/cars/types"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { unsaveCar } from "@/app/actions/cars"
 
 interface DashboardClientProps {
@@ -25,6 +26,7 @@ interface SavedSearch {
 }
 
 export default function DashboardClient({ user, allCars, initialSavedIds }: DashboardClientProps) {
+  const router = useRouter()
   const [savedIds, setSavedIds] = useState<string[]>(initialSavedIds)
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([
     { id: "1", name: "Electric SUVs", query: "/search?fuelType=electric&bodyStyle=suv", date: "2 days ago" },
@@ -36,8 +38,14 @@ export default function DashboardClient({ user, allCars, initialSavedIds }: Dash
 
   const removeSaved = async (id: string) => {
     setSavedIds((prev) => prev.filter((i) => i !== id))
-    const result = await unsaveCar(id)
-    if (result.error) {
+    try {
+      const result = await unsaveCar(id)
+      if (result.error) {
+        setSavedIds((prev) => prev.includes(id) ? prev : [...prev, id])
+      } else {
+        router.refresh()
+      }
+    } catch {
       setSavedIds((prev) => prev.includes(id) ? prev : [...prev, id])
     }
   }

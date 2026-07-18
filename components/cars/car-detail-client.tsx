@@ -53,8 +53,16 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
     if (!user) { router.push("/sign-in"); return }
     const wasSaved = saved
     setSaved(!wasSaved)
-    const result = await (wasSaved ? unsaveCar(car.id) : saveCar(car.id))
-    if (result.error) setSaved(wasSaved)
+    try {
+      const result = await (wasSaved ? unsaveCar(car.id) : saveCar(car.id))
+      if (result.error) {
+        setSaved(wasSaved)
+      } else {
+        router.refresh()
+      }
+    } catch {
+      setSaved(wasSaved)
+    }
   }
 
   const displayTrims = showAllTrims ? car.trimLevels : car.trimLevels.slice(0, 3)

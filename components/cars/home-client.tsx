@@ -198,8 +198,14 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
     if (!user) { router.push("/sign-in"); return }
     const isSaved = savedIds.includes(id)
     setSavedIds((prev) => isSaved ? prev.filter((i) => i !== id) : [...prev, id])
-    const result = await (isSaved ? unsaveCar(id) : saveCar(id))
-    if (result.error) {
+    try {
+      const result = await (isSaved ? unsaveCar(id) : saveCar(id))
+      if (result.error) {
+        setSavedIds((prev) => isSaved ? [...prev, id] : prev.filter((i) => i !== id))
+      } else {
+        router.refresh()
+      }
+    } catch {
       setSavedIds((prev) => isSaved ? [...prev, id] : prev.filter((i) => i !== id))
     }
   }
