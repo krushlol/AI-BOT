@@ -17,7 +17,7 @@ import { Car } from "@/lib/cars/types"
 import { LiveCar } from "@/lib/cars/live-types"
 import { MAINSTREAM_BRANDS } from "@/lib/cars/nhtsa"
 import { parseLiveQuery } from "@/lib/cars/parse-query"
-import { toggleSavedCar } from "@/lib/cars/save"
+import { saveCar, unsaveCar } from "@/app/actions/cars"
 
 const YEARS = Array.from({ length: new Date().getFullYear() - 1989 }, (_, i) => new Date().getFullYear() - i)
 
@@ -167,11 +167,9 @@ export default function SearchClient({ user, allCars, brands, bodyStyles, fuelTy
     if (!user) { router.push("/sign-in"); return }
     const isSaved = savedIds.includes(id)
     setSavedIds((prev) => isSaved ? prev.filter((i) => i !== id) : [...prev, id])
-    try {
-      await toggleSavedCar(user.id, id, isSaved)
-    } catch (err) {
+    const result = await (isSaved ? unsaveCar(id) : saveCar(id))
+    if (result.error) {
       setSavedIds((prev) => isSaved ? [...prev, id] : prev.filter((i) => i !== id))
-      alert("Failed to save car: " + (err instanceof Error ? err.message : String(err)))
     }
   }
 

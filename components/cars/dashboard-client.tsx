@@ -9,7 +9,7 @@ import Navbar from "./navbar"
 import CarCard from "./car-card"
 import { Car } from "@/lib/cars/types"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase/client"
+import { unsaveCar } from "@/app/actions/cars"
 
 interface DashboardClientProps {
   user: SupabaseUser
@@ -36,11 +36,8 @@ export default function DashboardClient({ user, allCars, initialSavedIds }: Dash
 
   const removeSaved = async (id: string) => {
     setSavedIds((prev) => prev.filter((i) => i !== id))
-    try {
-      const supabase = createClient()
-      const { error } = await supabase.from("saved_cars").delete().eq("user_id", user.id).eq("car_id", id)
-      if (error) throw error
-    } catch {
+    const result = await unsaveCar(id)
+    if (result.error) {
       setSavedIds((prev) => prev.includes(id) ? prev : [...prev, id])
     }
   }

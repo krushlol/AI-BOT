@@ -12,7 +12,7 @@ import CompareBar from "./compare-bar"
 import { Car } from "@/lib/cars/types"
 import { cars as allCarsData } from "@/lib/cars/data"
 import Link from "next/link"
-import { toggleSavedCar } from "@/lib/cars/save"
+import { saveCar, unsaveCar } from "@/app/actions/cars"
 import { parseLiveQuery } from "@/lib/cars/parse-query"
 import { computeCarAdvisorScore } from "@/lib/cars/score"
 
@@ -198,12 +198,9 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
     if (!user) { router.push("/sign-in"); return }
     const isSaved = savedIds.includes(id)
     setSavedIds((prev) => isSaved ? prev.filter((i) => i !== id) : [...prev, id])
-    try {
-      await toggleSavedCar(user.id, id, isSaved)
-    } catch (err) {
-      // Revert optimistic update on failure
+    const result = await (isSaved ? unsaveCar(id) : saveCar(id))
+    if (result.error) {
       setSavedIds((prev) => isSaved ? [...prev, id] : prev.filter((i) => i !== id))
-      alert("Failed to save car: " + (err instanceof Error ? err.message : String(err)))
     }
   }
 

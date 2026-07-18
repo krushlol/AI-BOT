@@ -18,7 +18,7 @@ import { useQuizAnswers } from "@/hooks/useQuizAnswers"
 import MatchBadge from "@/components/quiz/match-badge"
 import CarGallery from "@/components/cars/car-gallery"
 import { carGalleries } from "@/lib/cars/gallery"
-import { toggleSavedCar } from "@/lib/cars/save"
+import { saveCar, unsaveCar } from "@/app/actions/cars"
 import { getSpecExplanations } from "@/lib/cars/spec-explanations"
 import KnownIssues from "@/components/cars/known-issues"
 import LoanCalculator from "@/components/cars/loan-calculator"
@@ -53,12 +53,8 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
     if (!user) { router.push("/sign-in"); return }
     const wasSaved = saved
     setSaved(!wasSaved)
-    try {
-      await toggleSavedCar(user.id, car.id, wasSaved)
-    } catch (err) {
-      setSaved(wasSaved)
-      alert("Failed to save car: " + (err instanceof Error ? err.message : String(err)))
-    }
+    const result = await (wasSaved ? unsaveCar(car.id) : saveCar(car.id))
+    if (result.error) setSaved(wasSaved)
   }
 
   const displayTrims = showAllTrims ? car.trimLevels : car.trimLevels.slice(0, 3)
