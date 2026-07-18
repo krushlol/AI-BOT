@@ -34,12 +34,14 @@ function StarRating({ rating, label }: { rating?: number; label: string }) {
 
 export default function LiveCarDetailClient({ car, user }: LiveCarDetailClientProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(car.image ?? null)
+  const [imageLoading, setImageLoading] = useState(!car.image)
 
   useEffect(() => {
     if (car.image) return
     const key = `${car.brand}|${car.model}|${car.year}`
     if (detailImageCache.has(key)) {
       setImageUrl(detailImageCache.get(key) ?? null)
+      setImageLoading(false)
       return
     }
     const bs = car.specs?.bodyClass ? `&bodyStyle=${encodeURIComponent(car.specs.bodyClass)}` : ""
@@ -48,8 +50,9 @@ export default function LiveCarDetailClient({ car, user }: LiveCarDetailClientPr
       .then((data) => {
         detailImageCache.set(key, data.imageUrl ?? null)
         if (data.imageUrl) setImageUrl(data.imageUrl)
+        setImageLoading(false)
       })
-      .catch(() => { /* leave as null — show brand placeholder */ })
+      .catch(() => { setImageLoading(false) })
   }, [car.brand, car.model, car.year, car.image])
 
   const specRows = car.specs
@@ -97,6 +100,9 @@ export default function LiveCarDetailClient({ car, user }: LiveCarDetailClientPr
                   <div className="text-center text-gray-300">
                     <div className="text-7xl font-black">{car.brand[0]}</div>
                     <div className="text-lg">{car.brand}</div>
+                    {imageLoading && (
+                      <div className="text-xs text-gray-400 mt-2 animate-pulse">Loading photo…</div>
+                    )}
                   </div>
                 </div>
               )}

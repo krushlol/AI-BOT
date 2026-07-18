@@ -55,7 +55,7 @@ export default function KnownIssues({ brand, model, year, carId }: KnownIssuesPr
   if (loading) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <div className="h-5 bg-gray-200 rounded w-40 mb-4 animate-pulse" />
+        <p className="text-sm font-medium text-gray-500 animate-pulse mb-4">Loading owner complaints…</p>
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 animate-pulse">
           <div className="h-4 bg-amber-200 rounded w-48 mb-3" />
           <div className="space-y-2">

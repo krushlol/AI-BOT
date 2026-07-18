@@ -10,32 +10,35 @@ import { useState, useEffect } from "react"
 // Module-level cache so repeat renders don't re-fetch
 const imageCache = new Map<string, string | null>()
 
-function useLiveCarImage(car: LiveCar, index = 0): string | null {
+function useLiveCarImage(car: LiveCar, index = 0): { url: string | null; loading: boolean } {
   const [url, setUrl] = useState<string | null>(car.image ?? null)
+  const [loading, setLoading] = useState(!car.image)
 
   useEffect(() => {
     if (car.image) return
     const key = `${car.brand}|${car.model}|${car.year}`
     if (imageCache.has(key)) {
       setUrl(imageCache.get(key) ?? null)
+      setLoading(false)
       return
     }
     // Stagger requests: 300ms per card so we don't hammer Wikimedia all at once
     const delay = index * 300
     const timer = setTimeout(() => {
       const bs = car.bodyStyle ? `&bodyStyle=${encodeURIComponent(car.bodyStyle)}` : ""
-    fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}${bs}`)
+      fetch(`/api/car-image?brand=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}&year=${car.year}${bs}`)
         .then((r) => r.json())
         .then((data) => {
           imageCache.set(key, data.imageUrl ?? null)
           if (data.imageUrl) setUrl(data.imageUrl)
+          setLoading(false)
         })
-        .catch(() => { /* leave as null — show brand letter placeholder */ })
+        .catch(() => { setLoading(false) })
     }, delay)
     return () => clearTimeout(timer)
   }, [car.brand, car.model, car.year, car.image, index])
 
-  return url
+  return { url, loading }
 }
 
 interface LiveCarCardProps {
@@ -44,7 +47,7 @@ interface LiveCarCardProps {
 }
 
 export default function LiveCarCard({ car, index = 0 }: LiveCarCardProps) {
-  const imageUrl = useLiveCarImage(car, index)
+  const { url: imageUrl, loading: imageLoading } = useLiveCarImage(car, index)
   const fuelLabel = car.specs?.fuelType ?? car.fuelType ?? "Gas"
   const isElectric = fuelLabel.toLowerCase().includes("electric")
 
@@ -64,9 +67,10 @@ export default function LiveCarCard({ car, index = 0 }: LiveCarCardProps) {
               }}
             />
           ) : (
-            <div className="text-center text-gray-400 animate-pulse">
+            <div className="text-center text-gray-400">
               <div className="text-3xl font-bold">{car.brand[0]}</div>
               <div className="text-xs">{car.brand}</div>
+              {imageLoading && <div className="text-xs mt-1 animate-pulse">Loading photo…</div>}
             </div>
           )}
           <div className="absolute top-3 left-3 flex gap-1.5">
