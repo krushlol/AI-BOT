@@ -8,7 +8,8 @@ interface ComparePageProps {
 
 export default async function ComparePage({ searchParams }: ComparePageProps) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
   const initialIds = searchParams.ids ? searchParams.ids.split(",").slice(0, 4) : []
 

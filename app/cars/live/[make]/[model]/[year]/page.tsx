@@ -46,7 +46,8 @@ export default async function LiveCarDetailPage({ params }: { params: Params }) 
   const model = toTitleCase(modelRaw)
 
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
   // Fetch all in parallel; fall back to alias model name if primary returns nothing
   const aliasModel = MODEL_ALIASES[make]?.[model]

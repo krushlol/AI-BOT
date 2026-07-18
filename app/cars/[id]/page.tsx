@@ -21,7 +21,8 @@ export default async function CarDetailPage({ params }: CarDetailPageProps) {
   if (!car) notFound()
 
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
   const relatedCars = cars
     .filter((c) => c.id !== car.id && (c.brand === car.brand || c.bodyStyle === car.bodyStyle))

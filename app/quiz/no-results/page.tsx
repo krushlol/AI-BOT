@@ -8,7 +8,8 @@ export const metadata = { title: "No Matches Found — CarAdvisor" }
 
 export default async function NoResultsPage() {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
   return (
     <div className="min-h-screen bg-gray-50">
