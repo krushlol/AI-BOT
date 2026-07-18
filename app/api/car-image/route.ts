@@ -176,7 +176,7 @@ async function searchCommons(query: string, targetYear: number, model: string, s
 // so facelift/refresh photos may be wrong generation for older model year searches
 const WIKI_EXTRA_SKIP = ["_lci_", "mk2", "mk3", "second_generation", "third_generation"]
 
-async function wikiTitleLookup(title: string, targetYear?: number): Promise<string | null> {
+async function wikiTitleLookup(title: string, targetYear?: number, model?: string): Promise<string | null> {
   try {
     const res = await fetch(
       `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&redirects=1&prop=pageimages&pithumbsize=800&format=json&origin=*`,
@@ -189,14 +189,13 @@ async function wikiTitleLookup(title: string, targetYear?: number): Promise<stri
       if (!thumb || !isExteriorImage(thumb)) continue
       const lower = thumb.toLowerCase()
       if (WIKI_EXTRA_SKIP.some(kw => lower.includes(kw))) continue
+      // If a model name is supplied, reject thumbnails that clearly belong to a different model
+      if (model && !isModelRelevant(thumb, model)) continue
       if (targetYear) {
         const y = yearFromUrl(thumb)
-        // Require a verifiable year in the thumbnail URL — without one we can't tell
-        // if it's the right generation (e.g. Wikipedia shows N300 for 2024 Tacoma)
-        if (!y) continue
-        // Allow photos up to MAX_WIKI_YEAR_GAP years older (same gen cars) but no more than 1 year newer
-        // This prevents Wikipedia showing a 2025 Juniper refresh for a 2023 Model Y search
-        if (y < targetYear - MAX_WIKI_YEAR_GAP || y > targetYear + 1) continue
+        // Only reject if there IS a year in the URL and it's out of range.
+        // Year-less filenames are fine — Wikipedia article thumbnails are curated for the current gen.
+        if (y !== null && (y < targetYear - MAX_WIKI_YEAR_GAP || y > targetYear + 1)) continue
       }
       return thumb
     }
@@ -229,10 +228,10 @@ export async function GET(req: Request) {
 
   // Strategy 1: Wikipedia article thumbnail — curated current-gen image
   // Use body term for disambiguation: "Honda Odyssey minivan" not just "Honda Odyssey"
-  imageUrl = await wikiTitleLookup(bodyTerm ? `${brand} ${model} (${bodyTerm})` : `${brand} ${model}`, requestedYear)
-  if (!imageUrl) imageUrl = await wikiTitleLookup(`${brand} ${model}`, requestedYear)
+  imageUrl = await wikiTitleLookup(bodyTerm ? `${brand} ${model} (${bodyTerm})` : `${brand} ${model}`, requestedYear, model)
+  if (!imageUrl) imageUrl = await wikiTitleLookup(`${brand} ${model}`, requestedYear, model)
   // Strategy 1b: Wikipedia with short model — handles NHTSA trim names ("4Runner TRD Pro" → "Toyota 4Runner")
-  if (!imageUrl && shortModel) imageUrl = await wikiTitleLookup(`${brand} ${shortModel}`, requestedYear)
+  if (!imageUrl && shortModel) imageUrl = await wikiTitleLookup(`${brand} ${shortModel}`, requestedYear, shortModel)
 
   // Strategy 2+3: Year-targeted Commons with body type disambiguation
   if (!imageUrl && bodyTerm) {
@@ -243,7 +242,7 @@ export async function GET(req: Request) {
   // Fallback: "(North America)" Wikipedia — catches models where the base article is wrong
   // (e.g. "Honda Odyssey" → ATV, but "Honda Odyssey (North America)" → the minivan)
   // Placed after the "front" Commons search so a year-specific Commons photo wins if found
-  if (!imageUrl) imageUrl = await wikiTitleLookup(`${brand} ${model} (North America)`, requestedYear)
+  if (!imageUrl) imageUrl = await wikiTitleLookup(`${brand} ${model} (North America)`, requestedYear, model)
 
   if (!imageUrl) imageUrl = await searchCommons(`${sy} ${brand} ${model}`, requestedYear, model)
 
@@ -258,8 +257,8 @@ export async function GET(req: Request) {
   }
 
   // Also try Wikipedia with short/base model names
-  if (!imageUrl && shortModel) imageUrl = await wikiTitleLookup(`${brand} ${shortModel}`, requestedYear)
-  if (!imageUrl && baseModel !== model) imageUrl = await wikiTitleLookup(`${brand} ${baseModel}`, requestedYear)
+  if (!imageUrl && shortModel) imageUrl = await wikiTitleLookup(`${brand} ${shortModel}`, requestedYear, shortModel)
+  if (!imageUrl && baseModel !== model) imageUrl = await wikiTitleLookup(`${brand} ${baseModel}`, requestedYear, baseModel)
 
   // Last resort: any model-relevant photo, no year restriction
   if (!imageUrl && bodyTerm) imageUrl = await searchCommons(`${brand} ${model} ${bodyTerm}`, requestedYear, model, false)
