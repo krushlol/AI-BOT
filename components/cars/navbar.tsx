@@ -23,8 +23,25 @@ export default function Navbar({ user }: NavbarProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [profile, setProfile] = useState<Profile | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const userRef = useRef(user)
   const router = useRouter()
   const supabase = createClient()
+
+  // Keep ref in sync so the auth listener always sees the latest user value
+  useEffect(() => { userRef.current = user }, [user])
+
+  // Re-render from server whenever client auth state doesn't match server render.
+  // Handles OAuth flows where the Route Handler sets cookies but the first server
+  // render somehow misses them (router cache or timing).
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN') && session && !userRef.current) {
+        router.refresh()
+      }
+    })
+    return () => subscription.unsubscribe()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (!user) return
