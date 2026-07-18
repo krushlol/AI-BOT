@@ -35,11 +35,13 @@ export default function DashboardClient({ user, allCars, initialSavedIds }: Dash
   const savedCars = allCars.filter((c) => savedIds.includes(c.id))
 
   const removeSaved = async (id: string) => {
-    // Optimistic update
     setSavedIds((prev) => prev.filter((i) => i !== id))
-    if (user.id) {
+    try {
       const supabase = createClient()
-      await supabase.from("saved_cars").delete().eq("user_id", user.id).eq("car_id", id)
+      const { error } = await supabase.from("saved_cars").delete().eq("user_id", user.id).eq("car_id", id)
+      if (error) throw error
+    } catch {
+      setSavedIds((prev) => prev.includes(id) ? prev : [...prev, id])
     }
   }
   const removeSearch = (id: string) => setSavedSearches(savedSearches.filter((s) => s.id !== id))
