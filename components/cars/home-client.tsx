@@ -223,7 +223,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
               <p className="text-sm flex items-center gap-2">
                 <Heart className="w-4 h-4 shrink-0" />
                 <span>
-                  <Link href="/sign-up" className="font-semibold underline underline-offset-2">Sign up free</Link>
+                  <Link href="/sign-up" className="font-semibold underline underline-offset-2">Sign up</Link>
                   {" "}to save your car searches and favorites
                 </span>
               </p>
