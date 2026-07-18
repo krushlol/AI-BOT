@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import Link from "next/link"
+import { signInAction } from "@/app/(auth)/sign-in/actions"
 
 export default function SignInForm() {
   const [email, setEmail] = useState("")
@@ -16,13 +17,12 @@ export default function SignInForm() {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-      setError(error.message)
+    const result = await signInAction(email, password)
+    if (result?.error) {
+      setError(result.error)
       setLoading(false)
-      return
     }
-    window.location.href = "/"
+    // On success the server action sets the cookie and calls redirect("/")
   }
 
   const handleGoogleSignIn = async () => {
