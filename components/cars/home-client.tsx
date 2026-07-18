@@ -3,7 +3,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Search, ChevronRight, Car as CarIcon, Mail, Sparkles } from "lucide-react"
+import { Search, ChevronRight, Car as CarIcon, Mail, Sparkles, Heart, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Navbar from "./navbar"
@@ -152,7 +152,16 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
   const [savedIds, setSavedIds] = useState<string[]>(initialSavedIds)
   const [heroIndex, setHeroIndex] = useState(0)
   const [imageFading, setImageFading] = useState(false)
+  const [bannerVisible, setBannerVisible] = useState(false)
+  const [bannerDismissed, setBannerDismissed] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    if (!user) {
+      const t = setTimeout(() => setBannerVisible(true), 300)
+      return () => clearTimeout(t)
+    }
+  }, [user])
 
   // Both text and image track heroIndex; only the image gets the fade animation
   const currentHero = heroCarousel[heroIndex]
@@ -202,6 +211,29 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar user={user} />
+
+      {/* Sign-up banner — drops in for unauthenticated visitors */}
+      {!user && !bannerDismissed && (
+        <div
+          className="overflow-hidden transition-all duration-500 ease-out"
+          style={{ maxHeight: bannerVisible ? "80px" : "0px", opacity: bannerVisible ? 1 : 0 }}
+        >
+          <div className="bg-orange-500 text-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-3">
+              <p className="text-sm flex items-center gap-2">
+                <Heart className="w-4 h-4 shrink-0" />
+                <span>
+                  <Link href="/sign-up" className="font-semibold underline underline-offset-2">Sign up free</Link>
+                  {" "}to save your car searches and favorites
+                </span>
+              </p>
+              <button onClick={() => setBannerDismissed(true)} className="opacity-80 hover:opacity-100 shrink-0">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero — Editorial Top Pick */}
       <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white overflow-hidden">
