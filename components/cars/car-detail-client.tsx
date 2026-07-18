@@ -163,7 +163,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
             </div>
 
             {/* Quick stats */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
               {specExplanations.slice(0, 6).map(({ label, value, explanation }) => (
                 <div key={label} className="bg-white border border-gray-200 rounded-xl p-3 text-center">
                   <p className="text-xs text-gray-500 mb-1">{label}</p>

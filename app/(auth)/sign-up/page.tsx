@@ -14,7 +14,7 @@ export default async function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex min-h-screen items-start sm:items-center justify-center p-4 pt-10 sm:pt-4">
       <div className="w-full max-w-md">
         <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-500 transition mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to home

@@ -221,7 +221,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
           className="overflow-hidden transition-all duration-500 ease-out"
           style={{ maxHeight: bannerVisible ? "80px" : "0px", opacity: bannerVisible ? 1 : 0 }}
         >
-          <div className="bg-orange-500 text-white">
+          <div className="bg-orange-400/90 text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-3">
               <p className="text-sm flex items-center gap-2">
                 <Heart className="w-4 h-4 shrink-0" />
@@ -425,7 +425,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
               All brands <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-5 sm:grid-cols-10 gap-3">
+          <div className="grid grid-cols-5 sm:grid-cols-10 gap-2 sm:gap-3">
             {brandCards.map(({ brand, image }) => {
               const cfg = BRAND_CONFIG[brand] ?? { color: "text-gray-700", bg: "bg-gray-50 border-gray-200" }
               const displayName = brand === "Mercedes-Benz" ? "Mercedes" : brand
