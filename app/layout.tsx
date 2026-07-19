@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import Script from "next/script"
+import Link from "next/link"
 import "./globals.css"
 import ChatWidget from "@/components/chat/chat-widget"
 
@@ -32,6 +33,13 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         {children}
+        <footer className="border-t border-gray-200 mt-16 py-6 text-center text-xs text-gray-400">
+          <span>© {new Date().getFullYear()} CarAdvisor</span>
+          <span className="mx-2">·</span>
+          <Link href="/privacy" className="hover:text-gray-600 transition-colors">Privacy Policy</Link>
+          <span className="mx-2">·</span>
+          <Link href="/terms" className="hover:text-gray-600 transition-colors">Terms of Service</Link>
+        </footer>
         <ChatWidget />
       </body>
     </html>
