@@ -4,6 +4,7 @@ import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { generateCodeVerifier, generateCodeChallenge } from "@/lib/auth/google-pkce"
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("")
@@ -36,11 +37,24 @@ export default function SignUpForm() {
   const handleGoogleSignUp = async () => {
     setGoogleLoading(true)
     setError(null)
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    })
-    if (error) { setError(error.message); setGoogleLoading(false) }
+    try {
+      const verifier = generateCodeVerifier()
+      const challenge = await generateCodeChallenge(verifier)
+      document.cookie = `google_pkce=${verifier}; path=/; max-age=600; SameSite=Lax`
+      const params = new URLSearchParams({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+        redirect_uri: `${window.location.origin}/auth/callback`,
+        response_type: "code",
+        scope: "openid email profile",
+        code_challenge: challenge,
+        code_challenge_method: "S256",
+        prompt: "select_account",
+      })
+      window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params}`
+    } catch {
+      setError("Could not initiate Google sign-in")
+      setGoogleLoading(false)
+    }
   }
 
   return (
