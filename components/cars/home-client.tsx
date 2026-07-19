@@ -259,6 +259,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
           <div className="grid lg:grid-cols-2 gap-10 items-center" style={{ opacity: imageFading ? 0 : 1, transition: "opacity 400ms ease-in-out" }}>
             {/* Left — editorial content */}
             <div>
+              <p className="text-orange-300/70 text-xs font-semibold tracking-widest uppercase mb-3">CarAdvisor · Car Research &amp; Comparison</p>
               <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
                 {currentHero.badge} · {currentMonth}
