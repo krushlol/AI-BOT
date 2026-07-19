@@ -48,7 +48,7 @@ export default function TermsPage() {
 
         <section>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">8. Contact</h2>
-          <p>Questions? Email <a href="mailto:arush@caradvisor.app" className="text-orange-500 hover:underline">arush@caradvisor.app</a>.</p>
+          <p>Questions? Email <a href="mailto:supportcaradvisorusa@gmail.com" className="text-orange-500 hover:underline">supportcaradvisorusa@gmail.com</a>.</p>
         </section>
       </div>
     </main>

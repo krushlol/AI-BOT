@@ -48,7 +48,7 @@ export default function PrivacyPage() {
 
         <section>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">6. Contact</h2>
-          <p>Questions about this policy? Email us at <a href="mailto:arush@caradvisor.app" className="text-orange-500 hover:underline">arush@caradvisor.app</a>.</p>
+          <p>Questions about this policy? Email us at <a href="mailto:supportcaradvisorusa@gmail.com" className="text-orange-500 hover:underline">supportcaradvisorusa@gmail.com</a>.</p>
         </section>
       </div>
     </main>
