@@ -21,40 +21,42 @@ export default function Navbar({ user }: NavbarProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  // displayUser is the client-side source of truth — updated instantly via
+  // onAuthStateChange without a server round-trip (no router.refresh()).
+  const [displayUser, setDisplayUser] = useState(user ?? null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const userRef = useRef(user)
   const router = useRouter()
   const supabase = createClient()
 
-  // Keep ref in sync so the auth listener always sees the latest user value
-  useEffect(() => { userRef.current = user }, [user])
+  // Keep displayUser in sync when the server prop changes (e.g. on navigation).
+  useEffect(() => { setDisplayUser(user ?? null) }, [user])
 
-  // Re-render from server whenever client auth state doesn't match server render.
-  // Handles OAuth flows where the Route Handler sets cookies but the first server
-  // render somehow misses them (router cache or timing).
+  // Auth state changes update displayUser instantly — no server round-trip.
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN') && session && !userRef.current) {
-        router.refresh()
+      if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+        setDisplayUser(session?.user ?? null)
+      } else if (event === 'SIGNED_OUT') {
+        setDisplayUser(null)
+        setProfile(null)
       }
     })
     return () => subscription.unsubscribe()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Fetch profile once per user — not on every navigation.
   useEffect(() => {
-    if (!user) return
+    if (!displayUser) { setProfile(null); return }
     supabase
       .from("profiles")
       .select("username, avatar_url")
-      .eq("id", user.id)
+      .eq("id", displayUser.id)
       .single()
-      .then(({ data }) => {
-        if (data) setProfile(data)
-      })
+      .then(({ data }) => { if (data) setProfile(data) })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, pathname])
+  }, [displayUser?.id])
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -71,7 +73,6 @@ export default function Navbar({ user }: NavbarProps) {
     setDropdownOpen(false)
     await supabase.auth.signOut()
     router.push("/sign-in")
-    router.refresh()
   }
 
   const links = [
@@ -80,10 +81,10 @@ export default function Navbar({ user }: NavbarProps) {
     { href: "/calculator", label: "Calculator", icon: Calculator },
     { href: "/depreciation", label: "Resale Value", icon: TrendingDown },
     { href: "/contact", label: "Contact", icon: Mail },
-    ...(user ? [{ href: "/dashboard", label: "Saved", icon: Heart }] : []),
+    ...(displayUser ? [{ href: "/dashboard", label: "Saved", icon: Heart }] : []),
   ]
 
-  const displayName = profile?.username ?? user?.email?.split("@")[0] ?? ""
+  const displayName = profile?.username ?? displayUser?.email?.split("@")[0] ?? ""
   const initials = displayName.slice(0, 2).toUpperCase() || "??"
 
   const AvatarCircle = ({ size = "md" }: { size?: "sm" | "md" }) => {
@@ -147,7 +148,7 @@ export default function Navbar({ user }: NavbarProps) {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            {user ? (
+            {displayUser ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen((o) => !o)}
@@ -160,7 +161,7 @@ export default function Navbar({ user }: NavbarProps) {
                   <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl border border-gray-200 shadow-lg py-1 z-50">
                     <div className="px-4 py-2 border-b border-gray-100">
                       <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
-                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                      <p className="text-xs text-gray-500 truncate">{displayUser.email}</p>
                     </div>
                     <Link
                       href="/account"
@@ -212,7 +213,7 @@ export default function Navbar({ user }: NavbarProps) {
             </Link>
           ))}
           <div className="pt-2 border-t">
-            {user ? (
+            {displayUser ? (
               <div className="space-y-2">
                 <div className="flex items-center gap-2.5 py-1">
                   <AvatarCircle size="sm" />
