@@ -1,5 +1,6 @@
+export const runtime = "edge"
+
 import { createServerClient } from "@supabase/ssr"
-import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
@@ -16,7 +17,6 @@ export async function GET(request: NextRequest) {
       ? `https://${forwardedHost}`
       : origin
 
-    // Create the redirect response first so setAll can write cookies onto it
     const response = NextResponse.redirect(`${redirectBase}${next}`)
 
     const supabase = createServerClient(
@@ -36,10 +36,7 @@ export async function GET(request: NextRequest) {
     )
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      revalidatePath("/", "layout")
-      return response
-    }
+    if (!error) return response
     console.error("[auth/callback] exchangeCodeForSession error:", error.message)
   }
 
