@@ -12,6 +12,7 @@ import CompareBar from "./compare-bar"
 import { Car } from "@/lib/cars/types"
 import { cars as allCarsData } from "@/lib/cars/data"
 import Link from "next/link"
+import { createClient } from "@/lib/supabase/client"
 import { saveCar, unsaveCar } from "@/app/actions/cars"
 import { parseLiveQuery } from "@/lib/cars/parse-query"
 import { computeCarAdvisorScore } from "@/lib/cars/score"
@@ -155,6 +156,15 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
   const [bannerVisible, setBannerVisible] = useState(false)
   const [bannerDismissed, setBannerDismissed] = useState(false)
   const router = useRouter()
+  const supabase = createClient()
+
+  useEffect(() => {
+    if (!user) return
+    supabase.from("saved_cars").select("car_id").eq("user_id", user.id).then(({ data }) => {
+      if (data) setSavedIds(data.map((r: { car_id: string }) => r.car_id))
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id])
 
   useEffect(() => {
     if (!user) {
