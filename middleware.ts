@@ -23,7 +23,11 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  // getSession reads the JWT from the cookie — no network call, no risk of clearing cookies.
+  // getUser() would validate against Supabase's servers, but a failed call clears the session
+  // cookie before the page renders, causing a logged-out flash on every OAuth login.
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
   // Only /dashboard requires authentication
   const isProtected = request.nextUrl.pathname.startsWith('/dashboard')
