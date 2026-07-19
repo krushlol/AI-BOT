@@ -260,6 +260,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
             {/* Left — editorial content */}
             <div>
               <p className="text-orange-300 text-sm font-bold tracking-wider uppercase mb-3">CarAdvisor — Car Research &amp; Comparison</p>
+              <p className="text-white/60 text-sm mb-4 max-w-sm">CarAdvisor helps you research, compare, and find your perfect car. Browse specs, pricing, safety ratings, and expert scores for hundreds of models — all in one place.</p>
               <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
                 {currentHero.badge} · {currentMonth}
