@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Search, Heart, Menu, X, Mail, Sparkles, Calculator, Settings, LogOut, TrendingDown } from "lucide-react"
+import { Search, Heart, Menu, X, Mail, Sparkles, Calculator, Settings, LogOut, TrendingDown, Compass } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
@@ -80,6 +80,7 @@ export default function Navbar({ user }: NavbarProps) {
     { href: "/search", label: "Browse Cars", icon: Search },
     { href: "/calculator", label: "Calculator", icon: Calculator },
     { href: "/depreciation", label: "Resale Value", icon: TrendingDown },
+    { href: "/explore", label: "Explore", icon: Compass },
     { href: "/contact", label: "Contact", icon: Mail },
     ...(displayUser ? [{ href: "/dashboard", label: "Saved", icon: Heart }] : []),
   ]
