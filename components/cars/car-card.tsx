@@ -6,9 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Heart, GitCompare, Zap, Fuel } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { getBestForTags } from "@/lib/cars/tags"
 import { scoreCarForAnswers } from "@/lib/cars/quiz"
-import { computeCarAdvisorScore } from "@/lib/cars/score"
 import { useQuizAnswers } from "@/hooks/useQuizAnswers"
 import MatchBadge from "@/components/quiz/match-badge"
 
@@ -44,8 +42,6 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
   const isInCompare = compareIds.includes(car.id)
   const { answers } = useQuizAnswers()
   const matchScore = answers && !hideMatchBadge ? scoreCarForAnswers(car, answers) : null
-  const bestForTags = getBestForTags(car)
-  const advisorScore = computeCarAdvisorScore(car)
 
   const fuelStat = car.fuelType === "electric"
     ? `${car.specs.electricRange} mi range`
@@ -74,11 +70,6 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
             <MatchBadge score={matchScore} />
           </div>
         )}
-        {/* CarAdvisor score badge */}
-        <div className="absolute bottom-3 left-3 bg-black/65 backdrop-blur-sm text-white rounded-lg px-2 py-1 text-xs font-bold flex items-center gap-1">
-          <span className="text-yellow-400">{advisorScore.emoji}</span>
-          {advisorScore.score.toFixed(1)}
-        </div>
         {onCompare && (
           <button
             onClick={() => onCompare(car.id)}
@@ -102,16 +93,7 @@ export default function CarCard({ car, savedCarIds = [], compareIds = [], onSave
               {car.year} {car.model}
             </h3>
           </div>
-          <p className="text-xs text-gray-500 mb-2 line-clamp-2">{car.tagline}</p>
-          {bestForTags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mb-3">
-              {bestForTags.map((tag) => (
-                <span key={tag.label} className="inline-flex items-center gap-1 text-xs bg-orange-50 text-orange-600 border border-orange-100 px-2 py-0.5 rounded-full font-medium">
-                  {tag.emoji} {tag.label}
-                </span>
-              ))}
-            </div>
-          )}
+          <p className="text-xs text-gray-500 mb-3 line-clamp-2">{car.tagline}</p>
         </Link>
 
         <div className="grid grid-cols-3 gap-2 mb-4">

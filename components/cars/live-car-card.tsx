@@ -73,12 +73,11 @@ export default function LiveCarCard({ car, index = 0 }: LiveCarCardProps) {
               {imageLoading && <div className="text-xs mt-1 animate-pulse">Loading photo…</div>}
             </div>
           )}
-          <div className="absolute top-3 left-3 flex gap-1.5">
-            <Badge className="bg-indigo-600 text-white text-xs">Live</Badge>
-            {car.bodyStyle && (
+          {car.bodyStyle && (
+            <div className="absolute top-3 left-3">
               <Badge variant="secondary" className="text-xs capitalize">{car.bodyStyle}</Badge>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </Link>
 
