@@ -563,53 +563,6 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
       </div>
 
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
-            <div className="col-span-2 sm:col-span-1">
-              <div className="flex items-center gap-2 text-white font-bold text-lg mb-3">
-                <CarIcon className="w-6 h-6 text-blue-400" />
-                CarAdvisor
-              </div>
-              <p className="text-sm leading-relaxed">Your all-in-one car research tool. Compare, discover, and find the perfect vehicle.</p>
-            </div>
-            <div>
-              <p className="text-white font-semibold text-sm mb-3">Browse</p>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/search" className="hover:text-white transition-colors">All Cars</Link></li>
-                <li><Link href="/search?fuelType=electric" className="hover:text-white transition-colors">Electric</Link></li>
-                <li><Link href="/search?fuelType=hybrid" className="hover:text-white transition-colors">Hybrid</Link></li>
-                <li><Link href="/search?bodyStyle=suv" className="hover:text-white transition-colors">SUVs</Link></li>
-                <li><Link href="/search?bodyStyle=truck" className="hover:text-white transition-colors">Trucks</Link></li>
-              </ul>
-            </div>
-            <div>
-              <p className="text-white font-semibold text-sm mb-3">Tools</p>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/calculator" className="hover:text-white transition-colors">Loan Calculator</Link></li>
-                <li><Link href="/search" className="hover:text-white transition-colors">Live Catalog</Link></li>
-                <li><Link href="/dashboard" className="hover:text-white transition-colors">Saved Cars</Link></li>
-              </ul>
-            </div>
-            <div>
-              <p className="text-white font-semibold text-sm mb-3">Company</p>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                <li>
-                  <a href="mailto:arushchirp@gmail.com" className="hover:text-white transition-colors flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5" /> Email Us
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
-            <p>© {new Date().getFullYear()} CarAdvisor. All rights reserved.</p>
-            <p>Safety data sourced from <a href="https://www.nhtsa.gov" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">NHTSA</a>.</p>
-          </div>
-        </div>
-      </footer>
 
       <CompareBar compareIds={compareIds} onRemove={(id) => setCompareIds((p) => p.filter((i) => i !== id))} onClear={() => setCompareIds([])} />
     </div>
