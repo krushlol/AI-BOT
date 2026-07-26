@@ -1,33 +1,41 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 
+const AUTH_PATHS = ["/sign-up", "/sign-in", "/auth"]
+
 export default function SignupGate() {
   const [show, setShow] = useState(false)
+  const pathname = usePathname()
+  const onAuthPage = AUTH_PATHS.some(p => pathname.startsWith(p))
 
   useEffect(() => {
+    if (onAuthPage) return
     const supabase = createClient()
+    let timer: ReturnType<typeof setTimeout>
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) return
-      const timer = setTimeout(() => setShow(true), 2 * 60 * 1000)
-      return () => clearTimeout(timer)
+      timer = setTimeout(() => setShow(true), 2 * 60 * 1000)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       if (session) setShow(false)
     })
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => {
+      clearTimeout(timer)
+      subscription.unsubscribe()
+    }
+  }, [onAuthPage])
 
-  if (!show) return null
+  if (!show || onAuthPage) return null
 
   return (
     <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/70 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 max-w-md w-full text-center">
-        {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-6">
           <svg width="32" height="32" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="15" cy="15" r="13" stroke="#f97316" strokeWidth="2.5"/>
