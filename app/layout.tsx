@@ -4,6 +4,7 @@ import Script from "next/script"
 import Link from "next/link"
 import "./globals.css"
 import ChatWidget from "@/components/chat/chat-widget"
+import SignupGate from "@/components/signup-gate"
 
 const GA_ID = "G-KYFYQWTP2X"
 
@@ -41,6 +42,7 @@ export default function RootLayout({
           <Link href="/terms" className="hover:text-gray-600 transition-colors">Terms of Service</Link>
         </footer>
         <ChatWidget />
+        <SignupGate />
       </body>
     </html>
   )
