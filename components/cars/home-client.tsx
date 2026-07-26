@@ -239,6 +239,20 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
 
       {/* Hero — Editorial Top Pick */}
       <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-white overflow-hidden">
+        <button
+          onClick={() => { setImageFading(true); setTimeout(() => { setHeroIndex(i => (i - 1 + heroCarousel.length) % heroCarousel.length); setImageFading(false) }, 350) }}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors hidden lg:flex"
+          aria-label="Previous car"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => { setImageFading(true); setTimeout(() => { setHeroIndex(i => (i + 1) % heroCarousel.length); setImageFading(false) }, 350) }}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors hidden lg:flex"
+          aria-label="Next car"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute top-10 left-10 w-64 h-64 rounded-full bg-white blur-3xl" />
           <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-orange-300 blur-3xl" />
@@ -324,20 +338,6 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                   <p className="text-xs text-orange-300 font-semibold uppercase tracking-wider">Starting at</p>
                   <p className="text-2xl font-black">${currentHero.car.basePrice.toLocaleString()}</p>
                 </div>
-                <button
-                  onClick={() => { setImageFading(true); setTimeout(() => { setHeroIndex(i => (i - 1 + heroCarousel.length) % heroCarousel.length); setImageFading(false) }, 350) }}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors"
-                  aria-label="Previous car"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => { setImageFading(true); setTimeout(() => { setHeroIndex(i => (i + 1) % heroCarousel.length); setImageFading(false) }, 350) }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors"
-                  aria-label="Next car"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
               </div>
             </div>
           </div>
