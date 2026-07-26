@@ -45,18 +45,11 @@ export default function SignupGate() {
           Create a free account to keep browsing, save your favorite cars, and get personalized recommendations.
         </p>
 
-        <div className="flex flex-col gap-3">
-          <Link href="/sign-up" className="w-full">
-            <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold h-11 text-base">
-              Create Free Account
-            </Button>
-          </Link>
-          <Link href="/sign-in" className="w-full">
-            <Button variant="outline" className="w-full h-11 text-base font-semibold">
-              Log In
-            </Button>
-          </Link>
-        </div>
+        <Link href="/sign-up" className="w-full">
+          <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold h-11 text-base">
+            Create Free Account
+          </Button>
+        </Link>
       </div>
     </div>
   )
