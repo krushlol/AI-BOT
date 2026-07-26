@@ -176,17 +176,6 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
   // Both text and image track heroIndex; only the image gets the fade animation
   const currentHero = heroCarousel[heroIndex]
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setImageFading(true)
-      setTimeout(() => {
-        setHeroIndex(i => (i + 1) % heroCarousel.length)
-        setImageFading(false)
-      }, 500)
-    }, 5000)
-    return () => clearInterval(timer)
-  }, [])
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (!query.trim()) return
