@@ -3,7 +3,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Search, ChevronLeft, ChevronRight, Car as CarIcon, Mail, Sparkles, Heart, X } from "lucide-react"
+import { Search, ChevronLeft, ChevronRight, Car as CarIcon, Mail, Sparkles, Heart, X, Zap, Leaf, DollarSign, Users, Gauge, BarChart2, MessageSquare, Bot } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Navbar from "./navbar"
@@ -26,12 +26,12 @@ interface HomeClientProps {
 }
 
 const BODY_STYLES = [
-  { label: "Sedan", value: "sedan", emoji: "🚗" },
-  { label: "SUV", value: "suv", emoji: "🚙" },
-  { label: "Truck", value: "truck", emoji: "🛻" },
-  { label: "Coupe", value: "coupe", emoji: "🏎" },
-  { label: "Wagon", value: "wagon", emoji: "🚐" },
-  { label: "Van", value: "van", emoji: "🚌" },
+  { label: "Sedan", value: "sedan" },
+  { label: "SUV", value: "suv" },
+  { label: "Truck", value: "truck" },
+  { label: "Coupe", value: "coupe" },
+  { label: "Wagon", value: "wagon" },
+  { label: "Van", value: "van" },
 ]
 
 const STYLE_IMAGE_OVERRIDES: Record<string, string> = {
@@ -47,10 +47,10 @@ const styleImages: Record<string, string> = Object.fromEntries(
 )
 
 const FUEL_TYPES = [
-  { label: "Electric", value: "electric", emoji: "⚡", desc: "Zero emissions", color: "from-green-900/70" },
-  { label: "Hybrid", value: "hybrid", emoji: "🌿", desc: "Best of both", color: "from-teal-900/70" },
-  { label: "Plug-in Hybrid", value: "plug-in hybrid", emoji: "🔌", desc: "Electric + gas", color: "from-slate-900/70" },
-  { label: "Gas", value: "gasoline", emoji: "⛽", desc: "Classic power", color: "from-orange-900/70" },
+  { label: "Electric", value: "electric", desc: "Zero emissions", color: "from-green-900/70" },
+  { label: "Hybrid", value: "hybrid", desc: "Best of both", color: "from-teal-900/70" },
+  { label: "Plug-in Hybrid", value: "plug-in hybrid", desc: "Electric + gas", color: "from-slate-900/70" },
+  { label: "Gas", value: "gasoline", desc: "Classic power", color: "from-orange-900/70" },
 ]
 
 const fuelImages: Record<string, string> = Object.fromEntries(
@@ -279,7 +279,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                 <span className="text-2xl font-black text-orange-400">{currentHero.score.score.toFixed(1)}</span>
                 <div className="w-px h-8 bg-white/20" />
                 <div>
-                  <div className="text-sm font-bold">{currentHero.score.emoji} {currentHero.score.label}</div>
+                  <div className="text-sm font-bold">{currentHero.score.label}</div>
                   <div className="text-xs text-orange-200">{currentHero.score.reason}</div>
                 </div>
               </div>
@@ -345,12 +345,12 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
           {/* Quick category pills */}
           <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-white/10">
             {[
-              { label: "⚡ Electric", href: "/search?fuelType=electric" },
-              { label: "🌿 Hybrid", href: "/search?fuelType=hybrid" },
-              { label: "🚙 SUV", href: "/search?bodyStyle=suv" },
-              { label: "💰 Under $40k", href: "/search?maxPrice=40000" },
-              { label: "👨‍👩‍👧 Family", href: "/search?seating=7" },
-              { label: "🏎 Sports", href: "/search?bodyStyle=coupe" },
+              { label: "Electric", href: "/search?fuelType=electric" },
+              { label: "Hybrid", href: "/search?fuelType=hybrid" },
+              { label: "SUV", href: "/search?bodyStyle=suv" },
+              { label: "Under $40k", href: "/search?maxPrice=40000" },
+              { label: "Family", href: "/search?seating=7" },
+              { label: "Sports", href: "/search?bodyStyle=coupe" },
             ].map(({ label, href }) => (
               <Link key={label} href={href} className="bg-white/10 hover:bg-white/20 text-white text-xs px-3 py-1.5 rounded-full transition-colors border border-white/10">
                 {label}
@@ -369,7 +369,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
           </Link>
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-          {BODY_STYLES.map(({ label, value, emoji }) => (
+          {BODY_STYLES.map(({ label, value }) => (
             <Link
               key={value}
               href={`/search?bodyStyle=${value}`}
@@ -382,7 +382,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                   className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               ) : (
-                <div className="w-full h-24 bg-gray-100 flex items-center justify-center text-3xl">{emoji}</div>
+                <div className="w-full h-24 bg-gray-100 flex items-center justify-center"><CarIcon className="w-8 h-8 text-gray-400" /></div>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
               <div className="absolute bottom-2 left-0 right-0 text-center">
@@ -400,7 +400,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
             <h2 className="text-2xl font-bold text-gray-900">Browse by Fuel Type</h2>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {FUEL_TYPES.map(({ label, value, emoji, desc, color }) => (
+            {FUEL_TYPES.map(({ label, value, desc, color }) => (
               <Link
                 key={value}
                 href={`/search?fuelType=${encodeURIComponent(value)}`}
@@ -413,16 +413,13 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                     className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
-                  <div className="w-full h-36 bg-gray-100 flex items-center justify-center text-5xl">{emoji}</div>
+                  <div className="w-full h-36 bg-gray-100 flex items-center justify-center"><Zap className="w-10 h-10 text-gray-400" /></div>
                 )}
                 <div className={`absolute inset-0 bg-gradient-to-t ${color} via-black/20 to-transparent`} />
                 <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">{emoji}</span>
-                    <div>
-                      <p className="text-white text-sm font-bold leading-tight">{label}</p>
-                      <p className="text-white/70 text-xs">{desc}</p>
-                    </div>
+                  <div>
+                    <p className="text-white text-sm font-bold leading-tight">{label}</p>
+                    <p className="text-white/70 text-xs">{desc}</p>
                   </div>
                 </div>
               </Link>
@@ -476,9 +473,9 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
         {/* Category labels */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           {[
-            { label: "⚡ Best Electric", car: topPickEV, note: "Longest range · Best tech · Top rated" },
-            { label: "🌿 Best Hybrid", car: topPickHybrid, note: "Most efficient · Lowest fuel costs" },
-            { label: "💰 Best Under $40k", car: topPickValue, note: "Best value · No compromises" },
+            { label: "Best Electric", car: topPickEV, note: "Longest range · Best tech · Top rated" },
+            { label: "Best Hybrid", car: topPickHybrid, note: "Most efficient · Lowest fuel costs" },
+            { label: "Best Under $40k", car: topPickValue, note: "Best value · No compromises" },
           ].map(({ label, car, note }) => {
             const sc = computeCarAdvisorScore(car)
             return (
@@ -488,7 +485,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute top-2 left-2 bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{label}</div>
                   <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded-lg">
-                    {sc.emoji} {sc.score.toFixed(1)}
+                    {sc.score.toFixed(1)} / 10
                   </div>
                 </div>
                 <div className="p-3">
@@ -528,29 +525,31 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
-                emoji: "📊",
+                icon: BarChart2,
                 title: "Honest Scores",
                 desc: "Every car gets a score out of 10 based on safety, efficiency, value, and freshness. No ads. No sponsored rankings. Just data.",
                 cta: "Browse scored cars →",
                 href: "/search",
               },
               {
-                emoji: "💬",
+                icon: MessageSquare,
                 title: "Real Reddit Opinions",
                 desc: "We surface actual discussions from r/cars, r/whatcarshouldIbuy, and r/askcarsales — not press releases or manufacturer copy.",
                 cta: "See an example →",
                 href: `/cars/${heroCarousel[0].car.id}`,
               },
               {
-                emoji: "🤖",
+                icon: Sparkles,
                 title: "AI Car Advisor",
                 desc: "Tell our AI about your life — budget, family, commute — and it recommends the right car in seconds. Try it now.",
                 cta: "Chat with AI →",
                 href: "/quiz",
               },
-            ].map(({ emoji, title, desc, cta, href }) => (
+            ].map(({ icon: Icon, title, desc, cta, href }) => (
               <div key={title} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors">
-                <div className="text-4xl mb-4">{emoji}</div>
+                <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4">
+                  <Icon className="w-5 h-5 text-orange-400" />
+                </div>
                 <h3 className="font-bold text-xl mb-2">{title}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed mb-4">{desc}</p>
                 <Link href={href} className="text-orange-400 hover:text-orange-300 text-sm font-semibold transition-colors">
