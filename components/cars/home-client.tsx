@@ -3,7 +3,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Search, ChevronRight, Car as CarIcon, Mail, Sparkles, Heart, X } from "lucide-react"
+import { Search, ChevronLeft, ChevronRight, Car as CarIcon, Mail, Sparkles, Heart, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Navbar from "./navbar"
@@ -311,7 +311,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
               </form>
             </div>
 
-            {/* Right — rotating car image only */}
+            {/* Right — car image with prev/next arrows */}
             <div className="hidden lg:block relative">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
                 <img
@@ -324,6 +324,20 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
                   <p className="text-xs text-orange-300 font-semibold uppercase tracking-wider">Starting at</p>
                   <p className="text-2xl font-black">${currentHero.car.basePrice.toLocaleString()}</p>
                 </div>
+                <button
+                  onClick={() => { setImageFading(true); setTimeout(() => { setHeroIndex(i => (i - 1 + heroCarousel.length) % heroCarousel.length); setImageFading(false) }, 350) }}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors"
+                  aria-label="Previous car"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => { setImageFading(true); setTimeout(() => { setHeroIndex(i => (i + 1) % heroCarousel.length); setImageFading(false) }, 350) }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors"
+                  aria-label="Next car"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
             </div>
           </div>
