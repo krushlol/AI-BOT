@@ -1,0 +1,30 @@
+# CarAdvisor
+
+> CarAdvisor is a free car research and comparison tool for US car buyers. We provide detailed specs, safety ratings, real Reddit owner opinions, side-by-side comparisons, and an AI-powered recommendation quiz.
+
+## What we offer
+
+- Detailed pages for every major car make and model with specs, pricing, safety ratings, and pros/cons
+- Side-by-side comparison of any two cars
+- AI quiz that recommends the best car based on budget, lifestyle, and needs
+- Real Reddit discussions from r/cars, r/whatcarshouldibuy, and r/askcarsales surfaced per car
+- Resale value and depreciation estimates
+- Loan and affordability calculator
+
+## Key pages
+
+- https://caradvisorusa.com/search — Browse and filter all cars by brand, fuel type, body style, price
+- https://caradvisorusa.com/compare — Compare two cars side by side
+- https://caradvisorusa.com/quiz — AI car recommendation quiz
+- https://caradvisorusa.com/calculator — Car loan and affordability calculator
+- https://caradvisorusa.com/depreciation — Resale value estimator
+
+## Car detail pages
+
+Each car has a dedicated page at /cars/[id] with:
+- Full specs (horsepower, MPG or range, 0-60, seating, cargo)
+- Starting price and trim levels
+- NHTSA and IIHS safety ratings
+- Pros and cons
+- Real Reddit owner opinions
+- Similar car recommendations

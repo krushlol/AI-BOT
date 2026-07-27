@@ -39,5 +39,25 @@ export default async function CarDetailPage({ params }: CarDetailPageProps) {
     initialSaved = !!data
   }
 
-  return <CarDetailClient car={car} user={user} relatedCars={relatedCars} initialSaved={initialSaved} />
+  const vehicleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Vehicle",
+    "name": `${car.year} ${car.brand} ${car.model}`,
+    "brand": { "@type": "Brand", "name": car.brand },
+    "model": car.model,
+    "vehicleModelDate": String(car.year),
+    "bodyType": car.bodyStyle,
+    "fuelType": car.fuelType,
+    "vehicleEngine": { "@type": "EngineSpecification", "enginePower": `${car.specs.horsepower} HP` },
+    "offers": { "@type": "Offer", "price": car.basePrice, "priceCurrency": "USD" },
+    "description": car.description,
+    "url": `https://caradvisorusa.com/cars/${car.id}`,
+  }
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(vehicleSchema) }} />
+      <CarDetailClient car={car} user={user} relatedCars={relatedCars} initialSaved={initialSaved} />
+    </>
+  )
 }
