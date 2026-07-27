@@ -1,7 +1,7 @@
 "use client"
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Heart, GitCompare, Star, CheckCircle, XCircle, Sparkles, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -43,6 +43,16 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
   const [saved, setSaved] = useState(initialSaved)
   const [showAllTrims, setShowAllTrims] = useState(false)
   const [heroImage, setHeroImage] = useState(car.image)
+  const [activeTab, setActiveTab] = useState("overview")
+
+  useEffect(() => {
+    if (window.location.hash === "#reddit") {
+      setActiveTab("reviews")
+      setTimeout(() => {
+        document.getElementById("reddit")?.scrollIntoView({ behavior: "smooth" })
+      }, 100)
+    }
+  }, [])
   const { answers } = useQuizAnswers()
   const matchScore = answers ? scoreCarForAnswers(car, answers) : null
   const bestForTags = getBestForTags(car)
@@ -136,7 +146,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
         </div>
 
         {/* Tabs — everything below the hero lives here */}
-        <Tabs defaultValue="overview" className="mb-10">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-10">
           <TabsList className="mb-5 w-full flex overflow-x-auto gap-1 h-auto p-1 bg-white border border-gray-200 rounded-xl">
             <TabsTrigger value="overview" className="flex-shrink-0">Overview</TabsTrigger>
             <TabsTrigger value="specs" className="flex-shrink-0">Specs</TabsTrigger>
