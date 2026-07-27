@@ -14,6 +14,20 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://caradvisorusa.com"),
   title: "CarAdvisor — Car Research & Comparison",
   description: "Research, compare, and find your perfect car. Compare specs, prices, features, and reviews for every make and model.",
+  icons: {
+    icon: [
+      { url: "/caradvisor-icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/caradvisor-icon.svg",
+  },
+  openGraph: {
+    title: "CarAdvisor — Car Research & Comparison",
+    description: "Research, compare, and find your perfect car. Compare specs, prices, features, and reviews for every make and model.",
+    url: "https://caradvisorusa.com",
+    siteName: "CarAdvisor",
+    images: [{ url: "/caradvisor-icon.svg", width: 120, height: 120 }],
+    type: "website",
+  },
 }
 
 export default function RootLayout({
@@ -24,6 +38,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <Script id="org-schema" type="application/ld+json" strategy="beforeInteractive">{`
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "CarAdvisor",
+            "url": "https://caradvisorusa.com",
+            "logo": "https://caradvisorusa.com/caradvisor-icon.svg"
+          }
+        `}</Script>
         <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
         <Script id="ga-init" strategy="afterInteractive">{`
           window.dataLayer = window.dataLayer || [];
