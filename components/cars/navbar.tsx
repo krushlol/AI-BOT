@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Search, Heart, Menu, X, Mail, Sparkles, Calculator, Settings, LogOut, TrendingDown } from "lucide-react"
+import { Search, Heart, Menu, X, Mail, Sparkles, Calculator, Settings, LogOut, TrendingDown, GitCompare, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
@@ -17,22 +17,31 @@ interface Profile {
   avatar_url: string | null
 }
 
+const mainLinks = [
+  { href: "/search", label: "Browse Cars", icon: Search },
+  { href: "/compare", label: "Compare", icon: GitCompare },
+]
+
+const toolLinks = [
+  { href: "/calculator", label: "Calculator", icon: Calculator },
+  { href: "/depreciation", label: "Resale Value", icon: TrendingDown },
+  { href: "/contact", label: "Contact", icon: Mail },
+]
+
 export default function Navbar({ user }: NavbarProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  // displayUser is the client-side source of truth — updated instantly via
-  // onAuthStateChange without a server round-trip (no router.refresh()).
+  const [toolsOpen, setToolsOpen] = useState(false)
   const [displayUser, setDisplayUser] = useState(user ?? null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const toolsRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const supabase = createClient()
 
-  // Keep displayUser in sync when the server prop changes (e.g. on navigation).
   useEffect(() => { setDisplayUser(user ?? null) }, [user])
 
-  // Auth state changes update displayUser instantly — no server round-trip.
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
@@ -46,7 +55,6 @@ export default function Navbar({ user }: NavbarProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Fetch profile once per user — not on every navigation.
   useEffect(() => {
     if (!displayUser) { setProfile(null); return }
     supabase
@@ -58,16 +66,22 @@ export default function Navbar({ user }: NavbarProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayUser?.id])
 
-  // Close dropdown on outside click
+  // Close both dropdowns on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false)
       }
+      if (toolsRef.current && !toolsRef.current.contains(e.target as Node)) {
+        setToolsOpen(false)
+      }
     }
     document.addEventListener("mousedown", handler)
     return () => document.removeEventListener("mousedown", handler)
   }, [])
+
+  // Close mobile menu on route change (e.g. browser back)
+  useEffect(() => { setMobileOpen(false) }, [pathname])
 
   const handleSignOut = async () => {
     setDropdownOpen(false)
@@ -75,25 +89,14 @@ export default function Navbar({ user }: NavbarProps) {
     router.push("/sign-in")
   }
 
-  const links = [
-    { href: "/quiz", label: "Find My Car", icon: Sparkles, highlight: true },
-    { href: "/search", label: "Browse Cars", icon: Search },
-    { href: "/calculator", label: "Calculator", icon: Calculator },
-    { href: "/depreciation", label: "Resale Value", icon: TrendingDown },
-
-    { href: "/contact", label: "Contact", icon: Mail },
-    ...(displayUser ? [{ href: "/dashboard", label: "Saved", icon: Heart }] : []),
-  ]
-
-  const displayName = profile?.username ?? displayUser?.email?.split("@")[0] ?? ""
-  const initials = displayName.slice(0, 2).toUpperCase() || "??"
+  const isToolActive = toolLinks.some(l => pathname.startsWith(l.href))
 
   const AvatarCircle = ({ size = "md" }: { size?: "sm" | "md" }) => {
     const dim = size === "sm" ? "w-7 h-7 text-xs" : "w-9 h-9 text-sm"
     if (profile?.avatar_url) {
       return (
         <img
-          src={`${profile.avatar_url}?t=${Date.now()}`}
+          src={profile.avatar_url}
           alt={displayName}
           className={`${dim} rounded-full object-cover border border-gray-200`}
         />
@@ -106,11 +109,15 @@ export default function Navbar({ user }: NavbarProps) {
     )
   }
 
+  const displayName = profile?.username ?? displayUser?.email?.split("@")[0] ?? ""
+  const initials = displayName.slice(0, 2).toUpperCase() || "??"
+
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 font-bold text-xl flex-shrink-0">
             <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="15" cy="15" r="13" stroke="#f97316" strokeWidth="2.5"/>
               <circle cx="15" cy="15" r="3.5" fill="#f97316"/>
@@ -122,32 +129,75 @@ export default function Navbar({ user }: NavbarProps) {
             <span className="text-slate-900">Car<span className="text-orange-500">Advisor</span></span>
           </Link>
 
+          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-6">
-            {links.map(({ href, label, icon: Icon, highlight }) => (
-              highlight ? (
-                <Link
-                  key={href}
-                  href={href}
-                  className="flex items-center gap-1.5 text-sm font-semibold bg-orange-500 text-white px-3 py-1.5 rounded-full hover:bg-orange-600 transition-colors"
-                >
-                  <Icon className="w-4 h-4" />
-                  {label}
-                </Link>
-              ) : (
-                <Link
-                  key={href}
-                  href={href}
-                  className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
-                    pathname.startsWith(href) ? "text-orange-600" : "text-gray-600 hover:text-orange-600"
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  {label}
-                </Link>
-              )
+            {mainLinks.map(({ href, label, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                  pathname.startsWith(href) ? "text-orange-600" : "text-gray-600 hover:text-orange-600"
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {label}
+              </Link>
             ))}
+
+            {/* Tools dropdown */}
+            <div className="relative" ref={toolsRef}>
+              <button
+                onClick={() => setToolsOpen(o => !o)}
+                className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                  isToolActive ? "text-orange-600" : "text-gray-600 hover:text-orange-600"
+                }`}
+              >
+                Tools
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${toolsOpen ? "rotate-180" : ""}`} />
+              </button>
+              {toolsOpen && (
+                <div className="absolute left-0 mt-2 w-44 bg-white rounded-xl border border-gray-200 shadow-lg py-1 z-50">
+                  {toolLinks.map(({ href, label, icon: Icon }) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      onClick={() => setToolsOpen(false)}
+                      className={`flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 ${
+                        pathname.startsWith(href) ? "text-orange-600" : "text-gray-700"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 text-gray-400" />
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Saved — logged-in only */}
+            {displayUser && (
+              <Link
+                href="/dashboard"
+                className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                  pathname.startsWith("/dashboard") ? "text-orange-600" : "text-gray-600 hover:text-orange-600"
+                }`}
+              >
+                <Heart className="w-4 h-4" />
+                Saved
+              </Link>
+            )}
+
+            {/* Find My Car CTA */}
+            <Link
+              href="/quiz"
+              className="flex items-center gap-1.5 text-sm font-semibold bg-orange-500 text-white px-3 py-1.5 rounded-full hover:bg-orange-600 transition-colors"
+            >
+              <Sparkles className="w-4 h-4" />
+              Find My Car
+            </Link>
           </div>
 
+          {/* Desktop auth */}
           <div className="hidden md:flex items-center gap-3">
             {displayUser ? (
               <div className="relative" ref={dropdownRef}>
@@ -157,7 +207,6 @@ export default function Navbar({ user }: NavbarProps) {
                 >
                   <AvatarCircle />
                 </button>
-
                 {dropdownOpen && (
                   <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl border border-gray-200 shadow-lg py-1 z-50">
                     <div className="px-4 py-2 border-b border-gray-100">
@@ -194,36 +243,76 @@ export default function Navbar({ user }: NavbarProps) {
             )}
           </div>
 
+          {/* Hamburger */}
           <button className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
+      {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="md:hidden border-t bg-white px-4 py-4 space-y-3">
-          {links.map(({ href, label, icon: Icon }) => (
+        <div className="md:hidden border-t bg-white px-4 py-4 space-y-1">
+          {/* Main links */}
+          {mainLinks.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
-              className="flex items-center gap-2 text-sm font-medium text-gray-700"
-              onClick={() => setMobileOpen(false)}
+              className={`flex items-center gap-2 text-sm font-medium px-2 py-2.5 rounded-lg transition-colors ${
+                pathname.startsWith(href) ? "text-orange-600 bg-orange-50" : "text-gray-700 hover:bg-gray-50"
+              }`}
             >
               <Icon className="w-4 h-4" />
               {label}
             </Link>
           ))}
-          <div className="pt-2 border-t">
+
+          {/* Tool links flat in mobile */}
+          {toolLinks.map(({ href, label, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              className={`flex items-center gap-2 text-sm font-medium px-2 py-2.5 rounded-lg transition-colors ${
+                pathname.startsWith(href) ? "text-orange-600 bg-orange-50" : "text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              {label}
+            </Link>
+          ))}
+
+          {/* Saved — logged-in only */}
+          {displayUser && (
+            <Link
+              href="/dashboard"
+              className={`flex items-center gap-2 text-sm font-medium px-2 py-2.5 rounded-lg transition-colors ${
+                pathname.startsWith("/dashboard") ? "text-orange-600 bg-orange-50" : "text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              <Heart className="w-4 h-4" />
+              Saved
+            </Link>
+          )}
+
+          {/* Find My Car — orange pill on mobile too */}
+          <Link
+            href="/quiz"
+            className="flex items-center gap-2 text-sm font-semibold bg-orange-500 text-white px-3 py-2.5 rounded-lg hover:bg-orange-600 transition-colors"
+          >
+            <Sparkles className="w-4 h-4" />
+            Find My Car
+          </Link>
+
+          <div className="pt-2 border-t mt-2">
             {displayUser ? (
               <div className="space-y-2">
-                <div className="flex items-center gap-2.5 py-1">
+                <div className="flex items-center gap-2.5 py-1 px-2">
                   <AvatarCircle size="sm" />
                   <span className="text-sm font-medium text-gray-800">{displayName}</span>
                 </div>
                 <Link
                   href="/account"
-                  className="flex items-center gap-2 text-sm text-gray-700 py-1"
-                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 text-sm text-gray-700 px-2 py-2.5 rounded-lg hover:bg-gray-50"
                 >
                   <Settings className="w-4 h-4 text-gray-400" />
                   Account Settings
