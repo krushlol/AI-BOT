@@ -32,7 +32,7 @@ export default function SignInForm() {
       document.cookie = `google_pkce=${verifier}; path=/; max-age=600; SameSite=Lax`
       const params = new URLSearchParams({
         client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-        redirect_uri: `${window.location.origin}/auth/callback`,
+        redirect_uri: `https://caradvisorusa.com/auth/callback`,
         response_type: "code",
         scope: "openid email profile",
         code_challenge: challenge,
