@@ -55,6 +55,12 @@ export default function ChatWidget() {
     if (open) setTimeout(() => inputRef.current?.focus(), 100)
   }, [open])
 
+  useEffect(() => {
+    const handler = () => setOpen(true)
+    window.addEventListener("open-chat", handler)
+    return () => window.removeEventListener("open-chat", handler)
+  }, [])
+
   const send = async () => {
     const text = input.trim()
     if (!text || loading) return

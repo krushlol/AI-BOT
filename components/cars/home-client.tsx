@@ -526,35 +526,44 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
             {[
               {
                 icon: BarChart2,
-                title: "Honest Scores",
-                desc: "Every car gets a score out of 10 based on safety, efficiency, value, and freshness. No ads. No sponsored rankings. Just data.",
-                cta: "Browse scored cars →",
-                href: "/search",
+                title: "Side-by-Side Compare",
+                desc: "Pick any two cars and compare specs, price, range, and safety ratings side by side. No fluff — just the numbers that matter.",
+                cta: "Compare cars →",
+                href: "/compare",
+                onClick: undefined,
               },
               {
                 icon: MessageSquare,
                 title: "Real Reddit Opinions",
                 desc: "We surface actual discussions from r/cars, r/whatcarshouldIbuy, and r/askcarsales — not press releases or manufacturer copy.",
                 cta: "See an example →",
-                href: `/cars/${heroCarousel[0].car.id}`,
+                href: `/cars/${heroCarousel[0].car.id}#reddit`,
+                onClick: undefined,
               },
               {
                 icon: Sparkles,
                 title: "AI Car Advisor",
                 desc: "Tell our AI about your life — budget, family, commute — and it recommends the right car in seconds. Try it now.",
                 cta: "Chat with AI →",
-                href: "/quiz",
+                href: null,
+                onClick: () => window.dispatchEvent(new Event("open-chat")),
               },
-            ].map(({ icon: Icon, title, desc, cta, href }) => (
+            ].map(({ icon: Icon, title, desc, cta, href, onClick }) => (
               <div key={title} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4">
                   <Icon className="w-5 h-5 text-orange-400" />
                 </div>
                 <h3 className="font-bold text-xl mb-2">{title}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed mb-4">{desc}</p>
-                <Link href={href} className="text-orange-400 hover:text-orange-300 text-sm font-semibold transition-colors">
-                  {cta}
-                </Link>
+                {href ? (
+                  <Link href={href} className="text-orange-400 hover:text-orange-300 text-sm font-semibold transition-colors">
+                    {cta}
+                  </Link>
+                ) : (
+                  <button onClick={onClick ?? undefined} className="text-orange-400 hover:text-orange-300 text-sm font-semibold transition-colors">
+                    {cta}
+                  </button>
+                )}
               </div>
             ))}
           </div>

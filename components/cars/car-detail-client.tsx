@@ -348,7 +348,9 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
               )}
               <KnownIssues brand={car.brand} model={car.model} year={car.year} carId={car.id} />
             </div>
-            <RedditOpinions brand={car.brand} model={car.model} year={car.year} />
+            <div id="reddit">
+              <RedditOpinions brand={car.brand} model={car.model} year={car.year} />
+            </div>
           </TabsContent>
         </Tabs>
 
