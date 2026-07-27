@@ -43,7 +43,9 @@ export async function GET(request: NextRequest) {
         code,
         client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri: `${redirectBase}/auth/callback`,
+        redirect_uri: process.env.NODE_ENV === "development"
+          ? `${origin}/auth/callback`
+          : "https://caradvisorusa.com/auth/callback",
         grant_type: "authorization_code",
         code_verifier: googleVerifier,
       }),
