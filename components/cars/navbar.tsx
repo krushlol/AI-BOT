@@ -20,12 +20,12 @@ interface Profile {
 const mainLinks = [
   { href: "/search", label: "Browse Cars", icon: Search },
   { href: "/compare", label: "Compare", icon: GitCompare },
+  { href: "/contact", label: "Contact", icon: Mail },
 ]
 
 const toolLinks = [
   { href: "/calculator", label: "Calculator", icon: Calculator },
   { href: "/depreciation", label: "Resale Value", icon: TrendingDown },
-  { href: "/contact", label: "Contact", icon: Mail },
 ]
 
 export default function Navbar({ user }: NavbarProps) {
