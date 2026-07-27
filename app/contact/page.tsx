@@ -42,10 +42,10 @@ export default async function ContactPage() {
               <div>
                 <p className="font-semibold text-gray-900 mb-1">Email</p>
                 <a
-                  href="mailto:arushchirp@gmail.com"
+                  href="mailto:supportcaradvisorusa@gmail.com"
                   className="text-orange-500 hover:text-orange-700 font-medium transition-colors"
                 >
-                  arushchirp@gmail.com
+                  supportcaradvisorusa@gmail.com
                 </a>
                 <p className="text-sm text-gray-500 mt-1">Best for general inquiries and feedback</p>
               </div>
