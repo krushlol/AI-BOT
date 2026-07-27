@@ -17,9 +17,24 @@ export default function SignupGate() {
     if (onAuthPage) return
     const supabase = createClient()
     let timer: ReturnType<typeof setTimeout>
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) return
-      timer = setTimeout(() => setShow(true), 2 * 60 * 1000)
+
+      const GATE_MS = 2 * 60 * 1000
+      const key = "ca_first_visit"
+      const stored = localStorage.getItem(key)
+      const firstVisit = stored ? parseInt(stored, 10) : Date.now()
+      if (!stored) localStorage.setItem(key, String(firstVisit))
+
+      const elapsed = Date.now() - firstVisit
+      const remaining = GATE_MS - elapsed
+
+      if (remaining <= 0) {
+        setShow(true)
+      } else {
+        timer = setTimeout(() => setShow(true), remaining)
+      }
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
