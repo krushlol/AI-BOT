@@ -11,6 +11,9 @@ const GA_ID = "G-KYFYQWTP2X"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
+  verification: {
+    other: { "msvalidate.01": "E7B1F8C6FA97EAFE0C092C13DEDD3EBE" },
+  },
   metadataBase: new URL("https://caradvisorusa.com"),
   title: "CarAdvisor — Car Research & Comparison",
   description: "Research, compare, and find your perfect car. Compare specs, prices, features, and reviews for every make and model.",
