@@ -66,7 +66,6 @@ export default function RootLayout({
           <Link href="/terms" className="hover:text-gray-600 transition-colors">Terms of Service</Link>
         </footer>
         <ChatWidget />
-        <SignupGate />
       </body>
     </html>
   )
