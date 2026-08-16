@@ -2,7 +2,7 @@
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useMemo } from "react"
-import { X, Plus, CheckCircle, XCircle, Zap, DollarSign, Gauge, Leaf, Link2, Check, Printer } from "lucide-react"
+import { X, Plus, Zap, DollarSign, Gauge, Leaf, Link2, Check, Printer } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Navbar from "./navbar"
 import { Car } from "@/lib/cars/types"
@@ -348,7 +348,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
                     <div className="space-y-1 mb-3">
                       {car.pros.map((p) => (
                         <div key={p} className="flex items-start gap-1.5 text-xs text-green-800">
-                          <CheckCircle className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-green-500 flex-shrink-0 font-bold">+</span>
                           {p}
                         </div>
                       ))}
@@ -356,7 +356,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
                     <div className="space-y-1">
                       {car.cons.map((c) => (
                         <div key={c} className="flex items-start gap-1.5 text-xs text-red-800">
-                          <XCircle className="w-3 h-3 text-red-400 mt-0.5 flex-shrink-0" />
+                          <span className="text-red-400 flex-shrink-0 font-bold">−</span>
                           {c}
                         </div>
                       ))}

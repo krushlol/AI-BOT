@@ -3,7 +3,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Heart, GitCompare, Star, CheckCircle, XCircle, Sparkles, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react"
+import { Heart, GitCompare, Star, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -109,7 +109,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                 <div className="flex flex-wrap gap-2 mb-4">
                   {bestForTags.map((tag) => (
                     <span key={tag.label} className="inline-flex items-center gap-1 text-sm bg-orange-50 text-orange-600 border border-orange-100 px-3 py-1 rounded-full font-medium">
-                      {tag.emoji} {tag.label}
+                      {tag.label}
                     </span>
                   ))}
                   {matchScore !== null && <MatchBadge score={matchScore} size="md" />}
@@ -166,7 +166,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
               </div>
               <div className="w-px h-10 bg-gray-200" />
               <div className="flex-1 min-w-0">
-                <div className={`font-bold text-base ${advisorScore.color}`}>{advisorScore.emoji} {advisorScore.label}</div>
+                <div className={`font-bold text-base ${advisorScore.color}`}>{advisorScore.label}</div>
                 <p className="text-sm text-gray-600 mt-0.5">{advisorScore.reason}</p>
               </div>
               <div className="text-xs text-gray-400 text-right shrink-0 hidden sm:block">CarAdvisor<br />Score</div>
@@ -261,7 +261,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                   <ul className="space-y-2">
                     {items.map((item) => (
                       <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
-                        <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-300 flex-shrink-0">·</span>
                         {item}
                       </li>
                     ))}
@@ -286,7 +286,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
               <div className="grid sm:grid-cols-2 gap-2">
                 {car.safety.features.map((f) => (
                   <div key={f} className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span className="text-gray-300 flex-shrink-0">·</span>
                     {f}
                   </div>
                 ))}
@@ -298,9 +298,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
           <TabsContent value="verdict" className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="bg-green-50 rounded-xl border border-green-200 p-5">
-                <h3 className="font-bold text-green-800 mb-3 flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5" /> Pros
-                </h3>
+                <h3 className="font-bold text-green-800 mb-3">Pros</h3>
                 <ul className="space-y-2">
                   {car.pros.map((p) => (
                     <li key={p} className="text-sm text-green-900 flex items-start gap-2">
@@ -310,9 +308,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                 </ul>
               </div>
               <div className="bg-red-50 rounded-xl border border-red-200 p-5">
-                <h3 className="font-bold text-red-800 mb-3 flex items-center gap-2">
-                  <XCircle className="w-5 h-5" /> Cons
-                </h3>
+                <h3 className="font-bold text-red-800 mb-3">Cons</h3>
                 <ul className="space-y-2">
                   {car.cons.map((c) => (
                     <li key={c} className="text-sm text-red-900 flex items-start gap-2">
@@ -323,13 +319,11 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
               </div>
             </div>
             <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl border border-purple-200 p-5">
-              <h3 className="font-bold text-purple-800 mb-3 flex items-center gap-2">
-                <Sparkles className="w-5 h-5" /> Cool & Unique Features
-              </h3>
+              <h3 className="font-bold text-purple-800 mb-3">Standout Features</h3>
               <ul className="space-y-3">
                 {car.coolFeatures.map((f) => (
                   <li key={f} className="text-sm text-purple-900 flex items-start gap-2">
-                    <Sparkles className="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-300 flex-shrink-0">·</span>
                     {f}
                   </li>
                 ))}
@@ -342,13 +336,13 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
             <div className="grid lg:grid-cols-2 gap-6">
               {magazineReviews[car.id] && (
                 <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <h2 className="text-base font-bold text-gray-900 mb-4">📰 What the Experts Say</h2>
+                  <h2 className="text-base font-bold text-gray-900 mb-4">What the Experts Say</h2>
                   <div className="space-y-3">
                     {magazineReviews[car.id].map((rev) => (
                       <div key={rev.magazine} className="bg-gray-50 rounded-xl border border-gray-100 p-4">
                         <div className="flex items-center justify-between mb-2">
                           <span className="font-bold text-sm text-gray-800">{rev.magazine}</span>
-                          <span className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">⭐ {rev.rating}</span>
+                          <span className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">{rev.rating}</span>
                         </div>
                         <p className="text-sm text-gray-600 leading-relaxed italic">"{rev.quote}"</p>
                       </div>

@@ -169,7 +169,7 @@ export default function CalculatorClient({ user }: CalculatorClientProps) {
 
         {/* Tip */}
         <div className="bg-orange-50 border border-orange-100 rounded-xl p-4 text-sm text-orange-700 mb-10">
-          💡 A good rule of thumb: keep your monthly payment under <strong>15% of your take-home pay</strong>. A bigger down payment means less interest overall.
+          A good rule of thumb: keep your monthly payment under <strong>15% of your take-home pay</strong>. A bigger down payment means less interest overall.
         </div>
 
       </div>

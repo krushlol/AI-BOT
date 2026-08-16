@@ -21,6 +21,7 @@ export default function SignupGate() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) return
 
+
       const GATE_MS = 2 * 60 * 1000
       const key = "ca_first_visit"
       const stored = localStorage.getItem(key)

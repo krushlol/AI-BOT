@@ -1,0 +1,12 @@
+<svg width="220" height="52" viewBox="0 0 220 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon -->
+  <circle cx="26" cy="26" r="22" stroke="#f97316" stroke-width="4"/>
+  <circle cx="26" cy="26" r="6" fill="#f97316"/>
+  <line x1="26" y1="4" x2="26" y2="20" stroke="#f97316" stroke-width="4" stroke-linecap="round"/>
+  <line x1="26" y1="32" x2="26" y2="48" stroke="#f97316" stroke-width="4" stroke-linecap="round"/>
+  <line x1="4" y1="26" x2="20" y2="26" stroke="#f97316" stroke-width="4" stroke-linecap="round"/>
+  <line x1="32" y1="26" x2="48" y2="26" stroke="#f97316" stroke-width="4" stroke-linecap="round"/>
+  <!-- Wordmark -->
+  <text x="62" y="36" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="700" font-size="28" fill="#0f172a">Car</text>
+  <text x="108" y="36" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="700" font-size="28" fill="#f97316">Advisor</text>
+</svg>

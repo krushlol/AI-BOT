@@ -5,6 +5,7 @@ import Link from "next/link"
 import "./globals.css"
 import ChatWidget from "@/components/chat/chat-widget"
 import SignupGate from "@/components/signup-gate"
+import PostHogProvider from "@/components/posthog-provider"
 
 const GA_ID = "G-KYFYQWTP2X"
 
@@ -57,6 +58,7 @@ export default function RootLayout({
         `}</Script>
       </head>
       <body className={inter.className}>
+        <PostHogProvider>
         {children}
         <footer className="border-t border-gray-200 mt-16 py-6 text-center text-xs text-gray-400">
           <span>© {new Date().getFullYear()} CarAdvisor</span>
@@ -66,6 +68,7 @@ export default function RootLayout({
           <Link href="/terms" className="hover:text-gray-600 transition-colors">Terms of Service</Link>
         </footer>
         <ChatWidget />
+        </PostHogProvider>
       </body>
     </html>
   )

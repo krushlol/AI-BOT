@@ -3,7 +3,6 @@ import { Car } from "./types"
 export interface CarAdvisorScore {
   score: number
   label: string
-  emoji: string
   color: string         // tailwind text color
   bgColor: string       // tailwind bg color
   borderColor: string   // tailwind border color
@@ -52,21 +51,20 @@ export function computeCarAdvisorScore(car: Car): CarAdvisorScore {
 
   // Verdict
   let label: string
-  let emoji: string
   let color: string
   let bgColor: string
   let borderColor: string
   if (score >= 8.5) {
-    label = "Best in Class"; emoji = "🏆"
+    label = "Best in Class"
     color = "text-green-700"; bgColor = "bg-green-50"; borderColor = "border-green-200"
   } else if (score >= 7.0) {
-    label = "Highly Recommended"; emoji = "✅"
+    label = "Highly Recommended"
     color = "text-orange-600"; bgColor = "bg-orange-50"; borderColor = "border-orange-200"
   } else if (score >= 5.5) {
-    label = "Solid Choice"; emoji = "👍"
+    label = "Solid Choice"
     color = "text-blue-600"; bgColor = "bg-blue-50"; borderColor = "border-blue-200"
   } else {
-    label = "Consider Alternatives"; emoji = "⚠️"
+    label = "Consider Alternatives"
     color = "text-gray-600"; bgColor = "bg-gray-50"; borderColor = "border-gray-200"
   }
 
@@ -88,5 +86,5 @@ export function computeCarAdvisorScore(car: Car): CarAdvisorScore {
     reason = car.tagline + "."
   }
 
-  return { score, label, emoji, color, bgColor, borderColor, reason }
+  return { score, label, color, bgColor, borderColor, reason }
 }

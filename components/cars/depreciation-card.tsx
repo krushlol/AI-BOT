@@ -33,9 +33,9 @@ export default function DepreciationCard({ car }: Props) {
 
   const vsLabel =
     dep.vsSegmentAvg === "better"
-      ? `Holds value better than most ${dep.fuelLabel} cars ✅`
+      ? `Holds value better than most ${dep.fuelLabel} cars`
       : dep.vsSegmentAvg === "worse"
-      ? `Depreciates faster than most ${dep.fuelLabel} cars ⚠️`
+      ? `Depreciates faster than most ${dep.fuelLabel} cars`
       : `Depreciates about average for a ${dep.fuelLabel} car`
 
   const vsColor =

@@ -3,7 +3,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 import { useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
-import { RotateCcw, GitCompare, Car as CarIcon, Sparkles, CheckCircle2 } from "lucide-react"
+import { RotateCcw, GitCompare, Car as CarIcon, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Navbar from "@/components/cars/navbar"
@@ -21,71 +21,71 @@ interface QuizClientProps {
 const QUESTIONS: {
   key: keyof QuizAnswers
   question: string
-  options: { value: string; label: string; emoji: string }[]
+  options: { value: string; label: string }[]
 }[] = [
   {
     key: "budget",
     question: "Budget",
     options: [
-      { value: "under35k", label: "Under $35k", emoji: "💰" },
-      { value: "35to60k", label: "$35k – $60k", emoji: "💳" },
-      { value: "60kplus", label: "$60k+", emoji: "🏆" },
+      { value: "under35k", label: "Under $35k" },
+      { value: "35to60k", label: "$35k – $60k" },
+      { value: "60kplus", label: "$60k+" },
     ],
   },
   {
     key: "style",
     question: "Vehicle type",
     options: [
-      { value: "suv", label: "SUV / Crossover", emoji: "🚙" },
-      { value: "sedan", label: "Sedan", emoji: "🚗" },
-      { value: "truck", label: "Truck", emoji: "🛻" },
-      { value: "nopref", label: "No preference", emoji: "🎲" },
+      { value: "suv", label: "SUV / Crossover" },
+      { value: "sedan", label: "Sedan" },
+      { value: "truck", label: "Truck" },
+      { value: "nopref", label: "No preference" },
     ],
   },
   {
     key: "fuel",
     question: "Fuel type",
     options: [
-      { value: "electric", label: "Electric", emoji: "⚡" },
-      { value: "hybrid", label: "Hybrid / PHEV", emoji: "🌿" },
-      { value: "mpg", label: "Best MPG", emoji: "⛽" },
-      { value: "nopref", label: "No preference", emoji: "🤷" },
+      { value: "electric", label: "Electric" },
+      { value: "hybrid", label: "Hybrid / PHEV" },
+      { value: "mpg", label: "Best MPG" },
+      { value: "nopref", label: "No preference" },
     ],
   },
   {
     key: "useCase",
     question: "Main use",
     options: [
-      { value: "commute", label: "Daily commute", emoji: "🏙" },
-      { value: "family", label: "Family trips", emoji: "🗺" },
-      { value: "offroad", label: "Off-road", emoji: "🏔" },
-      { value: "hauling", label: "Hauling / towing", emoji: "⚙️" },
+      { value: "commute", label: "Daily commute" },
+      { value: "family", label: "Family trips" },
+      { value: "offroad", label: "Off-road" },
+      { value: "hauling", label: "Hauling / towing" },
     ],
   },
   {
     key: "kids",
     question: "Kids?",
     options: [
-      { value: "none", label: "No kids", emoji: "🙋" },
-      { value: "oneTwo", label: "1–2 kids", emoji: "👶" },
-      { value: "threePlus", label: "3+ kids", emoji: "👨‍👩‍👧‍👦" },
+      { value: "none", label: "No kids" },
+      { value: "oneTwo", label: "1–2 kids" },
+      { value: "threePlus", label: "3+ kids" },
     ],
   },
   {
     key: "size",
     question: "Size preference",
     options: [
-      { value: "small", label: "Small", emoji: "🚗" },
-      { value: "midsize", label: "Mid-size", emoji: "🚙" },
-      { value: "big", label: "Big & roomy", emoji: "🛻" },
+      { value: "small", label: "Small" },
+      { value: "midsize", label: "Mid-size" },
+      { value: "big", label: "Big & roomy" },
     ],
   },
   {
     key: "pets",
     question: "Pets?",
     options: [
-      { value: "no", label: "No pets", emoji: "🧹" },
-      { value: "yes", label: "Yes", emoji: "🐾" },
+      { value: "no", label: "No pets" },
+      { value: "yes", label: "Yes" },
     ],
   },
 ]
@@ -182,9 +182,7 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
                           : "border-gray-100 bg-gray-50 text-gray-700 hover:border-orange-200 hover:bg-orange-50/50"
                       }`}
                     >
-                      <span className="text-lg leading-none">{opt.emoji}</span>
                       <span className="flex-1">{opt.label}</span>
-                      {selected && <CheckCircle2 className="w-4 h-4 text-blue-500 flex-shrink-0" />}
                     </button>
                   )
                 })}
@@ -280,7 +278,7 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
                         <div className="mt-3 bg-gray-50 rounded-xl p-3">
                           <div className="flex items-center justify-between mb-1">
                             <span className="text-xs font-bold text-gray-600">{magazineReviews[car.id][0].magazine}</span>
-                            <span className="text-xs font-semibold text-amber-600">⭐ {magazineReviews[car.id][0].rating}</span>
+                            <span className="text-xs font-semibold text-amber-600">{magazineReviews[car.id][0].rating}</span>
                           </div>
                           <p className="text-xs text-gray-500 italic leading-relaxed">"{magazineReviews[car.id][0].quote}"</p>
                         </div>
