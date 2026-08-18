@@ -89,8 +89,8 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
       url: `https://www.edmunds.com/${slug(car.brand)}/${slug(car.model)}/${car.year}/`,
     },
     {
-      name: "Cars.com",
-      url: `https://www.cars.com/research/${slug(car.brand)}-${slug(car.model)}-${car.year}/`,
+      name: "KBB",
+      url: `https://www.kbb.com/${slug(car.brand)}/${slug(car.model)}/${car.year}/`,
     },
   ]
 
