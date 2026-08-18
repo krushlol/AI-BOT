@@ -174,6 +174,19 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                     ))}
                   </div>
                 </div>
+
+                <a
+                  href={`https://www.thezebra.com/auto-insurance/?year=${car.year}&make=${encodeURIComponent(car.brand)}&model=${encodeURIComponent(car.model)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 flex items-center justify-between bg-blue-600 hover:bg-blue-700 text-white rounded-xl p-4 transition-colors group"
+                >
+                  <div>
+                    <p className="text-sm font-bold">Don't forget insurance</p>
+                    <p className="text-xs text-blue-200 mt-0.5">Compare {car.year} {car.brand} {car.model} rates in 2 minutes</p>
+                  </div>
+                  <span className="text-2xl group-hover:translate-x-1 transition-transform">→</span>
+                </a>
               </div>
             </div>
           </div>
