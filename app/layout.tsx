@@ -49,6 +49,12 @@ export default function RootLayout({
             "logo": "https://caradvisorusa.com/caradvisor-icon.svg"
           }
         `}</Script>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3584399465652024"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
         <Script id="ga-init" strategy="afterInteractive">{`
           window.dataLayer = window.dataLayer || [];
