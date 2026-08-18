@@ -181,14 +181,24 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
         {/* Tabs — everything below the hero lives here */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-10">
-          <TabsList className="mb-5 w-full flex overflow-x-auto gap-1 h-auto p-1 bg-white border border-gray-200 rounded-xl">
-            <TabsTrigger value="overview" className="flex-shrink-0">Overview</TabsTrigger>
-            <TabsTrigger value="specs" className="flex-shrink-0">Specs</TabsTrigger>
-            <TabsTrigger value="trims" className="flex-shrink-0">Trims</TabsTrigger>
-            <TabsTrigger value="features" className="flex-shrink-0">Features</TabsTrigger>
-            <TabsTrigger value="safety" className="flex-shrink-0">Safety</TabsTrigger>
-            <TabsTrigger value="verdict" className="flex-shrink-0">Pros & Cons</TabsTrigger>
-            <TabsTrigger value="reviews" className="flex-shrink-0">Reviews</TabsTrigger>
+          <TabsList className="mb-5 w-full flex overflow-x-auto gap-1 h-auto p-1.5 bg-gray-100 border border-gray-200 rounded-xl">
+            {[
+              { value: "overview", label: "Overview" },
+              { value: "specs", label: "Specs" },
+              { value: "trims", label: "Trims" },
+              { value: "features", label: "Features" },
+              { value: "safety", label: "Safety" },
+              { value: "verdict", label: "Pros & Cons" },
+              { value: "reviews", label: "Reviews" },
+            ].map((tab) => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="flex-shrink-0 px-4 py-2 text-sm font-semibold rounded-lg text-gray-500 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm hover:text-gray-700 transition-colors cursor-pointer"
+              >
+                {tab.label}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
           {/* Overview: score + quick stats + loan calculator + colors */}
