@@ -78,6 +78,22 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
   const displayTrims = showAllTrims ? car.trimLevels : car.trimLevels.slice(0, 3)
   const specExplanations = getSpecExplanations(car)
 
+  const slug = (s: string) => s.toLowerCase().replace(/\s+/g, "-")
+  const affiliateLinks = [
+    {
+      name: "TrueCar",
+      url: `https://www.truecar.com/prices-new/listings/${slug(car.brand)}/${slug(car.model)}/`,
+    },
+    {
+      name: "Edmunds",
+      url: `https://www.edmunds.com/${slug(car.brand)}/${slug(car.model)}/${car.year}/`,
+    },
+    {
+      name: "Cars.com",
+      url: `https://www.cars.com/research/${slug(car.brand)}-${slug(car.model)}-${car.year}/`,
+    },
+  ]
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar user={user} />
@@ -139,6 +155,23 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                       Compare
                     </Button>
                   </Link>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-2">Find at a dealer</p>
+                  <div className="flex flex-wrap gap-2">
+                    {affiliateLinks.map((link) => (
+                      <a
+                        key={link.name}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-orange-50 hover:text-orange-600 border border-gray-200 hover:border-orange-200 px-3 py-1.5 rounded-lg transition-colors"
+                      >
+                        {link.name} →
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
