@@ -40,6 +40,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="msvalidate.01" content="E7B1F8C6FA97EAFE0C092C13DEDD3EBE" />
+        <meta name="google-adsense-account" content="ca-pub-3584399465652024" />
         <Script id="org-schema" type="application/ld+json" strategy="beforeInteractive">{`
           {
             "@context": "https://schema.org",
