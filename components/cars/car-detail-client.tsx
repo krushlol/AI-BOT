@@ -157,8 +157,9 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                   </Link>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-2">Find at a dealer</p>
+                <div className="mt-4 bg-orange-50 border border-orange-100 rounded-xl p-4">
+                  <p className="text-sm font-semibold text-orange-900 mb-1">Ready to buy?</p>
+                  <p className="text-xs text-orange-700 mb-3">Check live dealer prices and inventory</p>
                   <div className="flex flex-wrap gap-2">
                     {affiliateLinks.map((link) => (
                       <a
@@ -166,9 +167,9 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-orange-50 hover:text-orange-600 border border-gray-200 hover:border-orange-200 px-3 py-1.5 rounded-lg transition-colors"
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg transition-colors shadow-sm"
                       >
-                        {link.name} →
+                        {link.name} <span className="opacity-75">→</span>
                       </a>
                     ))}
                   </div>
