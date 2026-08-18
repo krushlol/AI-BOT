@@ -81,16 +81,16 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
   const slug = (s: string) => s.toLowerCase().replace(/\s+/g, "-")
   const affiliateLinks = [
     {
-      name: "TrueCar",
-      url: `https://www.truecar.com/prices-new/listings/${slug(car.brand)}/${slug(car.model)}/`,
-    },
-    {
       name: "Edmunds",
       url: `https://www.edmunds.com/${slug(car.brand)}/${slug(car.model)}/${car.year}/`,
     },
     {
       name: "KBB",
       url: `https://www.kbb.com/${slug(car.brand)}/${slug(car.model)}/${car.year}/`,
+    },
+    {
+      name: "Cars.com",
+      url: `https://www.cars.com/shopping/results/?stock_type=new&makes[]=${slug(car.brand)}&models[]=${slug(car.brand)}-${slug(car.model)}`,
     },
   ]
 
