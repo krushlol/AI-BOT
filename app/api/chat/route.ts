@@ -83,7 +83,7 @@ export async function POST(req: Request) {
     async start(controller) {
       try {
         const response = await client.chat.completions.create({
-          model: "llama-3.3-70b-versatile",
+          model: "llama-3.1-70b-versatile",
           max_tokens: 200,
           messages: [
             { role: "system", content: buildSystemPrompt(extractBudget(messages)) },
