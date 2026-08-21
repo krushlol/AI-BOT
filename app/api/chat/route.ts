@@ -83,6 +83,9 @@ export async function POST(req: Request) {
 
   const stream = new ReadableStream({
     async start(controller) {
+      const abort = new AbortController()
+      const timeout = setTimeout(() => abort.abort(), 8000)
+
       try {
         const response = await client.chat.completions.create({
           model: "openai/gpt-oss-120b",
@@ -92,7 +95,7 @@ export async function POST(req: Request) {
             ...messages,
           ],
           stream: true,
-        })
+        }, { signal: abort.signal })
 
         let received = false
         for await (const chunk of response) {
@@ -102,10 +105,14 @@ export async function POST(req: Request) {
         if (!received) controller.enqueue(encoder.encode("I'm here to help you find the right car! What are you looking for?"))
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err)
-        console.error("Chat API error:", msg)
-        controller.enqueue(encoder.encode(`Sorry, I hit an error. Please try again. (${msg.slice(0, 80)})`))
-
+        if (msg.includes("aborted") || msg.includes("abort")) {
+          controller.enqueue(encoder.encode("I'm here to help you find the right car! What are you looking for?"))
+        } else {
+          console.error("Chat API error:", msg)
+          controller.enqueue(encoder.encode("Something went wrong — try asking me about a car you're interested in!"))
+        }
       } finally {
+        clearTimeout(timeout)
         controller.close()
       }
     },
