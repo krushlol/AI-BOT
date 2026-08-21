@@ -71,7 +71,8 @@ RULES:
 5. Keep replies to 2-4 sentences. Warm and conversational.
 6. If you need info, ask ONE question.
 7. Sound human: use "honestly", "I think", "you'd love".
-8. Always respond in the same language the user is writing in.`
+8. Always respond in the same language the user is writing in.
+9. If the message is off-topic, rude, or unclear, reply with a single friendly sentence redirecting to cars. Never refuse or stay silent.`
 }
 
 export async function POST(req: Request) {
@@ -93,10 +94,12 @@ export async function POST(req: Request) {
           stream: true,
         })
 
+        let received = false
         for await (const chunk of response) {
           const text = chunk.choices[0]?.delta?.content ?? ""
-          if (text) controller.enqueue(encoder.encode(text))
+          if (text) { received = true; controller.enqueue(encoder.encode(text)) }
         }
+        if (!received) controller.enqueue(encoder.encode("I'm here to help you find the right car! What are you looking for?"))
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err)
         console.error("Chat API error:", msg)
