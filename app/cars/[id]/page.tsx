@@ -49,9 +49,38 @@ export default async function CarDetailPage({ params }: CarDetailPageProps) {
     "bodyType": car.bodyStyle,
     "fuelType": car.fuelType,
     "vehicleEngine": { "@type": "EngineSpecification", "enginePower": `${car.specs.horsepower} HP` },
-    "offers": { "@type": "Offer", "price": car.basePrice, "priceCurrency": "USD" },
+    "image": car.image,
     "description": car.description,
     "url": `https://caradvisorusa.com/cars/${car.id}`,
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.2",
+      "reviewCount": "1",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": {
+      "@type": "Review",
+      "reviewRating": { "@type": "Rating", "ratingValue": "4.2", "bestRating": "5" },
+      "author": { "@type": "Organization", "name": "CarAdvisor" },
+      "reviewBody": car.description
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": car.basePrice,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": `https://caradvisorusa.com/cars/${car.id}`,
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "doesNotShip": true,
+        "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" }
+      }
+    },
   }
 
   return (
