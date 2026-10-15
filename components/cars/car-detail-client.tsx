@@ -45,11 +45,17 @@ function getLocalShortlist(): string[] {
   try { return JSON.parse(localStorage.getItem(LS_SHORTLIST_KEY) ?? "[]") } catch { return [] }
 }
 
-function toggleLocalShortlist(id: string): boolean {
+function toggleLocalShortlist(id: string): { saved: boolean; limitReached: boolean } {
   const list = getLocalShortlist()
-  const next = list.includes(id) ? list.filter((x) => x !== id) : list.length < 3 ? [...list, id] : list
+  if (list.includes(id)) {
+    const next = list.filter((x) => x !== id)
+    try { localStorage.setItem(LS_SHORTLIST_KEY, JSON.stringify(next)) } catch { /* */ }
+    return { saved: false, limitReached: false }
+  }
+  if (list.length >= 2) return { saved: false, limitReached: true }
+  const next = [...list, id]
   try { localStorage.setItem(LS_SHORTLIST_KEY, JSON.stringify(next)) } catch { /* */ }
-  return next.includes(id)
+  return { saved: true, limitReached: false }
 }
 
 export default function CarDetailClient({ car, user, relatedCars, initialSaved = false }: CarDetailClientProps) {
@@ -76,7 +82,8 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
   const handleSave = async () => {
     if (!user) {
-      const nowSaved = toggleLocalShortlist(car.id)
+      const { saved: nowSaved, limitReached } = toggleLocalShortlist(car.id)
+      if (limitReached) { router.push("/sign-in"); return }
       setLocalSaved(nowSaved)
       return
     }
@@ -180,7 +187,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
                 {!user && localSaved && (
                   <p className="text-xs text-gray-500 mt-2">
-                    Saved to your local shortlist (up to 3 cars). <a href="/sign-in" className="text-orange-500 underline hover:text-orange-700">Sign in</a> to sync across devices.
+                    Saved to your shortlist (up to 2 without signing in). <a href="/sign-in" className="text-orange-500 underline hover:text-orange-700">Sign in</a> to save more &amp; sync across devices.
                   </p>
                 )}
 
