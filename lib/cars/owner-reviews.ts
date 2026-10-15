@@ -8,7 +8,7 @@ export interface OwnerReview {
 }
 
 export const ownerReviews: Record<string, OwnerReview[]> = {
-  "toyota-camry-2024": [
+  "toyota-camry-2025": [
     { name: "Brian K.", location: "Phoenix, AZ", rating: 5, title: "Best commuter car I've ever owned", review: "80 MPG on my morning commute because it runs electric until the battery dies. Gas barely moves. Quiet, smooth, and the lane assist actually works well on the highway.", owned: "Owned 11 months" },
     { name: "Sandra M.", location: "Charlotte, NC", rating: 4, title: "Reliable as ever, just wish the infotainment was better", review: "Third Toyota in a row for our family. This one is the most refined yet. Only gripe is the touchscreen can be sluggish. Everything else — ride, fuel economy, build quality — is excellent.", owned: "Owned 8 months" },
     { name: "David L.", location: "Denver, CO", rating: 5, title: "Surprised by how fun it is", review: "I expected a boring family sedan, but the hybrid powertrain is genuinely peppy. 0-60 feels quicker than the spec sheet suggests. Great value for the money.", owned: "Owned 6 months" },

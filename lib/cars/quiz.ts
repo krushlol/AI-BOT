@@ -7,6 +7,7 @@ export type UseCase = "commute" | "family" | "offroad" | "hauling"
 export type FuelPref = "mpg" | "electric" | "hybrid" | "nopref"
 export type StylePref = "suv" | "sedan" | "truck" | "nopref"
 export type PetOwner = "yes" | "no"
+export type CarCondition = "new" | "used" | "nopref"
 
 export interface QuizAnswers {
   budget: BudgetRange
@@ -16,6 +17,7 @@ export interface QuizAnswers {
   fuel: FuelPref
   style: StylePref
   pets: PetOwner
+  condition?: CarCondition
 }
 
 // Luxury car IDs — filtered out when user has pets

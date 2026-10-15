@@ -262,7 +262,7 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
           <div className="grid lg:grid-cols-2 gap-10 items-center" style={{ opacity: imageFading ? 0 : 1, transition: "opacity 400ms ease-in-out" }}>
             {/* Left — editorial content */}
             <div>
-              <p className="text-orange-300 text-sm font-bold tracking-wider uppercase mb-3">CarAdvisor — Car Research &amp; Comparison</p>
+              <p className="text-orange-300 text-sm font-bold tracking-wider uppercase mb-3">Research · Compare · Decide — for free</p>
               <p className="text-white/60 text-sm mb-3 max-w-sm">CarAdvisor helps you research, compare, and find your perfect car. Browse specs, pricing, safety ratings, and expert scores for hundreds of models — all in one place. Sign in with Google to save favorites and get personalized recommendations. We only request your name and email for account creation. <a href="/privacy" className="underline text-orange-300/80 hover:text-orange-300">Privacy Policy</a></p>
               <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3 py-1 text-xs font-semibold text-orange-300 uppercase tracking-widest mb-5">
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
@@ -285,14 +285,14 @@ export default function HomeClient({ user, featuredCars, allCars, initialSavedId
               </div>
 
               <div className="flex flex-wrap gap-3 mb-8">
-                <Link href={`/cars/${currentHero.car.id}`}>
-                  <Button size="lg" className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-6 shadow-lg">
-                    See Full Review →
+                <Link href="/quiz">
+                  <Button size="lg" className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-6 shadow-lg gap-2">
+                    <Sparkles className="w-4 h-4" /> Find My Car
                   </Button>
                 </Link>
-                <Link href="/quiz">
-                  <Button size="lg" className="bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold px-6 gap-2">
-                    <Sparkles className="w-4 h-4" /> Find MY Car
+                <Link href={`/cars/${currentHero.car.id}`}>
+                  <Button size="lg" className="bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold px-6">
+                    See Full Review →
                   </Button>
                 </Link>
               </div>

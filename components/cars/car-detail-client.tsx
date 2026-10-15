@@ -39,8 +39,22 @@ const fuelLabel = (f: string) => {
   return f.charAt(0).toUpperCase() + f.slice(1)
 }
 
+const LS_SHORTLIST_KEY = "ca_shortlist"
+
+function getLocalShortlist(): string[] {
+  try { return JSON.parse(localStorage.getItem(LS_SHORTLIST_KEY) ?? "[]") } catch { return [] }
+}
+
+function toggleLocalShortlist(id: string): boolean {
+  const list = getLocalShortlist()
+  const next = list.includes(id) ? list.filter((x) => x !== id) : list.length < 3 ? [...list, id] : list
+  try { localStorage.setItem(LS_SHORTLIST_KEY, JSON.stringify(next)) } catch { /* */ }
+  return next.includes(id)
+}
+
 export default function CarDetailClient({ car, user, relatedCars, initialSaved = false }: CarDetailClientProps) {
   const [saved, setSaved] = useState(initialSaved)
+  const [localSaved, setLocalSaved] = useState(false)
   const [showAllTrims, setShowAllTrims] = useState(false)
   const [heroImage, setHeroImage] = useState(car.image)
   const [activeTab, setActiveTab] = useState("overview")
@@ -52,7 +66,8 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
         document.getElementById("reddit")?.scrollIntoView({ behavior: "smooth" })
       }, 100)
     }
-  }, [])
+    setLocalSaved(getLocalShortlist().includes(car.id))
+  }, [car.id])
   const { answers } = useQuizAnswers()
   const matchScore = answers ? scoreCarForAnswers(car, answers) : null
   const bestForTags = getBestForTags(car)
@@ -60,7 +75,11 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
   const router = useRouter()
 
   const handleSave = async () => {
-    if (!user) { router.push("/sign-in"); return }
+    if (!user) {
+      const nowSaved = toggleLocalShortlist(car.id)
+      setLocalSaved(nowSaved)
+      return
+    }
     const wasSaved = saved
     setSaved(!wasSaved)
     try {
@@ -74,6 +93,8 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
       setSaved(wasSaved)
     }
   }
+
+  const isSaved = user ? saved : localSaved
 
   const displayTrims = showAllTrims ? car.trimLevels : car.trimLevels.slice(0, 3)
   const specExplanations = getSpecExplanations(car)
@@ -145,9 +166,9 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                   </div>
                 )}
                 <div className="flex gap-3">
-                  <Button className={`flex-1 ${saved ? "bg-red-500 hover:bg-red-600" : ""}`} onClick={handleSave}>
-                    <Heart className={`w-4 h-4 mr-2 ${saved ? "fill-current" : ""}`} />
-                    {saved ? "Saved" : "Save Car"}
+                  <Button className={`flex-1 ${isSaved ? "bg-red-500 hover:bg-red-600" : ""}`} onClick={handleSave}>
+                    <Heart className={`w-4 h-4 mr-2 ${isSaved ? "fill-current" : ""}`} />
+                    {isSaved ? "Saved" : "Save Car"}
                   </Button>
                   <Link href={`/compare?ids=${car.id}`}>
                     <Button variant="outline">
@@ -156,6 +177,12 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                     </Button>
                   </Link>
                 </div>
+
+                {!user && localSaved && (
+                  <p className="text-xs text-gray-500 mt-2">
+                    Saved to your local shortlist (up to 3 cars). <a href="/sign-in" className="text-orange-500 underline hover:text-orange-700">Sign in</a> to sync across devices.
+                  </p>
+                )}
 
                 <div className="mt-4 bg-orange-50 border border-orange-100 rounded-xl p-4">
                   <p className="text-sm font-semibold text-orange-900 mb-1">Ready to buy?</p>
@@ -263,7 +290,8 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
           {/* Trims */}
           <TabsContent value="trims">
             <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-bold mb-4">Trim Levels & Pricing</h2>
+              <h2 className="text-lg font-bold mb-1">Trim Levels & Pricing</h2>
+              <p className="text-xs text-gray-400 mb-4">Starting MSRP. Destination charges (~$1,100–1,400) and dealer fees are additional. Actual transaction price may vary.</p>
               <div className="space-y-3">
                 {displayTrims.map((trim) => (
                   <div key={trim.name} className="border border-gray-200 rounded-xl p-4 hover:border-orange-200 transition-colors">
@@ -323,7 +351,14 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                   {car.safety.rating || "Not Rated"}
                 </div>
                 {car.safety.ratingSource && (
-                  <span className="text-sm text-gray-500">{car.safety.ratingSource}</span>
+                  <a
+                    href="https://www.iihs.org/ratings"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-orange-500 hover:underline"
+                  >
+                    {car.safety.ratingSource} ↗
+                  </a>
                 )}
               </div>
               <h3 className="font-semibold mb-3">Safety Features</h3>
@@ -334,6 +369,11 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
                     {f}
                   </div>
                 ))}
+              </div>
+              <div className="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-x-6 gap-y-1 text-xs text-gray-400">
+                <span>Safety ratings: <a href="https://www.iihs.org/ratings" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:underline">IIHS</a></span>
+                <span>Specs &amp; pricing: manufacturer data</span>
+                <span>Last verified: Oct 2025</span>
               </div>
             </div>
           </TabsContent>

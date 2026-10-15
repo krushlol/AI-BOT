@@ -88,6 +88,15 @@ const QUESTIONS: {
       { value: "yes", label: "Yes" },
     ],
   },
+  {
+    key: "condition",
+    question: "New or used?",
+    options: [
+      { value: "new", label: "New only" },
+      { value: "used", label: "Used / CPO OK" },
+      { value: "nopref", label: "No preference" },
+    ],
+  },
 ]
 
 export default function QuizClient({ user, allCars }: QuizClientProps) {
@@ -227,6 +236,11 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
 
         {confirmed && results.length > 0 && (
           <>
+            {answers.condition === "used" && (
+              <div className="mb-4 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 text-sm text-blue-700">
+                Showing new model recommendations — for certified pre-owned options, check dealer sites linked on each car&apos;s page.
+              </div>
+            )}
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-xl font-bold text-gray-900">
@@ -273,6 +287,12 @@ export default function QuizClient({ user, allCars }: QuizClientProps) {
                       <h3 className="text-lg font-bold text-gray-900">{car.model} {car.year}</h3>
                       <p className="text-sm text-orange-500 font-medium mt-1">{reason}</p>
                       <p className="text-sm text-gray-500 mt-0.5">${car.basePrice.toLocaleString()} starting</p>
+                      {car.cons?.[0] && (
+                        <p className="text-xs text-gray-400 mt-1.5 flex items-start gap-1">
+                          <span className="text-amber-500 font-bold flex-shrink-0">!</span>
+                          <span>Trade-off: {car.cons[0]}</span>
+                        </p>
+                      )}
 
                       {magazineReviews[car.id]?.[0] && (
                         <div className="mt-3 bg-gray-50 rounded-xl p-3">

@@ -2,10 +2,10 @@ import { Car } from "./types"
 
 export const cars: Car[] = [
   {
-    id: "toyota-camry-2024",
+    id: "toyota-camry-2025",
     brand: "Toyota",
     model: "Camry",
-    year: 2024,
+    year: 2025,
     bodyStyle: "sedan",
     fuelType: "hybrid",
     basePrice: 28400,
@@ -13,7 +13,7 @@ export const cars: Car[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/2025_Toyota_Camry_Hybrid_SE_Upgrade_AWD_in_Midnight_Black_Metallic%2C_front_right%2C_2024-11-06.jpg/960px-2025_Toyota_Camry_Hybrid_SE_Upgrade_AWD_in_Midnight_Black_Metallic%2C_front_right%2C_2024-11-06.jpg",
     tagline: "America's best-selling sedan, now hybrid-only",
     description:
-      "The 2024 Toyota Camry transitions to a hybrid-only powertrain, offering outstanding fuel efficiency without sacrificing performance. A perennial favorite for its legendary reliability, spacious cabin, and competitive pricing.",
+      "The 2025 Toyota Camry continues its hybrid-only lineup, delivering outstanding fuel efficiency without sacrificing performance. A perennial favorite for its legendary reliability, spacious cabin, and competitive pricing.",
     specs: {
       horsepower: 225,
       torque: 163,
@@ -292,7 +292,7 @@ export const cars: Car[] = [
     year: 2024,
     bodyStyle: "suv",
     fuelType: "plug-in hybrid",
-    basePrice: 31895,
+    basePrice: 38950,
     maxPrice: 42240,
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Honda_CR-V_e-HEV_Elegance_AWD_%28VI%29_%E2%80%93_f_14072024.jpg/960px-Honda_CR-V_e-HEV_Elegance_AWD_%28VI%29_%E2%80%93_f_14072024.jpg",
     tagline: "The world's best-selling SUV, now with plug-in power",
@@ -317,8 +317,6 @@ export const cars: Car[] = [
       seating: 5,
     },
     trimLevels: [
-      { name: "Sport", price: 31895, highlights: ["Turbocharged gas", "18-inch wheels", "Honda Sensing"] },
-      { name: "EX", price: 34395, highlights: ["Panoramic moonroof", "Heated seats", "Remote start"] },
       { name: "Sport-L PHEV", price: 38950, highlights: ["40-mile EV range", "AWD", "Wireless charging"] },
       { name: "Sport Touring PHEV", price: 42240, highlights: ["Bose audio", "HUD", "Leather seats"] },
     ],

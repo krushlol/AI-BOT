@@ -6,7 +6,7 @@ export interface MagazineReview {
 
 // Keys must match car IDs in data.ts exactly
 export const magazineReviews: Record<string, MagazineReview[]> = {
-  "toyota-camry-2024": [
+  "toyota-camry-2025": [
     { magazine: "Car and Driver", rating: "8.5/10", quote: "The Camry hybrid is remarkably refined — smooth, quiet, and genuinely fuel-efficient in the real world." },
     { magazine: "Motor Trend", rating: "4.5/5", quote: "Toyota's best-selling sedan earns its reputation with class-leading reliability and a newly sporty edge." },
   ],

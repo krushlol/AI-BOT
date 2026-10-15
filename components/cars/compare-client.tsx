@@ -223,7 +223,7 @@ export default function CompareClient({ user, allCars, initialIds }: CompareClie
             <div className="bg-white rounded-xl border-2 border-dashed border-gray-300 p-4 flex flex-col items-center justify-center gap-2 min-h-[160px]">
               <Plus className="w-6 h-6 text-gray-400" />
               <p className="text-xs text-gray-500 text-center">Add a car</p>
-              <Select onValueChange={addCar}>
+              <Select key={selectedIds.length} onValueChange={addCar}>
                 <SelectTrigger className="text-xs">
                   <SelectValue placeholder="Choose..." />
                 </SelectTrigger>
