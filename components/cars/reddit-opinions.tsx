@@ -18,42 +18,12 @@ interface RedditOpinionsProps {
   year: number
 }
 
-const SUBREDDITS = ["cars", "whatcarshouldIbuy", "askcarsales"]
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function fetchSubreddit(query: string, subreddit: string): Promise<any[]> {
-  const url = `https://api.pullpush.io/reddit/search/submission/?q=${encodeURIComponent(query)}&subreddit=${subreddit}&size=25&after=1577836800`
-  try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
-    if (!res.ok) return []
-    const data = await res.json()
-    return data?.data ?? []
-  } catch {
-    return []
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function pickBest(allPosts: any[], brandLower: string, modelLower: string): RedditPost[] {
-  const seen = new Set<string>()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const filtered: any[] = []
-  for (const p of allPosts) {
-    if (!p.title || p.over_18 || seen.has(p.id)) continue
-    const t = p.title.toLowerCase()
-    if (!t.includes(brandLower) || !t.includes(modelLower)) continue
-    seen.add(p.id)
-    filtered.push(p)
-  }
-  filtered.sort((a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0))
-  return filtered.slice(0, 5).map((p) => ({
-    title: p.title,
-    score: p.score,
-    numComments: p.num_comments ?? 0,
-    subreddit: p.subreddit,
-    url: `https://reddit.com${p.permalink}`,
-    snippet: p.selftext ? p.selftext.replace(/\n+/g, " ").trim().slice(0, 220) : null,
-  }))
+async function fetchRedditPosts(brand: string, model: string, year: number): Promise<RedditPost[]> {
+  const params = new URLSearchParams({ brand, model, year: String(year) })
+  const res = await fetch(`/api/reddit-opinions?${params}`, { signal: AbortSignal.timeout(10000) })
+  if (!res.ok) return []
+  const data = await res.json()
+  return data?.posts ?? []
 }
 
 export default function RedditOpinions({ brand, model, year }: RedditOpinionsProps) {
@@ -65,11 +35,8 @@ export default function RedditOpinions({ brand, model, year }: RedditOpinionsPro
   useEffect(() => {
     let cancelled = false
     const cacheKey = `reddit:${brand}:${model}:${year}`
-    const brandLower = brand.toLowerCase()
-    const modelLower = model.toLowerCase()
 
     function doFetch() {
-      // Serve from cache instantly if available
       try {
         const cached = sessionStorage.getItem(cacheKey)
         if (cached) {
@@ -79,19 +46,9 @@ export default function RedditOpinions({ brand, model, year }: RedditOpinionsPro
         }
       } catch { /* ignore */ }
 
-      // Fire all 6 queries in parallel: year-specific + general, all 3 subreddits
-      const yearQuery = `${brand} ${model} ${year}`
-      const baseQuery = `${brand} ${model}`
-      const queries = [
-        ...SUBREDDITS.map(sub => fetchSubreddit(yearQuery, sub)),
-        ...SUBREDDITS.map(sub => fetchSubreddit(baseQuery, sub)),
-      ]
-
-      Promise.all(queries)
-        .then((batches) => {
+      fetchRedditPosts(brand, model, year)
+        .then((result) => {
           if (cancelled) return
-          const allPosts = batches.flat()
-          const result = pickBest(allPosts, brandLower, modelLower)
           try { sessionStorage.setItem(cacheKey, JSON.stringify(result)) } catch { /* ignore */ }
           setPosts(result)
           setLoading(false)

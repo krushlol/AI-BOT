@@ -10,70 +10,71 @@ export interface RedditPost {
   snippet: string | null
 }
 
+const SUBREDDITS = "cars+whatcarshouldIbuy+askcarsales"
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractPosts(json: any): any[] {
+  return json?.data?.children?.map((c: any) => c.data) ?? []
+}
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const brand = (searchParams.get("brand") ?? "").trim()
   const model = (searchParams.get("model") ?? "").trim()
+  const year  = (searchParams.get("year")  ?? "").trim()
 
   if (!brand || !model) return Response.json({ posts: [] })
 
-  const cacheKey = `${brand}|${model}`
+  const cacheKey = `${brand}|${model}|${year}`
   const cached = postCache.get(cacheKey)
   if (cached && Date.now() - cached.ts < POST_CACHE_TTL) {
     return Response.json({ posts: cached.data })
   }
 
-  const query = `${brand} ${model}`
-  const subreddits = ["cars", "whatcarshouldIbuy", "askcarsales"]
+  const headers = {
+    "User-Agent": "CarAdvisorUSA/1.0 (caradvisorusa.com)",
+    "Accept": "application/json",
+  }
+
+  const yearQuery  = encodeURIComponent(`${brand} ${model} ${year}`)
+  const baseQuery  = encodeURIComponent(`${brand} ${model}`)
+  const base       = `https://www.reddit.com/r/${SUBREDDITS}/search.json`
 
   try {
-    // Fetch from each subreddit in parallel, take best scored post from each
-    const results = await Promise.all(
-      subreddits.map(async (sub) => {
-        try {
-          const url = `https://api.pullpush.io/reddit/search/submission/?q=${encodeURIComponent(query)}&subreddit=${sub}&size=25`
-          const res = await fetch(url, {
-            headers: { "User-Agent": "CarAdvisor/1.0" },
-            next: { revalidate: 21600 },
-          })
-          if (!res.ok) return []
-          const data = await res.json()
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return (data?.data ?? []) as any[]
-        } catch {
-          return []
-        }
-      })
-    )
+    const [r1, r2] = await Promise.all([
+      fetch(`${base}?q=${yearQuery}&sort=top&t=all&limit=25&restrict_sr=true`, { headers }),
+      fetch(`${base}?q=${baseQuery}&sort=top&t=all&limit=25&restrict_sr=true`, { headers }),
+    ])
 
-    // Flatten, deduplicate by id, sort by score descending
-    const seen = new Set<string>()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const all: any[] = []
-    for (const batch of results) {
-      for (const post of batch) {
-        if (!seen.has(post.id) && !post.over_18 && post.score > 3) {
-          seen.add(post.id)
-          all.push(post)
-        }
+    const seen = new Set<string>()
+
+    for (const res of [r1, r2]) {
+      if (!res.ok) continue
+      for (const p of extractPosts(await res.json())) {
+        if (!p.id || p.over_18 || seen.has(p.id)) continue
+        const t = (p.title ?? "").toLowerCase()
+        if (!t.includes(brand.toLowerCase()) && !t.includes(model.toLowerCase())) continue
+        seen.add(p.id)
+        all.push(p)
       }
     }
-    all.sort((a, b) => b.score - a.score)
 
-    const posts: RedditPost[] = all.slice(0, 5).map((p) => ({
+    all.sort((a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0))
+
+    const posts: RedditPost[] = all.slice(0, 6).map((p) => ({
       title: p.title,
-      score: p.score,
+      score: p.score ?? 0,
       numComments: p.num_comments ?? 0,
       subreddit: p.subreddit,
       url: `https://reddit.com${p.permalink}`,
-      snippet: p.selftext
-        ? p.selftext.replace(/\n+/g, " ").trim().slice(0, 220)
-        : null,
+      snippet: p.selftext ? p.selftext.replace(/\n+/g, " ").trim().slice(0, 220) : null,
     }))
 
     postCache.set(cacheKey, { data: posts, ts: Date.now() })
     return Response.json({ posts })
-  } catch {
+  } catch (e) {
+    console.error("Reddit API error:", e)
     return Response.json({ posts: [] })
   }
 }
