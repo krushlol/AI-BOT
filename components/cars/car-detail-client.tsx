@@ -215,7 +215,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
 
         {/* Tabs — everything below the hero lives here */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-10">
-          <TabsList className="mb-5 w-full flex overflow-x-auto gap-1.5 h-auto p-2 bg-gray-900 border border-gray-800 rounded-2xl shadow-md">
+          <TabsList className="mb-5 w-full flex overflow-x-auto gap-1.5 h-auto p-2 bg-gray-200 border border-gray-300 rounded-2xl shadow-sm">
             {[
               { value: "overview", label: "Overview" },
               { value: "specs", label: "Specs" },
@@ -228,7 +228,7 @@ export default function CarDetailClient({ car, user, relatedCars, initialSaved =
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className="flex-shrink-0 px-4 py-2 text-sm font-semibold rounded-xl text-gray-400 data-[state=active]:bg-orange-500 data-[state=active]:text-white data-[state=active]:shadow-sm hover:text-white transition-colors cursor-pointer"
+                className="flex-shrink-0 px-4 py-2 text-sm font-semibold rounded-xl text-gray-500 data-[state=active]:bg-orange-500 data-[state=active]:text-white data-[state=active]:shadow-sm hover:text-gray-800 transition-colors cursor-pointer"
               >
                 {tab.label}
               </TabsTrigger>
